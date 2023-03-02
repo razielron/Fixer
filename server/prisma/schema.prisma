@@ -11,84 +11,84 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
-  name String
-  email String
-  type String //could be Enum
-  password String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  posts Post[]
-  issues Issue[]
-  comments Comment[]
-  reviewWrittenByMe Review[] @relation("auther")
-  reviewWrittenForMe Review[] @relation("reviewed")
+  id                 String    @id @default(uuid())
+  name               String
+  email              String
+  type               String //could be Enum
+  password           String
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  posts              Post[]
+  issues             Issue[]
+  comments           Comment[]
+  reviewWrittenByMe  Review[]  @relation("auther")
+  reviewWrittenForMe Review[]  @relation("reviewed")
 }
 
 model Post {
-  id String @id @default(uuid())
-  title String
-  body String
-  photo String
-  autherId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  comments Comment[]
-  auther User @relation(fields: [autherId], references: [id])
+  id        String    @id @default(uuid())
+  title     String
+  body      String
+  photo     String
+  autherId  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  comments  Comment[]
+  auther    User      @relation(fields: [autherId], references: [id])
 }
 
 model Issue {
-  id String @id @default(uuid())
-  title String
-  body String
-  type String //could be Enum
-  photo String
-  autherId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  comments Comment[]
-  auther User @relation(fields: [autherId], references: [id])
+  id        String    @id @default(uuid())
+  title     String
+  body      String
+  type      String //could be Enum
+  photo     String
+  autherId  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  comments  Comment[]
+  auther    User      @relation(fields: [autherId], references: [id])
 }
 
 model Comment {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  autherId String
-  postId String
-  issueId String
-  auther User @relation(fields: [autherId], references: [id])
-  post Post @relation(fields: [postId], references: [id])
-  issue Issue @relation(fields: [issueId], references: [id])
+  autherId  String
+  postId    String
+  issueId   String
+  auther    User     @relation(fields: [autherId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+  issue     Issue    @relation(fields: [issueId], references: [id])
 }
 
 model Review {
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  stars Int
-  autherId String
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  stars      Int
+  autherId   String
   reviewedId String
-  auther User @relation("auther", fields: [autherId], references: [id])
-  reviewed User @relation("reviewed", fields: [reviewedId], references: [id])
+  auther     User     @relation("auther", fields: [autherId], references: [id])
+  reviewed   User     @relation("reviewed", fields: [reviewedId], references: [id])
 }
 
 model Product {
-  id String @id @default(uuid())
-  name String
+  id          String   @id @default(uuid())
+  name        String
   description String
-  price Float
-  quantity Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  orders Order[] //maybe need for another table of Order-Product
+  price       Float
+  quantity    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orders      Order[] //maybe need for another table of Order-Product
 }
 
 model Order {
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deliverBy DateTime
-  price Float
-  products Product[] //maybe need for another table of Order-Product
+  price     Float
+  products  Product[] //maybe need for another table of Order-Product
 }
