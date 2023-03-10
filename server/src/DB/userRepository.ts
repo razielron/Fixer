@@ -6,17 +6,28 @@ const prisma = new PrismaClient();
 
 class UserRepository {
     public async getUser(userId : string) : Promise<UserModel> {
-        let where = { id: userId };
-        let user : UserModel = await prisma.user.findFirst({ where });
+        try {
+            let where = { id: userId };
+            let user : UserModel = await prisma.user.findFirst({ where });
 
-        return user;
+            return this.exclude(user, ["password"]);
+        }
+        catch(error : unknown) {
+            throw error;
+        }
     }
 
     public async createUser(user: UserModel) : Promise<UserModel> {
         if(this.isUserCreateInput(user)) {
-            let data : PrismaTypes.UserCreateInput = user;
-            let createdUser : UserModel = await prisma.user.create({ data });
-            return createdUser;
+            try {
+                let data : PrismaTypes.UserCreateInput = user;
+                let createdUser : UserModel = await prisma.user.create({ data });
+                
+                return this.exclude(createdUser, ["password"]);
+            }
+            catch(error : unknown) {
+                throw error;
+            }
         }
 
         throw new Error("Missing argument to create a user");
@@ -27,18 +38,29 @@ class UserRepository {
             throw new Error("Missing id to update user");
         }
 
-        let where = { id: user.id };
-        let data : PrismaTypes.UserUncheckedUpdateInput = user;
-        let updatedUser: UserModel = await prisma.user.update({where, data});
+        try {
+            let where = { id: user.id };
+            let data : PrismaTypes.UserUncheckedUpdateInput = user;
+            let updatedUser: UserModel = await prisma.user.update({where, data});
+            
+            return this.exclude(updatedUser, ["password"]);
+        }
+        catch(error : unknown) {
+            throw error;
+        }
 
-        return updatedUser;
     }
 
     public async deleteUser(id: string) : Promise<UserModel> {
-        let where = { id };
-        let deletedUser = prisma.user.delete({ where });
+        try {
+            let where = { id };
+            let deletedUser : UserModel = await prisma.user.delete({ where });
 
-        return deletedUser;
+            return this.exclude(deletedUser, ["password"]);
+        }
+        catch(error : unknown) {
+            throw error;
+        }
     }
 
     private isUserCreateInput(user : UserModel) : user is PrismaTypes.UserCreateInput {
@@ -46,4 +68,22 @@ class UserRepository {
             && user?.email !== undefined
             && user?.password !== undefined)
     }
+
+    exclude<Key extends keyof User>(
+        user: UserModel,
+        keys: Key[]
+      ): UserModel {
+        if(!user) return user;
+
+        for (let key of keys) {
+          delete user[key];
+        }
+        return user;
+    }
+}
+
+const userRepository : UserRepository = new UserRepository();
+
+export {
+    userRepository
 }
