@@ -13,14 +13,15 @@ datasource db {
 model User {
   id                 String    @id @default(uuid())
   name               String
-  email              String
-  type               String //could be Enum
+  email              String    @unique
+  role               Role      @default(BASIC)
   password           String
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
   posts              Post[]
   issues             Issue[]
   comments           Comment[]
+  order              Order[]
   reviewWrittenByMe  Review[]  @relation("auther")
   reviewWrittenForMe Review[]  @relation("reviewed")
 }
@@ -29,12 +30,12 @@ model Post {
   id        String    @id @default(uuid())
   title     String
   body      String
-  photo     String
+  photo     String?
   autherId  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   comments  Comment[]
-  auther    User      @relation(fields: [autherId], references: [id])
+  auther    User?      @relation(fields: [autherId], references: [id])
 }
 
 model Issue {
@@ -42,7 +43,7 @@ model Issue {
   title     String
   body      String
   type      String //could be Enum
-  photo     String
+  photo     String?
   autherId  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -52,6 +53,7 @@ model Issue {
 
 model Comment {
   id        String   @id @default(uuid())
+  body      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   autherId  String
@@ -64,9 +66,10 @@ model Comment {
 
 model Review {
   id         String   @id @default(uuid())
+  body       String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  stars      Int
+  stars      Int      @default(0)
   autherId   String
   reviewedId String
   auther     User     @relation("auther", fields: [autherId], references: [id])
@@ -74,21 +77,41 @@ model Review {
 }
 
 model Product {
-  id          String   @id @default(uuid())
+  id          String              @id @default(uuid())
   name        String
-  description String
+  description String?
   price       Float
   quantity    Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  orders      Order[] //maybe need for another table of Order-Product
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  orders      OrdersAndProducts[]
 }
 
 model Order {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deliverBy DateTime
+  id        String              @id @default(uuid())
+  notes     String
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  deliverBy DateTime?
   price     Float
-  products  Product[] //maybe need for another table of Order-Product
+  ownerId   String
+  owner     User                @relation(fields: [ownerId], references: [id])
+  products  OrdersAndProducts[]
+}
+
+model OrdersAndProducts {
+  productId  String
+  orderId    String
+  assignedAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  order      Order    @relation(fields: [orderId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id])
+
+  @@id([orderId, productId])
+}
+
+enum Role {
+  BASIC
+  PROFESSIONAL
+  ADMIN
 }
