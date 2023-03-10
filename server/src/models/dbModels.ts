@@ -1,39 +1,40 @@
 import type {
-        User as user,
-        Post as post,
-        Issue as issue,
-        Comment as comment,
-        Review as review,
-        Product as product,
-        Order as order
+        User,
+        Post,
+        Issue,
+        Comment,
+        Review,
+        Product,
+        Order
     }
 from '@prisma/client'
+import { Prisma as PrismaTypes } from '@prisma/client';
 
 //type User = Partial<user>
 type Nullable<T> = T | null;
 
-type User = Partial<user> | null;
-type Post = Partial<post> | null;
-type Issue = Partial<issue> | null;
-type Comment = Partial<comment> | null;
-type Review = Partial<review> | null;
-type Product = Partial<product> | null;
-type Order = Partial<order> | null;
+type UserModel = Partial<User> | null | PrismaTypes.UserCreateInput;
+type PostModel = Partial<Post> | null | PrismaTypes.PostCreateInput;
+type IssueModel = Partial<Issue> | null;
+type CommentModel = Partial<Comment> | null;
+type ReviewModel = Partial<Review> | null;
+type ProductModel = Partial<Product> | null;
+type OrderModel = Partial<Order> | null;
 
-class UserNotNull implements Partial<user> {}
-class PostNotNull implements Partial<post> {}
-class IssueNotNull implements Partial<issue> {}
-class CommentNotNull implements Partial<comment> {}
-class ReviewNotNull implements Partial<review> {}
-class ProductNotNull implements Partial<product> {}
-class OrderNotNull implements Partial<order> {}
+class UserNotNull implements Partial<User> {}
+class PostNotNull implements Partial<Post> {}
+class IssueNotNull implements Partial<Issue> {}
+class CommentNotNull implements Partial<Comment> {}
+class ReviewNotNull implements Partial<Review> {}
+class ProductNotNull implements Partial<Product> {}
+class OrderNotNull implements Partial<Order> {}
 
 export {
-    User,
-    Post,
-    Issue,
-    Comment,
-    Review,
-    Product,
-    Order
+    UserModel,
+    PostModel,
+    IssueModel,
+    CommentModel,
+    ReviewModel,
+    ProductModel,
+    OrderModel
 }
