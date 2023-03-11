@@ -1,4 +1,4 @@
-import express, { Router, NextFunction, Request, Response } from 'express';
+import { Router, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { UserModel } from '../models/dbModels.js';
 import { userRepository } from '../DB/userRepository.js';
@@ -55,13 +55,13 @@ async function deleteUser(req : Request, res : Response) : Promise<void> {
     }
 }
 
-const userController : Router = Router();
+const userRoute : Router = Router();
 
-userController.get('/:userId', (req : Request, res : Response, next : NextFunction) => { getUser(req, res); next(); } );
-userController.post('/create', (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { createUser(req, res); next(); } );
-userController.put('/update', (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { updateUser(req, res); next(); } );
-userController.delete('/:userId', (req : Request, res : Response, next : NextFunction) => { deleteUser(req, res); next(); } );
+userRoute.get('/:userId', (req : Request, res : Response, next : NextFunction) => { getUser(req, res); next(); } );
+userRoute.post('/create', (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { createUser(req, res); next(); } );
+userRoute.put('/update', (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { updateUser(req, res); next(); } );
+userRoute.delete('/:userId', (req : Request, res : Response, next : NextFunction) => { deleteUser(req, res); next(); } );
 
 export { 
-    userController
+    userRoute
 }
