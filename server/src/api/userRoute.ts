@@ -4,10 +4,15 @@ import { UserModel } from '../models/dbModels.js';
 import { userRepository } from '../DB/userRepository.js';
 
 async function getUser(req : Request, res : Response) : Promise<void> {
-    let userId : string = req?.params?.userId;
-
     try {
+        let userId : string = req?.params?.userId;
         let user : UserModel = await userRepository.getUser(userId);
+
+        if(user === null) {
+            res.sendStatus(StatusCodes.NOT_FOUND);
+            return;
+        }
+
         res.json(user);
     }
     catch(message : unknown) {
@@ -17,9 +22,8 @@ async function getUser(req : Request, res : Response) : Promise<void> {
 }
 
 async function createUser(req : Request, res : Response) : Promise<void> {
-    let user : UserModel = req.body;
-
     try {
+        let user : UserModel = req.body;
         await userRepository.createUser(user);
         res.sendStatus(StatusCodes.CREATED);
     }
@@ -30,9 +34,8 @@ async function createUser(req : Request, res : Response) : Promise<void> {
 }
 
 async function updateUser(req : Request, res : Response) : Promise<void> {
-    let user : UserModel = req.body;
-
     try {
+        let user : UserModel = req.body;
         let updatedUser = await userRepository.updateUser(user);
         res.json(updatedUser);
     }
@@ -43,9 +46,8 @@ async function updateUser(req : Request, res : Response) : Promise<void> {
 }
 
 async function deleteUser(req : Request, res : Response) : Promise<void> {
-    let userId : string = req?.params?.userId;
-
     try {
+        let userId : string = req?.params?.userId;
         let user : UserModel = await userRepository.deleteUser(userId);
         res.json(user);
     }
@@ -57,10 +59,10 @@ async function deleteUser(req : Request, res : Response) : Promise<void> {
 
 const userRoute : Router = Router();
 
-userRoute.get('/:userId', (req : Request, res : Response, next : NextFunction) => { getUser(req, res); next(); } );
-userRoute.post('/create', (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { createUser(req, res); next(); } );
-userRoute.put('/update', (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { updateUser(req, res); next(); } );
-userRoute.delete('/:userId', (req : Request, res : Response, next : NextFunction) => { deleteUser(req, res); next(); } );
+userRoute.get('/:userId', async (req : Request, res : Response, next : NextFunction) => { await getUser(req, res); next(); } );
+userRoute.post('/create', async (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { await createUser(req, res); next(); } );
+userRoute.put('/update', async (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { await updateUser(req, res); next(); } );
+userRoute.delete('/:userId', async (req : Request, res : Response, next : NextFunction) => { await deleteUser(req, res); next(); } );
 
 export { 
     userRoute

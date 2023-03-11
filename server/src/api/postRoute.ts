@@ -4,10 +4,15 @@ import { PostModel } from '../models/dbModels.js';
 import { postRepository } from '../DB/postRepository.js';
 
 async function getPost(req : Request, res : Response) : Promise<void> {
-    let postId : string = req?.params?.postId;
-
     try {
+        let postId : string = req?.params?.postId;
         let post : PostModel = await postRepository.getPost(postId);
+
+        if(post === null) {
+            res.sendStatus(StatusCodes.NOT_FOUND);
+            return;
+        }
+
         res.json(post);
     }
     catch(message : unknown) {
@@ -17,9 +22,8 @@ async function getPost(req : Request, res : Response) : Promise<void> {
 }
 
 async function createPost(req : Request, res : Response) : Promise<void> {
-    let post : PostModel = req.body;
-
     try {
+        let post : PostModel = req.body;
         await postRepository.createPost(post);
         res.sendStatus(StatusCodes.CREATED);
     }
@@ -30,9 +34,8 @@ async function createPost(req : Request, res : Response) : Promise<void> {
 }
 
 async function updatePost(req : Request, res : Response) : Promise<void> {
-    let post : PostModel = req.body;
-
     try {
+        let post : PostModel = req.body;
         let updatedPost = await postRepository.updatePost(post);
         res.json(updatedPost);
     }
@@ -43,9 +46,8 @@ async function updatePost(req : Request, res : Response) : Promise<void> {
 }
 
 async function deletePost(req : Request, res : Response) : Promise<void> {
-    let postId : string = req?.params?.postId;
-
     try {
+        let postId : string = req?.params?.postId;
         let post : PostModel = await postRepository.deletePost(postId);
         res.json(post);
     }
@@ -57,10 +59,10 @@ async function deletePost(req : Request, res : Response) : Promise<void> {
 
 const postRoute : Router = Router();
 
-postRoute.get('/:postId', (req : Request, res : Response, next : NextFunction) => { getPost(req, res); next(); } );
-postRoute.post('/create', (req : Request<{}, {}, PostModel>, res : Response, next : NextFunction) => { createPost(req, res); next(); } );
-postRoute.put('/update', (req : Request<{}, {}, PostModel>, res : Response, next : NextFunction) => { updatePost(req, res); next(); } );
-postRoute.delete('/:postId', (req : Request, res : Response, next : NextFunction) => { deletePost(req, res); next(); } );
+postRoute.get('/:postId', async (req : Request, res : Response, next : NextFunction) => { await getPost(req, res); next(); } );
+postRoute.post('/create', async (req : Request<{}, {}, PostModel>, res : Response, next : NextFunction) => { await createPost(req, res); next(); } );
+postRoute.put('/update', async (req : Request<{}, {}, PostModel>, res : Response, next : NextFunction) => { await updatePost(req, res); next(); } );
+postRoute.delete('/:postId', async (req : Request, res : Response, next : NextFunction) => { await deletePost(req, res); next(); } );
 
 export { 
     postRoute
