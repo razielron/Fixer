@@ -1,6 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { userRoute } from './userRoute.js';
+import { postRoute } from './postRoute.js';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.get('/healtcheck', (req: Request, res: Response) : void => {
 });
 
 app.use('/user', userRoute);
+app.use('/post', postRoute);
 
 app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running on port: ${PORT}`);
