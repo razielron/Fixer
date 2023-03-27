@@ -15,8 +15,9 @@ const Login = () => {
     };
 
     return(
-        <div className="flex justify-center">
-            <div className="bg-black px-10 py-10 self-center">
+        <div className="reative min-h-screen h-full w-full bg-[url('/images/peakpx.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
+        <div className="min-h-screen flex justify-center">
+            <div className="bg-black bg-opacity-60 px-10 py-10 self-center">
                 <nav className="">
                     <img src="/images/fixerLogo.png" alt="Logo" className="h-5 rounded-md mb-5"></img>
                 </nav>
@@ -56,7 +57,7 @@ const Login = () => {
                 <button onClick={signupRedirect} className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion">
                     Sign up
                 </button>
-                <p className="text-neutral-500 mt-5">
+                <p className="text-neutral-400 mt-5">
                     Already have an account?
                     <Link href="/login" className="text-white ml-1 hover:underline cursor-pointer">
                         Login
@@ -64,6 +65,7 @@ const Login = () => {
                 </p>
             </div>
         </div>
+    </div>
     )
 }
 
