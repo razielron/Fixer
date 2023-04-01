@@ -2,6 +2,10 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import Input from "@/components/input";
 import Link from "next/link";
+import UserPool from "@/pages/api/userPool";
+import { userClient } from "@/pages/api/userClient";
+import { UserModel } from "@/src/models/userModel";
+import { Role } from "@/src/enums/role";
 
 const Login = () => {
     const router = useRouter();
@@ -9,9 +13,23 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
+    const [error, setError] = useState('');
 
-    const signupRedirect = ()=>{
-        router.push('/');
+    const signupRedirect = async () => {
+        UserPool?.signUp(email, password, [], [], async (err, data) => {
+            if(err) {
+                setError(err.toString());
+                return;
+            }
+
+            const user : UserModel = {
+                email: email,
+                name: name,
+                role: Role.BASIC    
+            };
+            await userClient.createUser(user);
+            router.push('/');
+        });
     };
 
     return(
@@ -53,6 +71,9 @@ const Login = () => {
                         value = {password}
                         placeHolder = "Password"
                     />                                        
+                </div>
+                <div>
+                    <p className="text-red-600 mt-5">{error}</p>
                 </div>
                 <button onClick={signupRedirect} className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion">
                     Sign up
