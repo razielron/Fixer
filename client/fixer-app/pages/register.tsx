@@ -25,7 +25,7 @@ const Login = () => {
             const user : UserModel = {
                 email: email,
                 name: name,
-                role: Role.BASIC    
+                role: Role.BASIC 
             };
             await userClient.createUser(user);
             router.push('/');

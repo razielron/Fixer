@@ -47,7 +47,7 @@ class UserClient {
         try {
             let createUserUrl: string = "http://52.5.245.87:5000/user/create";
             //let createUserUrl: string = path.join(baseUrl, createEndpoint);
-            const { status } = await axios.post<GetUsersResponse>(createUserUrl, {data: user}, {headers});
+            const { status } = await axios.post<GetUsersResponse>(createUserUrl, user, {headers});
             
             return status == StatusCodes.CREATED;
         }
