@@ -10,7 +10,7 @@ class UserRepository {
             let where = { id: userId };
             let user : UserModel = await prisma.user.findFirst({ where });
 
-            return this.exclude(user, ["password"]);
+            return user;
         }
         catch(error : unknown) {
             throw error;
@@ -23,7 +23,7 @@ class UserRepository {
                 let data : PrismaTypes.UserCreateInput = user;
                 let createdUser : UserModel = await prisma.user.create({ data });
                 
-                return this.exclude(createdUser, ["password"]);
+                return createdUser;
             }
             catch(error : unknown) {
                 throw error;
@@ -43,7 +43,7 @@ class UserRepository {
             let data : PrismaTypes.UserUncheckedUpdateInput = user;
             let updatedUser: UserModel = await prisma.user.update({where, data});
             
-            return this.exclude(updatedUser, ["password"]);
+            return updatedUser;
         }
         catch(error : unknown) {
             throw error;
@@ -56,7 +56,7 @@ class UserRepository {
             let where = { id };
             let deletedUser : UserModel = await prisma.user.delete({ where });
 
-            return this.exclude(deletedUser, ["password"]);
+            return deletedUser;
         }
         catch(error : unknown) {
             throw error;
@@ -65,11 +65,10 @@ class UserRepository {
 
     private isUserCreateInput(user : UserModel) : user is PrismaTypes.UserCreateInput {
         return (user?.name !== undefined
-            && user?.email !== undefined
-            && user?.password !== undefined)
+            && user?.email !== undefined)
     }
 
-    exclude<Key extends keyof User>(
+    private exclude<Key extends keyof User>(
         user: UserModel,
         keys: Key[]
       ): UserModel {
