@@ -151,6 +151,30 @@ resource "aws_security_group" "fixer_frontend_sg" {
     }
 }
 
+resource "aws_security_group" "fixer_db_sg" {
+    name        = "fixer_db_sg"
+    description = "Allow all inbound traffic"
+    vpc_id      = aws_vpc.fixer_vpc.id
+
+    ingress {
+        from_port   = 3306
+        to_port     = 3306
+        protocol    = "TCP"
+        cidr_blocks = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24", "10.0.7.0/24"]
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags = {
+        Name = "fixer_db_sg"
+    }
+}
+
 resource "aws_network_interface_sg_attachment" "sg_server_dev_attachment" {
   security_group_id    = aws_security_group.fixer_server_dev_sg.id
   network_interface_id = aws_instance.fixer_server_dev.primary_network_interface_id
@@ -172,21 +196,32 @@ resource "aws_internet_gateway" "fixer_gw" {
 
 resource "aws_route_table" "fixer_rt" {
     vpc_id = aws_vpc.fixer_vpc.id
-
     route {
         cidr_block = "0.0.0.0/0"
         gateway_id = aws_internet_gateway.fixer_gw.id
     }
-
     tags = {
         Name = "fixer_rt"
     }
 }
 
 resource "aws_route_table_association" "public_subnet_asso" {
-    count = length(var.public_subnet_cidrs)
+    count          = length(var.public_subnet_cidrs)
     subnet_id      = element(aws_subnet.public_subnets[*].id, count.index)
     route_table_id = aws_route_table.fixer_rt.id
+}
+
+resource "aws_route_table" "fixer_private_rt" {
+    vpc_id = aws_vpc.fixer_vpc.id
+    tags = {
+        Name = "fixer_private_rt"
+    }
+}
+
+resource "aws_route_table_association" "private_subnet_asso" {
+    count          = length(var.private_subnet_cidrs)
+    subnet_id      = element(aws_subnet.private_subnets[*].id, count.index)
+    route_table_id = aws_route_table.fixer_private_rt.id
 }
 
 resource "aws_eip" "fixer_eip" {
@@ -253,6 +288,7 @@ resource "aws_db_instance" "fixer_db" {
     skip_final_snapshot   = true
     availability_zone     = "us-east-1b"
     db_subnet_group_name  = aws_db_subnet_group.fixer_db_subnet.id
+    vpc_security_group_ids = [aws_security_group.fixer_db_sg.id]
 
     tags = {
         Name = "fixer_db"
