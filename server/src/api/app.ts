@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { userRoute } from './userRoute.js';
 import { postRoute } from './postRoute.js';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -13,11 +14,14 @@ function setContentType(req : Request, res : Response, next : NextFunction) : vo
 	next();
 }
 
+app.use(cors());
+app.options('*', cors());
 app.use(setContentType);
 app.use(express.json());  // to support JSON-encoded bodies
 app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
 
 app.get('/healtcheck', (req: Request, res: Response) : void => {
+    console.log('Healthy');
     res.send('Healthy');
 });
 
