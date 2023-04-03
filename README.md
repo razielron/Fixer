@@ -13,7 +13,9 @@ After that you can use the aws cli for your purpose
 # trraform
 1. run: terraform apply
 2. copy the server_dev public key to .ssh: cp fixer_server_dev_key_file ~/.ssh
-3. copy the frontend public key to .ssh: cp fixer_frontend_key_file ~/.ssh
+3. sudo chmod 600 ~/.ssh/fixer_server_dev_key_file
+4. copy the frontend public key to .ssh: cp fixer_frontend_key_file ~/.ssh
+5. sudo chmod 600 ~/.ssh/fixer_frontend_key_file
 4. ssh to an instance using WSL:
     * cd ~/.ssh
     * ssh -i fixer_server_dev_key_file ubuntu@--ip--
