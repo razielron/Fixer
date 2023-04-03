@@ -13,9 +13,11 @@ async function getUser(req : Request, res : Response) : Promise<void> {
             return;
         }
 
+        console.log({getUser: user});
         res.json(user);
     }
     catch(message : unknown) {
+        console.log({message});
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
         res.json({message});
     }
@@ -24,6 +26,7 @@ async function getUser(req : Request, res : Response) : Promise<void> {
 async function createUser(req : Request, res : Response) : Promise<void> {
     try {
         let user : UserModel = req.body;
+        console.log({createUser: user});
         await userRepository.createUser(user);
         res.sendStatus(StatusCodes.CREATED);
     }
@@ -36,6 +39,7 @@ async function createUser(req : Request, res : Response) : Promise<void> {
 async function updateUser(req : Request, res : Response) : Promise<void> {
     try {
         let user : UserModel = req.body;
+        console.log({updateUser: user});
         let updatedUser = await userRepository.updateUser(user);
         res.json(updatedUser);
     }
@@ -48,6 +52,7 @@ async function updateUser(req : Request, res : Response) : Promise<void> {
 async function deleteUser(req : Request, res : Response) : Promise<void> {
     try {
         let userId : string = req?.params?.userId;
+        console.log({deleteUser: userId});
         let user : UserModel = await userRepository.deleteUser(userId);
         res.json(user);
     }
