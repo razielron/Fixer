@@ -2,6 +2,7 @@ import { Router, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { UserModel } from '../models/dbModels.js';
 import { userRepository } from '../DB/userRepository.js';
+import { authenticateUser } from "./apiAuthentication.js";
 
 async function getUser(req : Request, res : Response) : Promise<void> {
     try {
@@ -64,10 +65,10 @@ async function deleteUser(req : Request, res : Response) : Promise<void> {
 
 const userRoute : Router = Router();
 
-userRoute.get('/:userId', async (req : Request, res : Response, next : NextFunction) => { await getUser(req, res); next(); } );
+userRoute.get('/:userId', authenticateUser, async (req : Request, res : Response, next : NextFunction) => { await getUser(req, res); next(); } );
 userRoute.post('/create', async (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { await createUser(req, res); next(); } );
-userRoute.put('/update', async (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { await updateUser(req, res); next(); } );
-userRoute.delete('/:userId', async (req : Request, res : Response, next : NextFunction) => { await deleteUser(req, res); next(); } );
+userRoute.put('/update', authenticateUser, async (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { await updateUser(req, res); next(); } );
+userRoute.delete('/:userId', authenticateUser, async (req : Request, res : Response, next : NextFunction) => { await deleteUser(req, res); next(); } );
 
 export { 
     userRoute
