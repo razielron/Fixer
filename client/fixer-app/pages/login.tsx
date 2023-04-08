@@ -4,7 +4,7 @@ import Input from "@/components/input";
 import Link from "next/link";
 import UserPool from "@/pages/api/userPool";
 import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
-
+import { setCookie } from 'cookies-next';
 
 const Login = () => {
     const router = useRouter();
@@ -25,7 +25,11 @@ const Login = () => {
         });
 
         user.authenticateUser(authDetails, {
-            onSuccess: data => { console.log({data}); router.push('/'); },
+            onSuccess: data => {
+                const token = data.getIdToken().getJwtToken();
+                setCookie('jwt_auth', token);
+                router.push('/home'); },
+
             onFailure: err => setError(err.toString()),
             newPasswordRequired: data => console.log("newPasswordRequired", {data})
         });

@@ -1,4 +1,5 @@
-const { parsed: localEnv } = require('dotenv').config()
+const path = require('path');
+const { parsed: localEnv } = require('dotenv').config({ path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`) })
 const webpack = require('webpack')
 module.exports = {
   webpack: (config) => {

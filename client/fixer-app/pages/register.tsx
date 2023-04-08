@@ -1,13 +1,26 @@
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import Input from "@/components/input";
+import DropDown from "@/components/DropDown";
 import Link from "next/link";
 import UserPool from "@/pages/api/userPool";
 import { userClient } from "@/pages/api/userClient";
 import { UserModel } from "@/src/models/userModel";
 import { Role } from "@/src/enums/role";
+import Select from "react-dropdown-select";
 
 const Login = () => {
+    const options = [
+        { 
+          value: 1,
+          label: "BASIC"
+        },
+        {
+          value:  2,
+          label: "PROFESSIONAL"
+        }
+      ];
+      const defaultOption = options[0];
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,14 +34,14 @@ const Login = () => {
                 setError(err.toString());
                 return;
             }
-
             const user : UserModel = {
                 email: email,
                 name: name,
-                role: Role.BASIC 
+                password: password,
+                role: Role.PROFESSIONAL === role ? Role.PROFESSIONAL : Role.BASIC   
             };
             await userClient.createUser(user);
-            router.push('/');
+            router.push('/home');
         });
     };
 
@@ -51,13 +64,6 @@ const Login = () => {
                         placeHolder = "Name"
                     />
                     <Input
-                        onChange = {(event:any)=> setRole(event.target.value)}
-                        id = "role"
-                        type = "role"
-                        value = {role}
-                        placeHolder = "Role"
-                    />
-                    <Input
                         onChange = {(event:any)=> setEmail(event.target.value)}
                         id = "email"
                         type = "email"
@@ -70,7 +76,15 @@ const Login = () => {
                         type = "password"
                         value = {password}
                         placeHolder = "Password"
-                    />                                        
+                    /> 
+                    <DropDown  
+                        options={options} 
+                        onChange={(event:any)=> setRole(event[0].label)}
+                        placeHolder="Role"   
+                    />
+                    
+
+                                                         
                 </div>
                 <div>
                     <p className="text-red-600 mt-5">{error}</p>
