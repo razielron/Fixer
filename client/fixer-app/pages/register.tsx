@@ -37,7 +37,6 @@ const Login = () => {
             const user : UserModel = {
                 email: email,
                 name: name,
-                password: password,
                 role: Role.PROFESSIONAL === role ? Role.PROFESSIONAL : Role.BASIC   
             };
             await userClient.createUser(user);
