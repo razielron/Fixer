@@ -1,10 +1,7 @@
 import axios from 'axios';
 import path from 'path';
-import dotenv from 'dotenv';
 import { StatusCodes } from 'http-status-codes';
-import { PostModel } from '../models/postModel.js';
-
-dotenv.config({ path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`) });
+import { PostModel } from '../../src/models/postModel.js';
 
 type GetPostsResponse = {
     data?: PostModel[];

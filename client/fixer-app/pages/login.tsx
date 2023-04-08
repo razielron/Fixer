@@ -2,15 +2,39 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import Input from "@/components/input";
 import Link from "next/link";
+import UserPool from "@/pages/api/userPool";
+import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
+import { setCookie } from 'cookies-next';
 
 const Login = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    const loginRedirect = ()=>{
-        router.push('/');
-    } 
+    const loginRedirect = () => {
+        if(!UserPool) return;
+
+        const authDetails = new AuthenticationDetails({
+            Username: email,
+            Password: password
+        });
+        const user = new CognitoUser({
+            Username: email,
+            Pool: UserPool
+        });
+
+        user.authenticateUser(authDetails, {
+            onSuccess: data => {
+                const token = data.getIdToken().getJwtToken();
+                setCookie('jwt_auth', token);
+                router.push('/home'); },
+
+            onFailure: err => setError(err.toString()),
+            newPasswordRequired: data => console.log("newPasswordRequired", {data})
+        });
+    }
+
 
     return(
     <div className="reative min-h-screen h-full w-full bg-[url('/images/peakpx.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -37,6 +61,9 @@ const Login = () => {
                         value = {password}
                         placeHolder = "Password"
                     />
+                </div>
+                <div>
+                    <p className="text-red-600 mt-5">{error}</p>
                 </div>
                 <button onClick={loginRedirect} className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion">
                     Login

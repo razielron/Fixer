@@ -1,10 +1,7 @@
 import axios from 'axios';
 import path from 'path';
-import dotenv from 'dotenv';
 import { StatusCodes } from 'http-status-codes';
-import { UserModel } from '../models/userModel.js';
-
-dotenv.config({ path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`) });
+import { UserModel } from '../../src/models/userModel.js';
 
 type GetUsersResponse = {
     data?: UserModel[];
@@ -48,8 +45,9 @@ class UserClient {
         let errorMessage = `Internal error when trying to create user`;
         
         try {
-            let createUserUrl: string = path.join(baseUrl, createEndpoint);
-            const { status } = await axios.post<GetUsersResponse>(createUserUrl, {data: user}, {headers});
+            let createUserUrl: string = "http://52.5.245.87:5000/user/create";
+            //let createUserUrl: string = path.join(baseUrl, createEndpoint);
+            const { status } = await axios.post<GetUsersResponse>(createUserUrl, user, {headers});
             
             return status == StatusCodes.CREATED;
         }

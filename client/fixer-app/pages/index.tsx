@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-export default function Home() {
+export default function Index() {
   const router = useRouter();
 
   const loginRedirect = ()=>{
