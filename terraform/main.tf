@@ -160,7 +160,7 @@ resource "aws_security_group" "fixer_db_sg" {
         from_port   = 3306
         to_port     = 3306
         protocol    = "TCP"
-        cidr_blocks = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24", "10.0.7.0/24"]
+        cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24", "10.0.7.0/24"]
     }
 
     egress {
@@ -259,7 +259,7 @@ resource "tls_private_key" "fixer_frontend_private_key" {
     rsa_bits = 4096
 }
 
-resource "aws_key_pair" "fixer_frontend_dev_key" {
+resource "aws_key_pair" "fixer_frontend_key" {
     key_name = "fixer_frontend_key"
     public_key = tls_private_key.fixer_frontend_private_key.public_key_openssh
 }
@@ -315,6 +315,8 @@ resource "aws_instance" "fixer_frontend" {
 
     subnet_id = aws_subnet.public_subnets[0].id
     associate_public_ip_address = true
+
+    key_name = aws_key_pair.fixer_frontend_key.key_name
 
     tags = {
         Name = "fixer_frontend"
