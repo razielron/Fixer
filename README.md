@@ -21,7 +21,8 @@ After that you can use the aws cli for your purpose
 # EC2
 1. to add Nodejs:
     * sudo apt update
-    * curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash . ~/.nvm/nvm.sh
+    * curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+    * . ~/.nvm/nvm.sh
     * nvm install --lts
 2. to clone the project: git clone https://github.com/razielron/Fixer.git
 3. to run the server:
@@ -33,10 +34,13 @@ After that you can use the aws cli for your purpose
     * cd client/fixer-app
     * npm i
     * npm run build
+    * sudo su
     * npm run start
 
 # RDS
-1. conenct from ec2: mysql -h terraform-20230331152420071000000001.cqsyftuemdcq.us-east-1.rds.amazonaws.com -P 3306 -u admin -p
+1. conenct from ec2:
+    * you might need to install mysql: apt install mysql-client-core-8.0
+    * connect: mysql -h terraform-20230331152420071000000001.cqsyftuemdcq.us-east-1.rds.amazonaws.com -P 3306 -u admin -p
 2. common queries:
     * select * from test.User
 

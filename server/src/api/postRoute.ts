@@ -2,6 +2,7 @@ import { Router, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { PostModel } from '../models/dbModels.js';
 import { postRepository } from '../DB/postRepository.js';
+import { authenticateUser } from "./apiAuthentication.js";
 
 async function getPost(req : Request, res : Response) : Promise<void> {
     try {
@@ -59,10 +60,10 @@ async function deletePost(req : Request, res : Response) : Promise<void> {
 
 const postRoute : Router = Router();
 
-postRoute.get('/:postId', async (req : Request, res : Response, next : NextFunction) => { await getPost(req, res); next(); } );
-postRoute.post('/create', async (req : Request<{}, {}, PostModel>, res : Response, next : NextFunction) => { await createPost(req, res); next(); } );
-postRoute.put('/update', async (req : Request<{}, {}, PostModel>, res : Response, next : NextFunction) => { await updatePost(req, res); next(); } );
-postRoute.delete('/:postId', async (req : Request, res : Response, next : NextFunction) => { await deletePost(req, res); next(); } );
+postRoute.get('/:postId', authenticateUser, async (req : Request, res : Response, next : NextFunction) => { await getPost(req, res); next(); } );
+postRoute.post('/create', authenticateUser, async (req : Request<{}, {}, PostModel>, res : Response, next : NextFunction) => { await createPost(req, res); next(); } );
+postRoute.put('/update', authenticateUser, async (req : Request<{}, {}, PostModel>, res : Response, next : NextFunction) => { await updatePost(req, res); next(); } );
+postRoute.delete('/:postId', authenticateUser, async (req : Request, res : Response, next : NextFunction) => { await deletePost(req, res); next(); } );
 
 export { 
     postRoute
