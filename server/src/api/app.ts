@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { userRoute } from './userRoute.js';
 import { postRoute } from './postRoute.js';
+import { issueRoute } from './issueRoute.js';
 import { authenticateUser } from "./apiAuthentication.js";
 
 dotenv.config({ path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`) });
@@ -34,6 +35,7 @@ app.get('/userTokenCheck', authenticateUser, (req: Request, res: Response) : voi
 
 app.use('/user', userRoute);
 app.use('/post', postRoute);
+app.use('/issue', issueRoute);
 
 app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running on port: ${PORT}`);
