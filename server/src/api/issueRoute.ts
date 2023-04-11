@@ -25,7 +25,7 @@ async function getIssueById(req: Request, res: Response): Promise<void> {
 async function getIssuesByUserId(req: Request, res: Response): Promise<void> {
     try {
         let userId: string = req?.params?.userId;
-        let issue: IssueModel = await issueRepository.getIssuesByUserId(userId);
+        let issue: IssueModel[] = await issueRepository.getIssuesByUserId(userId);
 
         if (issue === null) {
             res.sendStatus(StatusCodes.NOT_FOUND);
@@ -43,7 +43,7 @@ async function getIssuesByUserId(req: Request, res: Response): Promise<void> {
 async function getIssuesByProfession(req: Request, res: Response): Promise<void> {
     try {
         let profession: string = req?.params?.profession;
-        let issue: IssueModel = await issueRepository.getIssuesByProfession(profession);
+        let issue: IssueModel[] = await issueRepository.getIssuesByProfession(profession);
 
         if (issue === null) {
             res.sendStatus(StatusCodes.NOT_FOUND);
