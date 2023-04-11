@@ -12,27 +12,30 @@ class IssueRepository {
         return issue;
     }
 
-    public async getIssuesByUserId(userId: string): Promise<IssueModel> {
+    public async getIssuesByUserId(userId: string): Promise<IssueModel[]> {
         let where = { autherId: userId };
-        let issues: IssueModel = await prisma.issue.findMany({ where });
+        let issues: IssueModel[] = await prisma.issue.findMany({ where });
 
         return issues;
     }
 
-    public async getIssuesByProfession(profession: string): Promise<IssueModel> {
+    public async getIssuesByProfession(profession: string): Promise<IssueModel[]> {
         if (!Object.values(Profession).includes(profession as unknown as Profession)) {
             throw new Error("Profession not exist in ENUM");
         }
-        let where = { profession: Profession };
-        let issues: IssueModel = await prisma.issue.findMany({ where });
+        
+        let where = { profession: profession as Profession };
+        let issues: IssueModel[] = await prisma.issue.findMany({ where });
 
         return issues;
     }
 
     public async createIssue(issue: IssueModel): Promise<IssueModel> {
-        if (this.isIssueCreateInput(issue)) {
+        let issueInputModel : PrismaTypes.IssueCreateInput | null = this.getIssueCreateInput(issue);
+
+        if (issueInputModel != null) {
             try {
-                let data: PrismaTypes.IssueCreateInput = issue;
+                let data: PrismaTypes.IssueCreateInput = issueInputModel;
                 let createdIssue: IssueModel = await prisma.issue.create({ data });
                 return createdIssue;
             }
@@ -73,9 +76,19 @@ class IssueRepository {
         }
     }
 
-    private isIssueCreateInput(issue: IssueModel): issue is PrismaTypes.IssueCreateInput {
-        return (issue?.title !== undefined
-            && issue?.body !== undefined)
+    private getIssueCreateInput(issue: IssueModel): PrismaTypes.IssueCreateInput | null {
+        if(!issue?.title || !issue?.body || !issue?.profession || !issue?.autherId) {
+            return null;
+        }
+
+        return {
+            title: issue.title,
+            body: issue.body,
+            profession: issue.profession,
+            auther: {
+                connect: { id: issue?.autherId }
+            }
+        };
     }
 }
 
