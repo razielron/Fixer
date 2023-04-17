@@ -36,7 +36,7 @@ const Navbar = () => {
                  lg:flex">
                     <NavbarItem label='Home' />
                     <NavbarItem label='Fourm' />
-                    <NavbarItem label='Proffesionals' />
+                    <NavbarItem label='Profesionals' />
                     <NavbarItem label='Store' />
               </div>
               <div className="flex flex-row ml-auto gap-7 items-center">

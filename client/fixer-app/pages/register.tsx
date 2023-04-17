@@ -24,10 +24,42 @@ const Login = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [check, setCheck] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
     const [error, setError] = useState('');
+    
+    const signupRedirectVladition = async () => {
+    
+        let newError = ''
+        if(name === '' || email === ''||password === '' || confirmPassword === ''||role === ''){
+            newError = (`Please fill all fields`)
+        }
+        // if(name === ''){
+        //     newError = (`${newError}, Name is missing`)
+        // }
+        // if(email === ''){
+        //     newError = (`${newError}, Email is missing`)
+        // }
 
+        // if(password === ''){
+        //     newError = (`${newError}, Password is missing`)
+        // }
+        // if(confirmPassword === ''){
+        //     newError = (`${newError}, Confirm password is missing`)
+        // }
+        // if(role === ''){
+        //     newError = (`${newError}, Role is missing`)
+            
+        // }
+        setError(newError)
+        if (newError === ''){
+            
+            signupRedirect()
+        }
+
+    }
     const signupRedirect = async () => {
         UserPool?.signUp(email, password, [], [], async (err, data) => {
             if(err) {
@@ -43,6 +75,15 @@ const Login = () => {
             router.push('/home');
         });
     };
+
+    const checkPasswordValidation = (event:any) => {
+        setConfirmPassword(event.target.value)
+
+        if(password !== event.target.value) {
+            setError("Password do not match")
+        }
+        else setError("")
+    }
 
     return(
         <div className="reative min-h-screen h-full w-full bg-[url('/images/peakpx.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -76,11 +117,21 @@ const Login = () => {
                         value = {password}
                         placeHolder = "Password"
                     /> 
+                    <Input
+                        onChange = {(event:any)=> checkPasswordValidation(event)}
+                        id = "confirmPassword"
+                        type = "password"
+                        value = {confirmPassword}
+                        placeHolder = "Confirm password"
+                        
+                    /> 
                     <DropDown  
                         options={options} 
                         onChange={(event:any)=> setRole(event[0].label)}
                         placeHolder="Role"   
                     />
+
+
                     
 
                                                          
@@ -88,7 +139,7 @@ const Login = () => {
                 <div>
                     <p className="text-red-600 mt-5">{error}</p>
                 </div>
-                <button onClick={signupRedirect} className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion">
+                <button onClick={signupRedirectVladition} className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion">
                     Sign up
                 </button>
                 <p className="text-neutral-400 mt-5">
