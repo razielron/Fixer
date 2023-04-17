@@ -21,6 +21,7 @@ const DropDown: React.FC<DropDownProps> = ({
                         rounded-md
                         text-md	
                     "
+                        values={[]}
                         options={options} 
                         onChange={onChange}
                         placeholder={placeHolder}
