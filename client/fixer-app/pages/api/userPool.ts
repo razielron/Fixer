@@ -10,6 +10,7 @@ let cognitoUserPool : CognitoUserPool | null;
 try {
     cognitoUserPool = new CognitoUserPool(poolData);
 } catch {
+    console.error("cognitoUserPool is null");
     cognitoUserPool = null;
 }
 

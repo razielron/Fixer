@@ -13,7 +13,7 @@ export default function Index() {
 
   return (
 
-    <div className="reative min-h-screen h-full w-full bg-[url('/images/peakpx.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
+    <div className="min-h-screen reative  h-full w-full bg-[url('/images/peakpx.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
       <div className="w-full h-full">
         <nav className="px-12 py-5">
           <img src="/images/fixerLogo.png" alt="Logo" className="h-12"/>
