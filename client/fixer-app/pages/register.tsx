@@ -12,15 +12,15 @@ import Select from "react-dropdown-select";
 const Login = () => {
     const options = [
         { 
-          value: 1,
-          label: "BASIC"
+            value: 1,
+            label: "BASIC"
         },
         {
-          value:  2,
-          label: "PROFESSIONAL"
+            value:  2,
+            label: "PROFESSIONAL"
         }
-      ];
-      const defaultOption = options[0];
+    ];
+    const defaultOption = options[0];
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -36,33 +36,16 @@ const Login = () => {
         if(name === '' || email === ''||password === '' || confirmPassword === ''||role === ''){
             newError = (`Please fill all fields`);
         }
-        // if(name === ''){
-        //     newError = (`${newError}, Name is missing`)
-        // }
-        // if(email === ''){
-        //     newError = (`${newError}, Email is missing`)
-        // }
 
-        // if(password === ''){
-        //     newError = (`${newError}, Password is missing`)
-        // }
-        // if(confirmPassword === ''){
-        //     newError = (`${newError}, Confirm password is missing`)
-        // }
-        // if(role === ''){
-        //     newError = (`${newError}, Role is missing`)
-            
-        // }
         setError(newError);
-        console.log(newError);
-        if (!newError){
-            console.log("here")
+
+        if (!newError) {
             await signupRedirect();
         }
 
-    }
+    };
+
     const signupRedirect = async () => {
-        console.log({UserPool})
         UserPool?.signUp(email, password, [], [], async (err, data) => {
             if(err) {
                 setError(err.toString());
