@@ -56,7 +56,7 @@ const Login = () => {
         setError(newError);
         console.log(newError);
         if (!newError){
-            signupRedirect();
+            await signupRedirect();
         }
 
     }
