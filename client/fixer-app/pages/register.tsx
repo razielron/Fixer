@@ -56,11 +56,13 @@ const Login = () => {
         setError(newError);
         console.log(newError);
         if (!newError){
+            console.log("here")
             await signupRedirect();
         }
 
     }
     const signupRedirect = async () => {
+        console.log({UserPool})
         UserPool?.signUp(email, password, [], [], async (err, data) => {
             if(err) {
                 setError(err.toString());
