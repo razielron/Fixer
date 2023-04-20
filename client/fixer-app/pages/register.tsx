@@ -32,9 +32,9 @@ const Login = () => {
     
     const signupRedirectVladition = async () => {
     
-        let newError = ''
+        let newError = '';
         if(name === '' || email === ''||password === '' || confirmPassword === ''||role === ''){
-            newError = (`Please fill all fields`)
+            newError = (`Please fill all fields`);
         }
         // if(name === ''){
         //     newError = (`${newError}, Name is missing`)
@@ -53,10 +53,10 @@ const Login = () => {
         //     newError = (`${newError}, Role is missing`)
             
         // }
-        setError(newError)
-        if (newError === ''){
-            
-            signupRedirect()
+        setError(newError);
+        console.log(newError);
+        if (!newError){
+            signupRedirect();
         }
 
     }
