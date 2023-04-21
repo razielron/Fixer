@@ -24,6 +24,7 @@
     "react-dom": "18.2.0",
     "react-dropdown-select": "^4.9.3",
     "react-icons": "^4.8.0",
+    "react-loader-spinner": "^5.3.4",
     "typescript": "5.0.2",
     "webpack": "^5.77.0"
   },

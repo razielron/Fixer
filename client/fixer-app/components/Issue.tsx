@@ -1,3 +1,5 @@
+import { BiCommentDetail } from 'react-icons/Bi';
+
 type Props =   {
     createdBy?: string
     title?: string
@@ -36,18 +38,8 @@ const Issue: React.FC<Props> =(props) => {
         {/* Post Footer */}
         <div className="post__footer">
           <div className="post__footer-item">
-            <i data-visualcompletion="css-img" className="hu5pjgll lzf7d6o1" style={{backgroundImage: 'url("https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/8sY7O-nSxto.png")', backgroundPosition: '0px -191px', backgroundSize: 'auto', width: '20px', height: '20px',backgroundRepeat: 'no-repeat', display: 'inline-block'}}></i>
-            <p className="post__reaction">Like</p>
-          </div>
-  
-          <div className="post__footer-item">
-            <i data-visualcompletion="css-img" className="hu5pjgll lzf7d6o1" style={{backgroundImage: 'url("https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/8sY7O-nSxto.png")', backgroundPosition: '0px -153px', backgroundSize: 'auto', width: '20px', height: '20px',backgroundRepeat: 'no-repeat', display: 'inline-block'}}></i>
+            <BiCommentDetail></BiCommentDetail>
             <p className="post__reaction">Comment</p>
-          </div>
-  
-          <div className="post__footer-item">
-            <i data-visualcompletion="css-img" className="hu5pjgll lzf7d6o1" style={{backgroundImage: 'url("https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/8sY7O-nSxto.png")', backgroundPosition: '0px -210px', backgroundSize: 'auto', width: '20px', height: '18px',backgroundRepeat: 'no-repeat', display: 'inline-block'}}></i>
-            <p className="post__reaction">Share</p>
           </div>
         </div>
       </div>
