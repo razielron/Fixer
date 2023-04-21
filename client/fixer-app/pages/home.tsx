@@ -1,4 +1,4 @@
-import Issue from "@/components/Issue";
+import Issues from "@/components/Issues";
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
 
@@ -15,7 +15,7 @@ export default function Home() {
     return (
         <>
             <Navbar></Navbar>
-            <Issue {...post}></Issue>
+            <Issues></Issues>
         </>
     )
 }

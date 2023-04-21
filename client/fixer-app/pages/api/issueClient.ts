@@ -11,18 +11,20 @@ const createEndpoint: string = '/issue/create';
 const updateEndpoint: string = '/issue/update';
 const deleteEndpoint: string = '/issue';
 
-let headers: object = { Accept: 'application/json' };
+let headers = { Accept: 'application/json', Authorization: '' };
 
 class IssueClient {
 
-    public async getIssueById(issueId: string) : Promise<GetIssuesResponse> {
+    public async getIssueById(issueId: string, token: string) : Promise<GetIssuesResponse> {
         let errorMessage = `Internal error when trying to get issue ${issueId}`;
         
         try {
             let getIssueUrl: string = path.join(baseUrl, getByIdEndpoint, issueId);
-            const {data} = await axios.get<GetIssuesResponse>(getIssueUrl, {headers});
+            headers.Authorization = `Bearer ${token}`;
+            const {data} = await axios.get(getIssueUrl, {headers});
+            const response: GetIssuesResponse = { data };
             
-            return data;
+            return response;
         }
         catch(error: unknown) {
             console.log({error});
@@ -34,14 +36,16 @@ class IssueClient {
         }
     }
 
-    public async getIssueByUserId(userId: string) : Promise<GetIssuesResponse> {
+    public async getIssueByUserId(userId: string, token: string) : Promise<GetIssuesResponse> {
         let errorMessage = `Internal error when trying to get issue ${userId}`;
         
         try {
             let getIssueUrl: string = path.join(baseUrl, getByUserIdEndpoint, userId);
-            const { data } = await axios.get<GetIssuesResponse>(getIssueUrl, {headers});
+            headers.Authorization = `Bearer ${token}`;
+            const { data } = await axios.get(getIssueUrl, {headers});
+            const response: GetIssuesResponse = { data };
 
-            return data;
+            return response;
         }
         catch(error: unknown) {
             console.log({error});
@@ -53,14 +57,17 @@ class IssueClient {
         }
     }
 
-    public async getIssueByProfession(profession: string) : Promise<GetIssuesResponse> {
+    public async getIssueByProfession(profession: string, token: string) : Promise<GetIssuesResponse> {
         let errorMessage = `Internal error when trying to get issue ${profession}`;
         
         try {
-            let getIssueUrl: string = path.join(baseUrl, getByProfessionEndpoint, profession);
-            const { data } = await axios.get<GetIssuesResponse>(getIssueUrl, {headers});
+            let getIssueUrl: string = `http://52.5.245.87:5000/issue/profession/${profession}`;
+            //let getIssueUrl: string = path.join(baseUrl, getByProfessionEndpoint, profession);
+            headers.Authorization = `Bearer ${token}`;
+            const { data } = await axios.get(getIssueUrl, {headers});
+            const response: GetIssuesResponse = { data };
 
-            return data;
+            return response;
         }
         catch(error: unknown) {
             console.log({error});
@@ -72,12 +79,11 @@ class IssueClient {
         }
     }
 
-    public async createIssue(issue: IssueModel) : Promise<boolean> {
-        let errorMessage = `Internal error when trying to create issue`;
-        
+    public async createIssue(issue: IssueModel, token: string) : Promise<boolean> {
         try {
             let createIssueUrl: string = path.join(baseUrl, createEndpoint);
-            const { status } = await axios.post<GetIssuesResponse>(createIssueUrl, {data: issue}, {headers});
+            headers.Authorization = `Bearer ${token}`;
+            const { status } = await axios.post(createIssueUrl, {data: issue}, {headers});
             
             return status == StatusCodes.CREATED;
         }
@@ -87,13 +93,14 @@ class IssueClient {
         }
     }
 
-    public async updateIssue(issue: IssueModel) : Promise<IssueModel[] | string> {
+    public async updateIssue(issue: IssueModel, token: string) : Promise<IssueModel[] | string> {
         let errorMessage = `Internal error when trying to update issue: ${issue.id}`;
         
         try {
             if(!issue.id) throw "missing issue id";
             let updateIssueUrl: string = path.join(baseUrl, updateEndpoint, issue.id);
-            const { data } = await axios.put<GetIssuesResponse>(updateIssueUrl, {data: issue}, {headers});
+            headers.Authorization = `Bearer ${token}`;
+            const { data } = await axios.put(updateIssueUrl, {data: issue}, {headers});
             
             if(data.message) {
                 return data.message;
@@ -111,12 +118,13 @@ class IssueClient {
         }
     }
 
-    public async deleteIssue(issueId: string) : Promise<IssueModel[] | string> {
+    public async deleteIssue(issueId: string, token: string) : Promise<IssueModel[] | string> {
         let errorMessage = `Internal error when trying to delete issue: ${issueId}`;
         
         try {
             let deleteIssueUrl: string = path.join(baseUrl, deleteEndpoint, issueId);
-            const { data } = await axios.delete<GetIssuesResponse>(deleteIssueUrl, {headers});
+            headers.Authorization = `Bearer ${token}`;
+            const { data } = await axios.delete(deleteIssueUrl, {headers});
             
             if(data.message) {
                 return data.message;

@@ -1,15 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Issue from './Issue';
 import { issueClient } from '@/pages/api/issueClient';
-import { IssueModel, GetIssuesResponse } from '../src/models/issueModel.js';
+import { IssueModel } from '../src/models/issueModel.js';
+import { getCookie } from 'cookies-next';
 
-async function Issues() {
-  const issuesResponse: GetIssuesResponse = await issueClient.getIssueByProfession('ELECTRICIAN');
-  const allIssues : IssueModel[] = issuesResponse.data || [];
+export default function Issues() {
+  const token : string = getCookie('jwt_auth')?.toString() || '';
   const s3 = {imageUrl: '', userAvatar: ''};
+  const [allIssues, setAllIssues] = useState<IssueModel[]>([]);
+
+  useEffect(() => {
+    issueClient.getIssueByProfession('ELECTRICIAN', token)
+      .then((issuesResponse) => {
+        setAllIssues(issuesResponse.data || []);
+      })
+      .catch((err) => {console.error({err})});
+  }, []);
+
   return (
     <div>
-      {allIssues.map((issue) => (
+      {allIssues.map((issue : IssueModel) => (
         <Issue
           key={issue.id}
           createdBy={issue.autherId}
@@ -23,5 +33,3 @@ async function Issues() {
     </div>
   );
 }
-
-export default Issues;
