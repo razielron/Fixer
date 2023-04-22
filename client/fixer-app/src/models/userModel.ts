@@ -1,6 +1,6 @@
 import { Role } from '../enums/role.js';
 
-export interface UserModel {
+interface UserModel {
     id?: string,
     name?: string,
     email?: string,
@@ -8,4 +8,11 @@ export interface UserModel {
     password?: string,
     createdAt?: Date,
     updatedAt?: Date,
-}
+};
+
+interface GetUsersResponse {
+    data?: UserModel[],
+    message?: string,
+};
+
+export type {UserModel, GetUsersResponse};

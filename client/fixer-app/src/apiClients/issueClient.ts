@@ -1,15 +1,14 @@
 import axios from 'axios';
 import path from 'path';
-import { StatusCodes } from 'http-status-codes';
-import { IssueModel, GetIssuesResponse } from '../../src/models/issueModel.js';
+import { IssueModel, GetIssuesResponse } from '../models/issueModel.js';
 
 const baseUrl = `${process.env.SERVER_URL}:${process.env.SERVER_PORT}`;
-const getByIdEndpoint: string = '/issue';
-const getByUserIdEndpoint: string = '/issue/user';
-const getByProfessionEndpoint: string = '/issue/profession';
-const createEndpoint: string = '/issue/create';
-const updateEndpoint: string = '/issue/update';
-const deleteEndpoint: string = '/issue';
+const getByIdEndpoint: string = '/issue/';
+const getByUserIdEndpoint: string = '/issue/user/';
+const getByProfessionEndpoint: string = '/issue/profession/';
+const createEndpoint: string = '/issue/create/';
+const updateEndpoint: string = '/issue/update/';
+const deleteEndpoint: string = '/issue/';
 
 let headers = { Accept: 'application/json', Authorization: '' };
 
@@ -19,9 +18,10 @@ class IssueClient {
         let errorMessage = `Internal error when trying to get issue ${issueId}`;
         
         try {
-            let getIssueUrl: string = path.join(baseUrl, getByIdEndpoint, issueId);
-            headers.Authorization = `Bearer ${token}`;
-            const {data} = await axios.get(getIssueUrl, {headers});
+            let getIssueBaseUrl: URL = new URL(getByIdEndpoint, baseUrl);
+            let getIssueUrl : URL = new URL (issueId, getIssueBaseUrl);
+            headers.Authorization = token;
+            const {data} = await axios.get(getIssueUrl.toString(), {headers});
             const response: GetIssuesResponse = { data };
             
             return response;
@@ -41,7 +41,7 @@ class IssueClient {
         
         try {
             let getIssueUrl: string = path.join(baseUrl, getByUserIdEndpoint, userId);
-            headers.Authorization = `Bearer ${token}`;
+            headers.Authorization = token;
             const { data } = await axios.get(getIssueUrl, {headers});
             const response: GetIssuesResponse = { data };
 
@@ -61,10 +61,10 @@ class IssueClient {
         let errorMessage = `Internal error when trying to get issue ${profession}`;
         
         try {
-            let getIssueUrl: string = `http://52.5.245.87:5000/issue/profession/${profession}`;
-            //let getIssueUrl: string = path.join(baseUrl, getByProfessionEndpoint, profession);
-            headers.Authorization = `Bearer ${token}`;
-            const { data } = await axios.get(getIssueUrl, {headers});
+            let getIssueBaseUrl: URL = new URL(getByProfessionEndpoint, baseUrl);
+            let getIssueUrl : URL = new URL (profession, getIssueBaseUrl);
+            headers.Authorization = token;
+            const { data } = await axios.get(getIssueUrl.toString(), {headers});
             const response: GetIssuesResponse = { data };
 
             return response;
@@ -82,10 +82,10 @@ class IssueClient {
     public async createIssue(issue: IssueModel, token: string) : Promise<boolean> {
         try {
             let createIssueUrl: string = path.join(baseUrl, createEndpoint);
-            headers.Authorization = `Bearer ${token}`;
+            headers.Authorization = token;
             const { status } = await axios.post(createIssueUrl, {data: issue}, {headers});
             
-            return status == StatusCodes.CREATED;
+            return status == 201;
         }
         catch(error: unknown) {
             console.log({error});
@@ -99,7 +99,7 @@ class IssueClient {
         try {
             if(!issue.id) throw "missing issue id";
             let updateIssueUrl: string = path.join(baseUrl, updateEndpoint, issue.id);
-            headers.Authorization = `Bearer ${token}`;
+            headers.Authorization = token;
             const { data } = await axios.put(updateIssueUrl, {data: issue}, {headers});
             
             if(data.message) {
@@ -123,7 +123,7 @@ class IssueClient {
         
         try {
             let deleteIssueUrl: string = path.join(baseUrl, deleteEndpoint, issueId);
-            headers.Authorization = `Bearer ${token}`;
+            headers.Authorization = token;
             const { data } = await axios.delete(deleteIssueUrl, {headers});
             
             if(data.message) {

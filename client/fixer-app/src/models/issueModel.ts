@@ -5,6 +5,7 @@ interface IssueModel {
     profession?: string,
     photo?: string,
     autherId?: string,
+    autherName?: string,
     createdAt?: Date,
     updatedAt?: Date,
 };
