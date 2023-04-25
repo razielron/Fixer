@@ -1,6 +1,7 @@
 import axios from 'axios';
 import path from 'path';
-import { UserModel, GetUsersResponse } from '../../src/models/userModel.js';
+import { UserModel } from '../../src/models/userModel.js';
+import ApiResponseModel from '@/src/models/apiModel';
 
 const baseUrl = `${process.env.SERVER_URL}:${process.env.SERVER_PORT}`;
 const getEndpoint: string = '/user/';
@@ -12,90 +13,83 @@ let headers = { Accept: 'application/json', Authorization: '' };
 
 class UserClient {
 
-    public async getUser(userId: string, token: string) : Promise<GetUsersResponse> {
-        let errorMessage = `Internal error when trying to get user ${userId}`;
-        
+    public async getUser(userId: string, token: string) : Promise<ApiResponseModel<UserModel>> {
         try {
             let getUserBaseUrl: URL = new URL(getEndpoint, baseUrl);
             let getUserUrl : URL = new URL (userId, getUserBaseUrl);
             headers.Authorization = token;
             const {data} = await axios.get(getUserUrl.toString(), {headers});
-            const response: GetUsersResponse = { data };
             
-            return response;
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to get user ${userId}`;
             console.log({error});
-            const response: GetUsersResponse = {
-                message: errorMessage
+            const response: ApiResponseModel<UserModel> = {
+                error: errorMessage
             }
 
             return response;
         }
     }
 
-    public async createUser(user: UserModel) : Promise<boolean> {
+    public async createUser(user: UserModel) : Promise<ApiResponseModel<UserModel>> {
         try {
             let createUserUrl: URL = new URL(createEndpoint, baseUrl);
             console.log({createUserUrl});
             console.log({user});
-            const { status } = await axios.post<GetUsersResponse>(createUserUrl.toString(), user, {headers});
+            const { data } = await axios.post(createUserUrl.toString(), user, {headers});
             
-            return status == 201;
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to create user`;
             console.log({error});
-            return false;
+            const response: ApiResponseModel<UserModel> = {
+                error: errorMessage
+            }
+
+            return response;
         }
     }
 
-    public async updateUser(user: UserModel, token: string) : Promise<UserModel[] | string> {
-        let errorMessage = `Internal error when trying to update user: ${user.id}`;
-        
+    public async updateUser(user: UserModel, token: string) : Promise<ApiResponseModel<UserModel>> {
         try {
             if(!user.id) throw "missing user id";
             let updateUserBaseUrl: URL = new URL(createEndpoint, baseUrl);
             let updateUserUrl: URL = new URL(user.id, updateUserBaseUrl);
             headers.Authorization = token;
-            const { data } = await axios.put<GetUsersResponse>(updateUserUrl.toString(), {data: user}, {headers});
-            
-            if(data.message) {
-                return data.message;
-            }
+            const { data } = await axios.put(updateUserUrl.toString(), {data: user}, {headers});
 
-            if(data.data) {
-                return data.data;
-            }
-
-            return errorMessage
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to update user: ${user.id}`;
             console.log({error});
-            return errorMessage;
+            const response: ApiResponseModel<UserModel> = {
+                error: errorMessage
+            }
+
+            return response;
         }
     }
 
-    public async deleteUser(userId: string, token: string) : Promise<UserModel[] | string> {
-        let errorMessage = `Internal error when trying to delete user: ${userId}`;
-        
+    public async deleteUser(userId: string, token: string) : Promise<ApiResponseModel<UserModel>> {
         try {
             let deleteUserUrl: string = path.join(baseUrl, deleteEndpoint, userId);
             headers.Authorization = token;
-            const { data } = await axios.delete<GetUsersResponse>(deleteUserUrl, {headers});
-            
-            if(data.message) {
-                return data.message;
-            }
+            const { data } = await axios.delete(deleteUserUrl, {headers});
 
-            if(data.data) {
-                return data.data;
-            }
-
-            return errorMessage
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to delete user: ${userId}`;
             console.log({error});
-            return errorMessage;
+            const response: ApiResponseModel<UserModel> = {
+                error: errorMessage
+            }
+
+            return response;
         }
     }
 }

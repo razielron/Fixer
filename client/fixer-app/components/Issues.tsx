@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Issue from './Issue';
 import Spinner from './Spinner';
-import { IssueModel } from '@/src/models/issueModel.js';
 import { getCookie } from 'cookies-next';
+import { IssueModel } from '@/src/models/issueModel.js';
+import ApiResponseModel from '@/src/models/apiModel';
 
 export default function Issues() {
   const token : string = getCookie('jwt_auth')?.toString() || '';
@@ -24,7 +25,9 @@ export default function Issues() {
     setIsLoading(true);
     fetch('/api/issue', {headers})
       .then(res => res.json())
-      .then((data: IssueModel[]) => {
+      .then((response: ApiResponseModel<IssueModel[]>) => {
+        let data = response?.data;
+        
         if(!data?.length) {
           data = [post, post];
         }

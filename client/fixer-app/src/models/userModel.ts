@@ -10,9 +10,4 @@ interface UserModel {
     updatedAt?: Date,
 };
 
-interface GetUsersResponse {
-    data?: UserModel[],
-    message?: string,
-};
-
-export type {UserModel, GetUsersResponse};
+export type {UserModel};

@@ -10,9 +10,4 @@ interface IssueModel {
     updatedAt?: Date,
 };
 
-interface GetIssuesResponse {
-    data?: IssueModel[],
-    message?: string,
-};
-
-export type {IssueModel, GetIssuesResponse};
+export type {IssueModel};

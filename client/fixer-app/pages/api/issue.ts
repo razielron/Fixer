@@ -1,19 +1,20 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import type { IssueModel, GetIssuesResponse } from '@/src/models/issueModel'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type { IssueModel } from '@/src/models/issueModel';
+import ApiResponseModel from '@/src/models/apiModel';
 import { issueClient } from '@/src/apiClients/issueClient';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<IssueModel[]>
+  res: NextApiResponse<ApiResponseModel<IssueModel[]>>
 ) {
     try {
         const token = req.headers.authorization || '';
-        let issues: GetIssuesResponse = await issueClient.getIssueByProfession('ELECTRICIAN', token);
-        console.log({issues});
-        res.status(200).json(issues?.data || []);
+        let response: ApiResponseModel<IssueModel[]> = await issueClient.getIssueByProfession('ELECTRICIAN', token);
+        console.log({response});
+        res.status(200).json(response);
     }
     catch(error: unknown) {
         console.log({error});
-        res.status(500).json([]);
+        res.status(500).json({error: `internal error: couldn't get issues by profession`});
     }
 }

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import path from 'path';
-import { IssueModel, GetIssuesResponse } from '../models/issueModel.js';
+import { IssueModel } from '../models/issueModel.js';
+import ApiResponseModel from '@/src/models/apiModel';
 
 const baseUrl = `${process.env.SERVER_URL}:${process.env.SERVER_PORT}`;
 const getByIdEndpoint: string = '/issue/';
@@ -14,131 +15,121 @@ let headers = { Accept: 'application/json', Authorization: '' };
 
 class IssueClient {
 
-    public async getIssueById(issueId: string, token: string) : Promise<GetIssuesResponse> {
-        let errorMessage = `Internal error when trying to get issue ${issueId}`;
-        
+    public async getIssueById(issueId: string, token: string) : Promise<ApiResponseModel<IssueModel>> {
         try {
             let getIssueBaseUrl: URL = new URL(getByIdEndpoint, baseUrl);
             let getIssueUrl : URL = new URL (issueId, getIssueBaseUrl);
             headers.Authorization = token;
             const {data} = await axios.get(getIssueUrl.toString(), {headers});
-            const response: GetIssuesResponse = { data };
             
-            return response;
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to get issue ${issueId}`;
             console.log({error});
-            const response: GetIssuesResponse = {
-                message: errorMessage
+            const response: ApiResponseModel<IssueModel> = {
+                error: errorMessage
             }
 
             return response;
         }
     }
 
-    public async getIssueByUserId(userId: string, token: string) : Promise<GetIssuesResponse> {
-        let errorMessage = `Internal error when trying to get issue ${userId}`;
-        
+    public async getIssueByUserId(userId: string, token: string) : Promise<ApiResponseModel<IssueModel>> {
         try {
             let getIssueUrl: string = path.join(baseUrl, getByUserIdEndpoint, userId);
             headers.Authorization = token;
             const { data } = await axios.get(getIssueUrl, {headers});
-            const response: GetIssuesResponse = { data };
 
-            return response;
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to get issue ${userId}`;
             console.log({error});
-            const response: GetIssuesResponse = {
-                message: errorMessage
+            const response: ApiResponseModel<IssueModel> = {
+                error: errorMessage
             }
             
             return response;
         }
     }
 
-    public async getIssueByProfession(profession: string, token: string) : Promise<GetIssuesResponse> {
-        let errorMessage = `Internal error when trying to get issue ${profession}`;
-        
+    public async getIssueByProfession(profession: string, token: string) : Promise<ApiResponseModel<IssueModel[]>> {
         try {
             let getIssueBaseUrl: URL = new URL(getByProfessionEndpoint, baseUrl);
             let getIssueUrl : URL = new URL (profession, getIssueBaseUrl);
             headers.Authorization = token;
             const { data } = await axios.get(getIssueUrl.toString(), {headers});
-            const response: GetIssuesResponse = { data };
+            const response: ApiResponseModel<IssueModel[]> = { data: data };
 
             return response;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to get issue ${profession}`;
             console.log({error});
-            const response: GetIssuesResponse = {
-                message: errorMessage
+            const response: ApiResponseModel<IssueModel[]> = {
+                error: errorMessage
             }
             
             return response;
         }
     }
 
-    public async createIssue(issue: IssueModel, token: string) : Promise<boolean> {
+    public async createIssue(issue: IssueModel, token: string) : Promise<ApiResponseModel<IssueModel>> {
         try {
             let createIssueUrl: string = path.join(baseUrl, createEndpoint);
             headers.Authorization = token;
-            const { status } = await axios.post(createIssueUrl, {data: issue}, {headers});
+            const { data } = await axios.post(createIssueUrl, {data: issue}, {headers});
             
-            return status == 201;
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to create issue`;
             console.log({error});
-            return false;
+            const response: ApiResponseModel<IssueModel> = {
+                error: errorMessage
+            }
+
+            return response;
         }
     }
 
-    public async updateIssue(issue: IssueModel, token: string) : Promise<IssueModel[] | string> {
-        let errorMessage = `Internal error when trying to update issue: ${issue.id}`;
-        
+    public async updateIssue(issue: IssueModel, token: string) : Promise<ApiResponseModel<IssueModel>> {
         try {
             if(!issue.id) throw "missing issue id";
             let updateIssueUrl: string = path.join(baseUrl, updateEndpoint, issue.id);
             headers.Authorization = token;
             const { data } = await axios.put(updateIssueUrl, {data: issue}, {headers});
             
-            if(data.message) {
-                return data.message;
-            }
-
-            if(data.data) {
-                return data.data;
-            }
-
-            return errorMessage
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to update issue: ${issue.id}`;
             console.log({error});
-            return errorMessage;
+            const response: ApiResponseModel<IssueModel> = {
+                error: errorMessage
+            }
+
+            return response;
         }
     }
 
-    public async deleteIssue(issueId: string, token: string) : Promise<IssueModel[] | string> {
-        let errorMessage = `Internal error when trying to delete issue: ${issueId}`;
-        
+    public async deleteIssue(issueId: string, token: string) : Promise<ApiResponseModel<IssueModel>> {
         try {
             let deleteIssueUrl: string = path.join(baseUrl, deleteEndpoint, issueId);
             headers.Authorization = token;
             const { data } = await axios.delete(deleteIssueUrl, {headers});
-            
-            if(data.message) {
-                return data.message;
-            }
 
-            if(data.data) {
-                return data.data;
-            }
-
-            return errorMessage
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to delete issue: ${issueId}`;
             console.log({error});
-            return errorMessage;
+            const response: ApiResponseModel<IssueModel> = {
+                error: errorMessage
+            }
+
+            return response;
         }
     }
 }
