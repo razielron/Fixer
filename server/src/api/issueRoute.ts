@@ -4,7 +4,7 @@ import { IssueModel, UserModel } from '../models/dbModels.js';
 import { issueRepository } from '../DB/issueRepository.js';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
-import { IssueApiModel } from '../models/apiModels.js';
+import { ApiResponseModel, IssueApiModel } from '../models/apiModels.js';
 
 async function getIssueById(req: Request, res: Response): Promise<void> {
     try {
@@ -21,16 +21,18 @@ async function getIssueById(req: Request, res: Response): Promise<void> {
             return;
         }
 
-        let issueApiModel: IssueApiModel = {
-            ...issue,
-            autherName: user?.name
+        let apiResponseModel: ApiResponseModel<IssueApiModel> = {
+            data: {
+                ...issue,
+                autherName: user?.name
+            }
         };
 
-        res.json(issueApiModel);
+        res.json(apiResponseModel);
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ message });
+        res.json({ error: `internal error: coudn't get issue ${req?.params?.issueId}` });
     }
 }
 
@@ -50,7 +52,7 @@ async function getIssuesByUserId(req: Request, res: Response): Promise<void> {
             return;
         }
 
-        let issueApiModel: IssueApiModel[] = issues.map(issue => {
+        let issueApiModels: IssueApiModel[] = issues.map(issue => {
             let user = users.find(user => user?.id === issue?.autherId);
             return {
                 ...issue,
@@ -58,11 +60,11 @@ async function getIssuesByUserId(req: Request, res: Response): Promise<void> {
             }
         });
 
-        res.json(issueApiModel);
+        res.json({data: issueApiModels});
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ message });
+        res.json({ error: `internal error: coudn't get issue by user ${req?.params?.userId}` });
     }
 }
 
@@ -82,7 +84,7 @@ async function getIssuesByProfession(req: Request, res: Response): Promise<void>
             return;
         }
 
-        let issueApiModel: IssueApiModel[] = issues.map(issue => {
+        let issueApiModels: IssueApiModel[] = issues.map(issue => {
             let user = users.find(user => user?.id === issue?.autherId);
             return {
                 ...issue,
@@ -90,11 +92,11 @@ async function getIssuesByProfession(req: Request, res: Response): Promise<void>
             }
         });
 
-        res.json(issueApiModel);
+        res.json({data: issueApiModels});
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ message });
+        res.json({ error: `internal error: coudn't get issue by profession ${req?.params?.profession}` });
     }
 }
 
@@ -106,19 +108,23 @@ async function createIssue(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ message });
+        res.json({ error: `internal error: coudn't create issue` });
+
     }
 }
 
 async function updateIssue(req: Request, res: Response): Promise<void> {
     try {
         let issue: IssueModel = req.body;
-        let updatedIssue = await issueRepository.updateIssue(issue);
-        res.json(updatedIssue);
+        let updatedIssue: IssueModel = await issueRepository.updateIssue(issue);
+        let apiResponseModel: ApiResponseModel<IssueModel> = {
+            data: updatedIssue
+        }
+        res.json(apiResponseModel);
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ message });
+        res.json({ error: `internal error: coudn't update issue ${req?.body?.id}` });
     }
 }
 
@@ -126,11 +132,14 @@ async function deleteIssue(req: Request, res: Response): Promise<void> {
     try {
         let issueId: string = req?.params?.issueId;
         let issue: IssueModel = await issueRepository.deleteIssue(issueId);
-        res.json(issue);
+        let apiResponseModel: ApiResponseModel<IssueModel> = {
+            data: issue
+        }
+        res.json(apiResponseModel);
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ message });
+        res.json({ error: `internal error: coudn't delete issue ${req?.params?.issueId}` });
     }
 }
 

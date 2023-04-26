@@ -1,4 +1,9 @@
-export interface IssueApiModel {
+interface ApiResponseModel<T> {
+    data?: T;
+    error?: string;
+}
+
+interface IssueApiModel {
     id?: string;
     title?: string;
     body?: string;
@@ -9,3 +14,5 @@ export interface IssueApiModel {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+export type { ApiResponseModel, IssueApiModel };
