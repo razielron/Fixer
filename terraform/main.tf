@@ -365,3 +365,25 @@ resource "aws_cognito_user_pool_client" "fixer_cognito_client" {
     callback_urls = ["http://localhost:3000/"]
 }
 ########################################################################
+
+# S3 blocks
+resource "aws_s3_bucket" "fixer_bucket_main" {
+    bucket = "fixer-bucket"
+
+    tags = {
+        Name = "fixer-bucket"
+    }
+}
+
+resource "aws_s3_bucket_acl" "fixer_bucket_acl" {
+    bucket = aws_s3_bucket.fixer_bucket_main.id
+    acl = "private"
+}
+
+resource "aws_s3_bucket_ownership_controls" "fixer_s3_ownership" {
+  bucket = aws_s3_bucket.fixer_bucket_main.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+########################################################################
