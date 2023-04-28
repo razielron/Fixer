@@ -3,13 +3,13 @@ import { StatusCodes } from 'http-status-codes';
 import { ApiResponseModel } from '../models/apiModels.js';
 import { authenticateUser } from "./apiAuthentication.js";
 import { s3Service } from '../services/s3Service.js';
-import { presignedUrl } from '../models/presignedUrl.js';
+import { PresignedUrlModel } from '../models/presignedUrlModel.js';
 
 async function generatePresignedUrl(req: Request, res: Response): Promise<void> {
     try {
         let fileType: string = req?.params?.fileType;
-        let presignedUrl: presignedUrl = await s3Service.generatePresignedUrl(fileType);
-        let response: ApiResponseModel<presignedUrl> = { data: presignedUrl };
+        let presignedUrl: PresignedUrlModel = await s3Service.generatePresignedUrl(fileType);
+        let response: ApiResponseModel<PresignedUrlModel> = { data: presignedUrl };
 
         res.json(response);
     }

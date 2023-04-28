@@ -1,6 +1,6 @@
 import { S3 } from "aws-sdk";
 import { randomUUID } from "crypto";
-import { presignedUrl } from "../models/presignedUrl.js";
+import { PresignedUrlModel } from "../models/presignedUrlModel.js";
 
 class S3Service {
     private s3: S3;
@@ -14,7 +14,7 @@ class S3Service {
         });
     }
 
-    async generatePresignedUrl(fileType: string): Promise<presignedUrl> {
+    async generatePresignedUrl(fileType: string): Promise<PresignedUrlModel> {
         const uploadId = randomUUID();
         const key = `${uploadId}.${fileType}`;
         const presignedUrl = await this.s3.getSignedUrlPromise('putObject', {
