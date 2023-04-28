@@ -19,6 +19,8 @@
     "@prisma/client": "^4.12.0",
     "amazon-cognito-identity-js": "^6.2.0",
     "aws-jwt-verify": "^4.0.0",
+    "aws-sdk": "^2.1367.0",
+    "axios": "^1.3.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",

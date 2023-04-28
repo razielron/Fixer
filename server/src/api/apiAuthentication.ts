@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import CognitoTokenValidator from "../cognito/cognitoTokenValidator.js";
+import CognitoTokenValidator from "../services/cognitoTokenValidator.js";
 
 export async function authenticateUser(
   req: Request,

@@ -2,10 +2,11 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import { authenticateUser } from "./apiAuthentication.js";
 import { userRoute } from './userRoute.js';
 import { postRoute } from './postRoute.js';
 import { issueRoute } from './issueRoute.js';
-import { authenticateUser } from "./apiAuthentication.js";
+import { s3Route } from './s3Route.js';
 
 dotenv.config({ path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`) });
 
@@ -36,6 +37,7 @@ app.get('/userTokenCheck', authenticateUser, (req: Request, res: Response) : voi
 app.use('/user', userRoute);
 app.use('/post', postRoute);
 app.use('/issue', issueRoute);
+app.use('/s3', s3Route);
 
 app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running on port: ${PORT}`);
