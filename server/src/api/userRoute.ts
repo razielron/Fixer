@@ -3,24 +3,29 @@ import { StatusCodes } from 'http-status-codes';
 import { UserModel } from '../models/dbModels.js';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
+import { ApiResponseModel } from '../models/apiModels.js';
 
 async function getUser(req : Request, res : Response) : Promise<void> {
     try {
         let userId : string = req?.params?.userId;
         let user : UserModel = await userRepository.getUser(userId);
 
-        if(user === null) {
+        if(!user) {
             res.sendStatus(StatusCodes.NOT_FOUND);
             return;
         }
 
+        let apiResponseModel: ApiResponseModel<UserModel> = {
+            data: user
+        };
+
         console.log({getUser: user});
-        res.json(user);
+        res.json(apiResponseModel);
     }
     catch(message : unknown) {
-        console.log({message});
+        console.error({message});
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({message});
+        res.json({ error: `internal error: coudn't get user ${req?.params?.issueId}` });
     }
 }
 
@@ -32,8 +37,9 @@ async function createUser(req : Request, res : Response) : Promise<void> {
         res.sendStatus(StatusCodes.CREATED);
     }
     catch (message : unknown) {
+        console.error({message});
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({message});
+        res.json({ error: `internal error: coudn't create user` });
     }
 }
 
@@ -42,11 +48,15 @@ async function updateUser(req : Request, res : Response) : Promise<void> {
         let user : UserModel = req.body;
         console.log({updateUser: user});
         let updatedUser = await userRepository.updateUser(user);
-        res.json(updatedUser);
+        let apiResponseModel: ApiResponseModel<UserModel> = {
+            data: updatedUser
+        };
+        res.json(apiResponseModel);
     }
     catch (message : unknown) {
+        console.error({message});
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({message});
+        res.json({ error: `internal error: coudn't update user ${req?.body?.id}` });
     }
 }
 
@@ -55,11 +65,14 @@ async function deleteUser(req : Request, res : Response) : Promise<void> {
         let userId : string = req?.params?.userId;
         console.log({deleteUser: userId});
         let user : UserModel = await userRepository.deleteUser(userId);
-        res.json(user);
+        let apiResponseModel: ApiResponseModel<UserModel> = {
+            data: user
+        };res.json(apiResponseModel);
     }
     catch(message : unknown) {
+        console.error({message});
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({message});
+        res.json({ error: `internal error: coudn't delete user ${req?.params?.userId}` });
     }
 }
 

@@ -17,6 +17,18 @@ class UserRepository {
         }
     }
 
+    public async getUsers(usersIds : string[]) : Promise<UserModel[]> {
+        try {
+            let where = { id: { in: usersIds } };
+            let users : UserModel[] = await prisma.user.findMany({ where });
+
+            return users;
+        }
+        catch(error : unknown) {
+            throw error;
+        }
+    }
+
     public async createUser(user: UserModel) : Promise<UserModel> {
         if(this.isUserCreateInput(user)) {
             try {
