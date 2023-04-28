@@ -2,7 +2,7 @@ import { Router, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ApiResponseModel } from '../models/apiModels.js';
 import { authenticateUser } from "./apiAuthentication.js";
-import { s3Service } from '../s3Service/s3Service.js';
+import { s3Service } from '../services/s3Service.js';
 import { presignedUrl } from '../models/presignedUrl.js';
 
 async function generatePresignedUrl(req: Request, res: Response): Promise<void> {
