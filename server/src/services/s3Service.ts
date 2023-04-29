@@ -1,12 +1,12 @@
-import { S3 } from "aws-sdk";
+import AWS from "aws-sdk";
 import { randomUUID } from "crypto";
 import { PresignedUrlModel } from "../models/presignedUrlModel.js";
 
 class S3Service {
-    private s3: S3;
+    private s3: AWS.S3;
 
     constructor() {
-        this.s3 = new S3({
+        this.s3 = new AWS.S3({
             accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
             secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
             region: process.env.AWS_REGION,

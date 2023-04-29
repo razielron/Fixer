@@ -7,11 +7,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { S3 } from "aws-sdk";
+import AWS from "aws-sdk";
 import { randomUUID } from "crypto";
 class S3Service {
     constructor() {
-        this.s3 = new S3({
+        this.s3 = new AWS.S3({
             accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
             secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
             region: process.env.AWS_REGION,
