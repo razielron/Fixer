@@ -11,7 +11,7 @@ const createEndpoint: string = '/issue/create/';
 const updateEndpoint: string = '/issue/update/';
 const deleteEndpoint: string = '/issue/';
 
-let headers = { Accept: 'application/json', Authorization: '' };
+let headers = { Accept: 'application/json', Authorization: '', 'Content-Type': 'application/json' };
 
 class IssueClient {
 
@@ -60,9 +60,8 @@ class IssueClient {
             let getIssueUrl : URL = new URL (profession, getIssueBaseUrl);
             headers.Authorization = token;
             const { data } = await axios.get(getIssueUrl.toString(), {headers});
-            const response: ApiResponseModel<IssueModel[]> = { data: data };
 
-            return response;
+            return data;
         }
         catch(error: unknown) {
             let errorMessage = `Internal error when trying to get issue ${profession}`;
@@ -77,9 +76,10 @@ class IssueClient {
 
     public async createIssue(issue: IssueModel, token: string) : Promise<ApiResponseModel<IssueModel>> {
         try {
-            let createIssueUrl: string = path.join(baseUrl, createEndpoint);
+            console.log({issue})
+            let createIssueUrl: URL = new URL(createEndpoint, baseUrl);
             headers.Authorization = token;
-            const { data } = await axios.post(createIssueUrl, {data: issue}, {headers});
+            const { data } = await axios.post(createIssueUrl.toString(), issue, {headers});
             
             return data;
         }

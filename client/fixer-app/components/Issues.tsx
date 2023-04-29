@@ -27,7 +27,7 @@ export default function Issues() {
       .then(res => res.json())
       .then((response: ApiResponseModel<IssueModel[]>) => {
         let data = response?.data;
-        
+        console.log({response})
         if(!data?.length) {
           data = [post, post];
         }
