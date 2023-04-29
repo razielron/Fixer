@@ -4,6 +4,7 @@ import Input from "@/components/input";
 import DropDown from "@/components/DropDown";
 import Link from "next/link";
 import UserPool from "@/pages/api/userPool";
+import { userClient } from "@/pages/api/userClient";
 import { UserModel } from "@/src/models/userModel";
 import { Role } from "@/src/enums/role";
 import Select from "react-dropdown-select";
@@ -55,8 +56,7 @@ const Login = () => {
                 name: name,
                 role: Role.PROFESSIONAL === role ? Role.PROFESSIONAL : Role.BASIC   
             };
-
-            let response = await fetch('/api/user', {method: 'POST', body: JSON.stringify(user)});
+            await userClient.createUser(user);
             router.push('/home');
         });
     };

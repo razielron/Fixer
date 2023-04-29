@@ -28,7 +28,6 @@ After that you can use the aws cli for your purpose
 3. to run the server:
     * cd server
     * npm i
-    * npm run migration
     * npm run build
     * npm run start
 4. to run the frontend:
