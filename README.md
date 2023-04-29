@@ -14,7 +14,8 @@ After that you can use the aws cli for your purpose
 1. run: terraform apply
 2. copy the server_dev public key to .ssh: cp fixer_server_dev_key_file ~/.ssh
 3. copy the frontend public key to .ssh: cp fixer_frontend_key_file ~/.ssh
-4. ssh to an instance using WSL:
+4. lock the files: sudo chmod 500 fixer_frontend_key_file
+5. ssh to an instance using WSL:
     * cd ~/.ssh
     * ssh -i fixer_server_dev_key_file ubuntu@--ip--
 
@@ -28,6 +29,7 @@ After that you can use the aws cli for your purpose
 3. to run the server:
     * cd server
     * npm i
+    * npm run migration
     * npm run build
     * npm run start
 4. to run the frontend:
