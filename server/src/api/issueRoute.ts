@@ -103,6 +103,16 @@ async function getIssuesByProfession(req: Request, res: Response): Promise<void>
 async function createIssue(req: Request, res: Response): Promise<void> {
     try {
         let issue: IssueModel = req.body;
+        let email: string = req?.body?.cognitoUser?.email;
+
+        if(!issue || !email) {
+            res.status(StatusCodes.BAD_REQUEST);
+            res.json({ error: `Missing issue data or valid token` });
+            return;
+        }
+
+        let user: UserModel = await userRepository.getUserByEmail(email);
+        issue.autherId = user?.id;
         await issueRepository.createIssue(issue);
         res.sendStatus(StatusCodes.CREATED);
     }

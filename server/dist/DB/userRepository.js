@@ -22,6 +22,18 @@ class UserRepository {
             }
         });
     }
+    getUserByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let where = { email };
+                let user = yield prisma.user.findFirst({ where });
+                return user;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
     getUsers(usersIds) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

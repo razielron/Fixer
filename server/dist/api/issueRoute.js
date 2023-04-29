@@ -92,9 +92,18 @@ function getIssuesByProfession(req, res) {
     });
 }
 function createIssue(req, res) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let issue = req.body;
+            let email = (_b = (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.cognitoUser) === null || _b === void 0 ? void 0 : _b.email;
+            if (!issue || !email) {
+                res.status(StatusCodes.BAD_REQUEST);
+                res.json({ error: `Missing issue data or valid token` });
+                return;
+            }
+            let user = yield userRepository.getUserByEmail(email);
+            issue.autherId = user === null || user === void 0 ? void 0 : user.id;
             yield issueRepository.createIssue(issue);
             res.sendStatus(StatusCodes.CREATED);
         }
