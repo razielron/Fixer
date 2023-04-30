@@ -17,6 +17,18 @@ class UserRepository {
         }
     }
 
+    public async getUserByEmail(email : string) : Promise<UserModel> {
+        try {
+            let where = { email };
+            let user : UserModel = await prisma.user.findFirst({ where });
+
+            return user;
+        }
+        catch(error : unknown) {
+            throw error;
+        }
+    }
+
     public async getUsers(usersIds : string[]) : Promise<UserModel[]> {
         try {
             let where = { id: { in: usersIds } };

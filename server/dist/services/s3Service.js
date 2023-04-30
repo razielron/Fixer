@@ -18,7 +18,7 @@ class S3Service {
             signatureVersion: "v4",
         });
     }
-    generatePresignedUrl(fileType) {
+    generateUploadPresignedUrl(fileType) {
         return __awaiter(this, void 0, void 0, function* () {
             const uploadId = randomUUID();
             const key = `${uploadId}.${fileType}`;
@@ -28,6 +28,16 @@ class S3Service {
                 Expires: 60 * 3,
             });
             return { presignedUrl, key };
+        });
+    }
+    generateDownloadPresignedUrl(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const presignedUrl = yield this.s3.getSignedUrlPromise('getObject', {
+                Bucket: process.env.AWS_S3_BUCKET_NAME,
+                Key: key,
+                Expires: 60 * 3,
+            });
+            return presignedUrl;
         });
     }
     getFile(key) {

@@ -14,7 +14,7 @@ class S3Service {
         });
     }
 
-    async generatePresignedUrl(fileType: string): Promise<PresignedUrlModel> {
+    async generateUploadPresignedUrl(fileType: string): Promise<PresignedUrlModel> {
         const uploadId = randomUUID();
         const key = `${uploadId}.${fileType}`;
         const presignedUrl = await this.s3.getSignedUrlPromise('putObject', {
@@ -24,6 +24,16 @@ class S3Service {
         });
 
         return {presignedUrl, key};
+    }
+
+    async generateDownloadPresignedUrl(key: string): Promise<string> {
+        const presignedUrl = await this.s3.getSignedUrlPromise('getObject', {
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: key,
+            Expires: 60 * 3,
+        });
+
+        return presignedUrl;
     }
     
     async getFile(key: string): Promise<string | null> {
