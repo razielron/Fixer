@@ -8,8 +8,10 @@ export default function Home() {
     return (
         <>
             <Navbar></Navbar>
-            <Issues></Issues>
+            <div className="text-center text-5xl">Issues</div>
             <IssueModal></IssueModal>
+            <Issues></Issues>
+            
         </>
     )
 }

@@ -26,7 +26,11 @@ export default function Issues() {
     fetch('/api/issue', {headers})
       .then(res => res.json())
       .then((response: ApiResponseModel<IssueModel[]>) => {
-        let data = response?.data;
+        let data = response?.data?.sort((x, y) => { 
+          let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
+          let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
+          return secondDate - firstDate;
+        });
         console.log({response})
         if(!data?.length) {
           data = [post, post];
