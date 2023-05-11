@@ -4,6 +4,8 @@ import Spinner from './Spinner';
 import { getCookie } from 'cookies-next';
 import { IssueModel } from '@/src/models/issueModel.js';
 import ApiResponseModel from '@/src/models/apiModel';
+import IssueModal from "@/components/IssueModal";
+
 
 export default function Issues() {
   const token : string = getCookie('jwt_auth')?.toString() || '';
@@ -16,8 +18,8 @@ export default function Issues() {
       id: 'id',
       autherId: 'razId',
       autherName: 'raz',
-      title: 'title',
-      body: 'body',
+      title: 'A washing machine gets the clothes dirty',
+      body: 'After running the machine, the clothes come out with black stains',
       createdAt: new Date(),
     };
 
@@ -43,6 +45,7 @@ export default function Issues() {
 
   return (
     <div>
+      <div className="text-center text-5xl">Issues </div>
       {isLoading
         ? (<Spinner></Spinner>)
         : allIssues.map((issue : IssueModel) => (

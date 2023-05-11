@@ -27,14 +27,13 @@ export default function Modal() {
   const [showModal, setShowModal] = React.useState(false);
 
   function createIssue(){
-    let createIssue: IssueModel = {
+    let createIssueModel: IssueModel = {
       title,
       body,
       profession: role,
-      autherId: '78d888ba-e994-4f6f-b40d-ef615e788ed8'
     };
 
-    fetch('/api/issue', {method: 'POST', headers, body: JSON.stringify(createIssue)})
+    fetch('/api/issue', {method: 'POST', headers, body: JSON.stringify(createIssueModel)})
       .then(res => res.json())
       .then((response: ApiResponseModel<IssueModel[]>) => {
         console.log({response});
@@ -45,11 +44,11 @@ export default function Modal() {
   return (
     <>
       <button
-        className="	h-12 px-6 content-center bg-yellow-400 "
+        className="h-12 px-6 content-center bg-yellow-400"
         type="button"
         onClick={() => setShowModal(true)}
       >
-        Create New Issue
+        Create
       </button>
       {showModal ? (
         <>
@@ -76,29 +75,25 @@ export default function Modal() {
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
                 <div className="flex flex-col gap-4">
-                    <Input
-                        onChange = {(event:any)=> setTitle(event.target.value)}
-                        id = "title"
-                        type = "name"
-                        value = {title}
-                        placeHolder = "Title"
-                    />
-                    <Input
-                        onChange = {(event:any)=> setBody(event.target.value)}
-                        id = "body"
-                        type = "textarea"
-                        value = {body}
-                        placeHolder = "Body"
-                    />
-
-
+                  <Input
+                      onChange = {(event:any)=> setTitle(event.target.value)}
+                      id = "title"
+                      type = "name"
+                      value = {title}
+                      placeHolder = "Title"
+                  />
+                  <Input
+                      onChange = {(event:any)=> setBody(event.target.value)}
+                      id = "body"
+                      type = "textarea"
+                      value = {body}
+                      placeHolder = "Body"
+                  />
                   <DropDown 
-                        options={options} 
-                        onChange={(event:any)=> setRole(event[0].label)}
-                        placeHolder="Role"   
-                    />
-
-
+                      options={options} 
+                      onChange={(event:any)=> setRole(event[0].label)}
+                      placeHolder="Role"   
+                  />
                 </div>
                 </div>
                 {/*footer*/}

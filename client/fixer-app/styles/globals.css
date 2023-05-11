@@ -12,19 +12,6 @@
     margin-top: 1rem; 
   } 
    
-  .post__title-container { 
-    border-top-left-radius: 8px; 
-    border-top-right-radius: 8px; 
-    background-color: #fff; 
-    padding: 1.25rem; 
-  } 
-   
-  .post__title { 
-    align-items: center; 
-    display: flex; 
-    gap: 0.75rem; 
-  } 
-   
   .post__image { 
     border-radius: 9999px; 
   } 
@@ -55,10 +42,7 @@
     height: 100%; 
   } 
    
-  .post__reaction-title { 
-    font-size: 0.75rem; 
-    line-height: 1rem; 
-  } 
+
    
   .post__footer { 
     align-items: center; 

@@ -12,14 +12,13 @@ const Issue: React.FC<Props> =(props) => {
     return (
       <div className="post__container">
         <div className="post__title-container">
-          <div className="text-lg text-center	">
+          <div className="text-lg text-left	font-bold	">
             {props.title}
             <img className="header__avatar" src={props.userAvatar} />
             <div>
-              <p className="post__name">{props.createdBy}</p>
               {props.timestamp ? (
                 <p className="post__timestamp">
-                  {(new Date(props.timestamp)).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'})}
+                  {(new Date(props.timestamp)).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'}) + ` written by ${props.createdBy}`}
                 </p>
               ) : (
                 <p className="post__timestamp">Loading</p>
