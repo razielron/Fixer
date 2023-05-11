@@ -12,6 +12,7 @@
     margin-top: 1rem; 
   } 
    
+
   .post__image { 
     border-radius: 9999px; 
   } 
@@ -35,6 +36,7 @@
     height: 18rem; 
     max-height: 18rem; 
     position: relative; 
+    background-color: #fff;
   } 
    
   .post__background img {  
