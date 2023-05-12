@@ -386,4 +386,14 @@ resource "aws_s3_bucket_ownership_controls" "fixer_s3_ownership" {
     object_ownership = "BucketOwnerPreferred"
   }
 }
+
+resource "aws_s3_bucket_cors_configuration" "example" {
+  bucket = aws_s3_bucket.fixer_bucket_main.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "PUT", "POST"]
+    allowed_origins = ["*"]
+  }
+}
 ########################################################################
