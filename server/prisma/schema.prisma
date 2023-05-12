@@ -41,7 +41,7 @@ model Issue {
   id         String     @id @default(uuid())
   title      String
   body       String
-  profession Profession 
+  profession Profession
   photo      String?
   autherId   String
   createdAt  DateTime   @default(now())
@@ -56,11 +56,11 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   autherId  String
-  postId    String
-  issueId   String
+  postId    String?
+  issueId   String?
   auther    User     @relation(fields: [autherId], references: [id])
-  post      Post     @relation(fields: [postId], references: [id])
-  issue     Issue    @relation(fields: [issueId], references: [id])
+  post      Post?    @relation(fields: [postId], references: [id])
+  issue     Issue?   @relation(fields: [issueId], references: [id])
 }
 
 model Review {
