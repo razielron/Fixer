@@ -3,13 +3,15 @@ import {ApiResponseModel, PresignedUrlModel} from '@/src/models/apiModel';
 import axios from 'axios';
 
 const baseUrl = `${process.env.SERVER_URL}:${process.env.SERVER_PORT}`;
-const uploadPath = '/api/upload/';
+const uploadPath = '/s3/upload/';
+let headers = { Accept: 'application/json', Authorization: '', 'Content-Type': 'application/json' };
 
-async function getUploadPresignedUrl(fileType: string) : Promise<ApiResponseModel<PresignedUrlModel>> {
+async function getUploadPresignedUrl(fileType: string, token: string) : Promise<ApiResponseModel<PresignedUrlModel>> {
     try {
+        headers.Authorization = token;
         let uploadBaseUrl: URL = new URL(uploadPath, baseUrl);
         let uploadUrl : URL = new URL (fileType, uploadBaseUrl);
-        let { data } = await axios.get(uploadUrl.toString());
+        let { data } = await axios.get(uploadUrl.toString(), {headers});
 
         return data as ApiResponseModel<PresignedUrlModel>;
     }
@@ -26,7 +28,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
     try {
-        let response: ApiResponseModel<PresignedUrlModel> = await getUploadPresignedUrl(req?.query?.fileType as string);
+      console.log({fileType:req.query.fileType})
+        const token = req.headers.authorization || '';
+        let response: ApiResponseModel<PresignedUrlModel> = await getUploadPresignedUrl(req?.query?.fileType as string, token);
         console.log({response});
         res.status(201).json(response);
     }
@@ -35,43 +39,3 @@ export default async function handler(
         res.status(500).json({error: `internal error: couldn't get upload link`});
     }
 }
-///////////////////////////////////////////////////////////////////////////////////////////
-import {ApiResponseModel, PresignedUrlModel} from "@/src/models/apiModel";
-
-const [image, setImage] = useState(null as File | null);
-
-function renameFile(file: File, newName: string) : FormData {
-    let results = new FormData();
-    results.append('file', file, newName);
-    return results;
-  }
-
-  async function uploadFile() {
-    let res = await fetch('/api/issue', {method: 'POST', headers, body: JSON.stringify(createIssue)});
-    let response: ApiResponseModel<PresignedUrlModel> = await res.json();
-    console.log({response});
-
-    if(!response?.data?.presignedUrl) {
-      console.error(response?.error);
-      return;
-    }
-
-    if(!image) {
-      console.error('no image selected');
-      return;
-    }
-
-    let uploadImage = renameFile(image, response?.data?.key);
-
-    await fetch(response?.data?.presignedUrl, {method: 'PUT', headers: {'Content-Tpye': image.type}, body: uploadImage});
-    console.log('image uploaded');
-    setImage(null);
-  }
-
-  <Input
-        onChange = {(event:any)=> setImage(event.target.files[0])}
-        id = "image"
-        type = "file"
-        value = ''
-        placeHolder = "Choose Image"
-    />
