@@ -5,10 +5,15 @@ import { authenticateUser } from "./apiAuthentication.js";
 import { s3Service } from '../services/s3Service.js';
 import { PresignedUrlModel } from '../models/presignedUrlModel.js';
 
+interface FileModel {
+    fileName: string;
+    fileType: string;
+}
+
 async function generateUploadPresignedUrl(req: Request, res: Response): Promise<void> {
     try {
-        let fileType: string = req?.params?.fileType;
-        let presignedUrl: PresignedUrlModel = await s3Service.generateUploadPresignedUrl(fileType);
+        let fileModel: FileModel = req?.body;
+        let presignedUrl: PresignedUrlModel = await s3Service.generateUploadPresignedUrl(fileModel.fileType);
         let response: ApiResponseModel<PresignedUrlModel> = { data: presignedUrl };
 
         res.json(response);
@@ -22,8 +27,8 @@ async function generateUploadPresignedUrl(req: Request, res: Response): Promise<
 
 async function generateDownloadPresignedUrl(req: Request, res: Response): Promise<void> {
     try {
-        let fileName: string = req?.params?.fileName;
-        let presignedUrl: string = await s3Service.generateDownloadPresignedUrl(fileName);
+        let fileModel: FileModel = req?.body;
+        let presignedUrl: string = await s3Service.generateDownloadPresignedUrl(fileModel.fileName);
         let response: ApiResponseModel<string> = { data: presignedUrl };
 
         res.json(response);
@@ -37,8 +42,8 @@ async function generateDownloadPresignedUrl(req: Request, res: Response): Promis
 
 const s3Route: Router = Router();
 
-s3Route.get('/upload/:fileType', authenticateUser, async (req: Request, res: Response, next: NextFunction) => { await generateUploadPresignedUrl(req, res); next(); });
-s3Route.get('/download/:fileName', authenticateUser, async (req: Request, res: Response, next: NextFunction) => { await generateDownloadPresignedUrl(req, res); next(); });
+s3Route.get('/upload', authenticateUser, async (req: Request<{}, {}, FileModel>, res: Response, next: NextFunction) => { await generateUploadPresignedUrl(req, res); next(); });
+s3Route.get('/download', authenticateUser, async (req: Request<{}, {}, FileModel>, res: Response, next: NextFunction) => { await generateDownloadPresignedUrl(req, res); next(); });
 
 export {
     s3Route
