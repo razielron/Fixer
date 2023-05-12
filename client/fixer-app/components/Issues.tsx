@@ -3,9 +3,7 @@ import Issue from './Issue';
 import Spinner from './Spinner';
 import { getCookie } from 'cookies-next';
 import { IssueModel } from '@/src/models/issueModel.js';
-import ApiResponseModel from '@/src/models/apiModel';
-import IssueModal from "@/components/IssueModal";
-
+import { ApiResponseModel } from '@/src/models/apiModel';
 
 export default function Issues() {
   const token : string = getCookie('jwt_auth')?.toString() || '';

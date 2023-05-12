@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { IssueModel } from '@/src/models/issueModel';
-import ApiResponseModel from '@/src/models/apiModel';
+import {ApiResponseModel} from '@/src/models/apiModel';
 import { issueClient } from '@/src/apiClients/issueClient';
 
 async function getIssueByProfessionHandler (
