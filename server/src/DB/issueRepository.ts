@@ -1,4 +1,4 @@
-import { PrismaClient, Issue, Profession } from '@prisma/client';
+import { PrismaClient, Profession } from '@prisma/client';
 import { IssueModel } from '../models/dbModels.js';
 import { Prisma as PrismaTypes } from '@prisma/client';
 
