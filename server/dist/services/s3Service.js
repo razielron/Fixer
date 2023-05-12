@@ -20,8 +20,9 @@ class S3Service {
     }
     generateUploadPresignedUrl(fileType) {
         return __awaiter(this, void 0, void 0, function* () {
+            const fileExtension = fileType.split('/')[1];
             const uploadId = randomUUID();
-            const key = `${uploadId}.${fileType}`;
+            const key = `${uploadId}.${fileExtension}`;
             const presignedUrl = yield this.s3.getSignedUrlPromise('putObject', {
                 Bucket: process.env.AWS_S3_BUCKET_NAME,
                 Key: key,
