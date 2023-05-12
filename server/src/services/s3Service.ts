@@ -20,6 +20,7 @@ class S3Service {
         const presignedUrl = await this.s3.getSignedUrlPromise('putObject', {
             Bucket: process.env.AWS_S3_BUCKET_NAME,
             Key: key,
+            ContentType: fileType,
             Expires: 60 * 3,
         });
 
