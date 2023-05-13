@@ -4,6 +4,7 @@ import type {
         Issue,
         Comment,
         Review,
+        PriceOffer,
         Product,
         Order
     }
@@ -18,16 +19,9 @@ type PostModel = Partial<Post> | null | PrismaTypes.PostCreateInput;
 type IssueModel = Partial<Issue> | null;
 type CommentModel = Partial<Comment> | null;
 type ReviewModel = Partial<Review> | null;
+type PriceOfferModel = Partial<PriceOffer> | null;
 type ProductModel = Partial<Product> | null;
 type OrderModel = Partial<Order> | null;
-
-class UserNotNull implements Partial<User> {}
-class PostNotNull implements Partial<Post> {}
-class IssueNotNull implements Partial<Issue> {}
-class CommentNotNull implements Partial<Comment> {}
-class ReviewNotNull implements Partial<Review> {}
-class ProductNotNull implements Partial<Product> {}
-class OrderNotNull implements Partial<Order> {}
 
 export {
     UserModel,
@@ -35,6 +29,7 @@ export {
     IssueModel,
     CommentModel,
     ReviewModel,
+    PriceOfferModel,
     ProductModel,
     OrderModel
 }
