@@ -42,7 +42,7 @@ function generateDownloadPresignedUrl(req, res) {
     });
 }
 const s3Route = Router();
-s3Route.get('/upload', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield generateUploadPresignedUrl(req, res); next(); }));
-s3Route.get('/download', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield generateDownloadPresignedUrl(req, res); next(); }));
+s3Route.post('/upload', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield generateUploadPresignedUrl(req, res); next(); }));
+s3Route.post('/download', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield generateDownloadPresignedUrl(req, res); next(); }));
 export { s3Route };
 //# sourceMappingURL=s3Route.js.map
