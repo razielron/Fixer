@@ -9,6 +9,7 @@ class S3Service {
         this.s3 = new AWS.S3({
             accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
             secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
+            sessionToken: process.env.AWS_S3_SESSION_TOKEN,
             region: process.env.AWS_REGION,
             signatureVersion: "v4",
         });
