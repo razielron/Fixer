@@ -42,7 +42,7 @@ const Issue: React.FC<Props> =(props) => {
           <p className="post__message pl-5">{props.body}</p>
         </div>
       {props.imageUrl && (
-          <img className="h-28 w-28" src={image} />
+          <img className="h-28 w-28 pl-5" src={image} />
       )}
 
       {/* Post Footer */}
