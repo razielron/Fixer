@@ -9,6 +9,7 @@ interface IssueApiModel {
     body?: string;
     profession?: string;
     photo?: string | null;
+    photoUrl?: string | null;
     autherId?: string;
     autherName?: string;
     createdAt?: Date;

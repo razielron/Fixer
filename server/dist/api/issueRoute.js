@@ -12,6 +12,7 @@ import { StatusCodes } from 'http-status-codes';
 import { issueRepository } from '../DB/issueRepository.js';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
+import { s3Service } from '../services/s3Service.js';
 function getIssueById(req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
@@ -79,10 +80,14 @@ function getIssuesByProfession(req, res) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
-            let issueApiModels = issues.map(issue => {
+            let issueApiModels = yield Promise.all(issues.map((issue) => __awaiter(this, void 0, void 0, function* () {
                 let user = users.find(user => (user === null || user === void 0 ? void 0 : user.id) === (issue === null || issue === void 0 ? void 0 : issue.autherId));
-                return Object.assign(Object.assign({}, issue), { autherName: user === null || user === void 0 ? void 0 : user.name });
-            });
+                let photoUrl = null;
+                if (issue === null || issue === void 0 ? void 0 : issue.photo) {
+                    photoUrl = yield s3Service.generateDownloadPresignedUrl(issue === null || issue === void 0 ? void 0 : issue.photo);
+                }
+                return Object.assign(Object.assign({}, issue), { autherName: user === null || user === void 0 ? void 0 : user.name, photoUrl });
+            })));
             res.json({ data: issueApiModels });
         }
         catch (message) {
