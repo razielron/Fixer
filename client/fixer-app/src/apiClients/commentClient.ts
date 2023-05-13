@@ -34,18 +34,19 @@ class CommentClient {
         }
     }
 
-    public async getCommentByUserId(issueId: string, token: string) : Promise<ApiResponseModel<CommentModel>> {
+    public async getCommentByIssueId(issueId: string, token: string) : Promise<ApiResponseModel<CommentModel[]>> {
         try {
-            let getCommentUrl: string = path.join(baseUrl, getByIssueIdEndpoint, issueId);
+            let getCommentBaseUrl: URL = new URL(getByIssueIdEndpoint, baseUrl);
+            let getCommentUrl : URL = new URL (issueId, getCommentBaseUrl);
             headers.Authorization = token;
-            const { data } = await axios.get(getCommentUrl, {headers});
+            const { data } = await axios.get(getCommentUrl.toString(), {headers});
 
             return data;
         }
         catch(error: unknown) {
             let errorMessage = `Internal error when trying to get comment by issueId ${issueId}`;
             console.log({error});
-            const response: ApiResponseModel<CommentModel> = {
+            const response: ApiResponseModel<CommentModel[]> = {
                 error: errorMessage
             }
             

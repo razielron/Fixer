@@ -8,8 +8,9 @@ async function getIssueByProfessionHandler (
     res: NextApiResponse<ApiResponseModel<IssueModel[]>>
 ) {
     try {
-        const token = req.headers.authorization || '';
-        let response: ApiResponseModel<IssueModel[]> = await issueClient.getIssueByProfession('ELECTRICIAN', token);
+        const token = req.headers.authorization as string;
+        const profession = req?.query?.profession as string || 'ELECTRICIAN';
+        let response: ApiResponseModel<IssueModel[]> = await issueClient.getIssueByProfession(profession, token);
         console.log({response});
         res.status(200).json(response);
     }
@@ -24,7 +25,7 @@ async function createIssueHandler (
     res: NextApiResponse<ApiResponseModel<IssueModel>>
 ) {
     try {
-        const token = req.headers.authorization || '';
+        const token = req.headers.authorization as string;
         let response: ApiResponseModel<IssueModel> = await issueClient.createIssue(JSON.parse(req.body), token);
         console.log({response});
         res.status(200).json(response);
@@ -34,6 +35,7 @@ async function createIssueHandler (
         res.status(500).json({error: `internal error: couldn't create issue`});
     }
 }
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
