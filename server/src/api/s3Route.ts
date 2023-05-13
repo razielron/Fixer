@@ -42,8 +42,8 @@ async function generateDownloadPresignedUrl(req: Request, res: Response): Promis
 
 const s3Route: Router = Router();
 
-s3Route.get('/upload', authenticateUser, async (req: Request<{}, {}, FileModel>, res: Response, next: NextFunction) => { await generateUploadPresignedUrl(req, res); next(); });
-s3Route.get('/download', authenticateUser, async (req: Request<{}, {}, FileModel>, res: Response, next: NextFunction) => { await generateDownloadPresignedUrl(req, res); next(); });
+s3Route.post('/upload', authenticateUser, async (req: Request<{}, {}, FileModel>, res: Response, next: NextFunction) => { await generateUploadPresignedUrl(req, res); next(); });
+s3Route.post('/download', authenticateUser, async (req: Request<{}, {}, FileModel>, res: Response, next: NextFunction) => { await generateDownloadPresignedUrl(req, res); next(); });
 
 export {
     s3Route
