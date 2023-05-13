@@ -3,9 +3,7 @@ import Issue from './Issue';
 import Spinner from './Spinner';
 import { getCookie } from 'cookies-next';
 import { IssueModel } from '@/src/models/issueModel.js';
-import ApiResponseModel from '@/src/models/apiModel';
-import IssueModal from "@/components/IssueModal";
-
+import { ApiResponseModel } from '@/src/models/apiModel';
 
 export default function Issues() {
   const token : string = getCookie('jwt_auth')?.toString() || '';
@@ -33,7 +31,6 @@ export default function Issues() {
           let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
           return secondDate - firstDate;
         });
-        console.log({response})
         if(!data?.length) {
           data = [post, post];
         }
@@ -55,7 +52,7 @@ export default function Issues() {
             title={issue.title}
             body={issue.body}
             timestamp={issue.createdAt}
-            imageUrl={s3.imageUrl}
+            imageUrl={issue.photoUrl}
             userAvatar={s3.userAvatar}
           />))
       }

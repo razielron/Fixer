@@ -1,9 +1,10 @@
-import ApiResponseModel from "@/src/models/apiModel";
+import { ApiResponseModel } from "@/src/models/apiModel";
 import { IssueModel } from "@/src/models/issueModel";
 import { getCookie } from "cookies-next";
 import React, { useEffect, useState } from "react";
 import DropDown from "./DropDown";
 import Input from "./input";
+import Upload from "./Upload";
 
 export default function Modal() {
   const options = [
@@ -20,9 +21,9 @@ export default function Modal() {
   const token : string = getCookie('jwt_auth')?.toString() || '';
   const headers = {Authorization: `Bearer ${token}`};
   const [title, setTitle] = useState('')
-  const [check, setCheck] = useState(false);
   const [body, setBody] = useState('');
   const [role, setRole] = useState('');
+  const [s3key, setS3key] = useState<string>('');
   const [error, setError] = useState('');
   const [showModal, setShowModal] = React.useState(false);
 
@@ -31,12 +32,12 @@ export default function Modal() {
       title,
       body,
       profession: role,
+      photo: s3key
     };
 
     fetch('/api/issue', {method: 'POST', headers, body: JSON.stringify(createIssueModel)})
       .then(res => res.json())
       .then((response: ApiResponseModel<IssueModel[]>) => {
-        console.log({response});
         setShowModal(false);
     });
   };
@@ -97,7 +98,10 @@ export default function Modal() {
                 </div>
                 </div>
                 {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                <div className="flex justify-center p-4 pt-0">
+                  <Upload updateKey={setS3key}></Upload>
+                </div>
+                <div className="flex items-center justify-end p-4 pt-0 border-t border-solid border-slate-200 rounded-b">
                   <button
                     className=" py-2 rounded-md w-full mt-6 transion"
                     type="button"
