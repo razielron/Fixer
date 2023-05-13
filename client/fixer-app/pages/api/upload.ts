@@ -9,9 +9,9 @@ let headers = { Accept: 'application/json', Authorization: '', 'Content-Type': '
 async function getUploadPresignedUrl(fileType: string, token: string) : Promise<ApiResponseModel<PresignedUrlModel>> {
     try {
         headers.Authorization = token;
-        let uploadBaseUrl: URL = new URL(uploadPath, baseUrl);
-        let uploadUrl : URL = new URL (fileType, uploadBaseUrl);
-        let { data } = await axios.get(uploadUrl.toString(), {headers});
+        let uploadUrl: URL = new URL(uploadPath, baseUrl);
+        let fileTypeModel = {fileType};
+        let { data } = await axios.post(uploadUrl.toString(), fileTypeModel, {headers});
 
         return data as ApiResponseModel<PresignedUrlModel>;
     }
@@ -25,14 +25,17 @@ async function getUploadPresignedUrl(fileType: string, token: string) : Promise<
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ApiResponseModel<PresignedUrlModel>>
 ) {
     try {
-      console.log({fileType:req.query.fileType})
+        console.log({fileType: req.body});
         const token = req.headers.authorization || '';
-        let response: ApiResponseModel<PresignedUrlModel> = await getUploadPresignedUrl(req?.query?.fileType as string, token);
+        const bodyJson = JSON.parse(req.body);
+        const fileType = bodyJson.fileType;
+        console.log({fileType});
+        let response: ApiResponseModel<PresignedUrlModel> = await getUploadPresignedUrl(fileType, token);
         console.log({response});
-        res.status(201).json(response);
+        res.status(200).json(response);
     }
     catch(error: unknown) {
         console.log({error});

@@ -33,7 +33,8 @@ const Upload: React.FC<UploadProps> = ({
     async function uploadFile() {
         const token : string = getCookie('jwt_auth')?.toString() || '';
         const headers = {Authorization: `Bearer ${token}`};
-        let res = await fetch(`/api/upload?fileType=${file?.type}`, {headers});
+        const bodyData = {fileType: file?.type};
+        let res = await fetch('/api/upload', {headers, method: 'POST', body: JSON.stringify(bodyData)});
         let response: ApiResponseModel<PresignedUrlModel> = await res.json();
         console.log({response});
     
@@ -52,7 +53,7 @@ const Upload: React.FC<UploadProps> = ({
         await fetch(response.data.presignedUrl, {method: 'PUT', headers: {'Content-Tpye': file.type}, body: uploadImage});
         console.log('image uploaded');
         setFile(undefined);
-      }
+    }
 
     return (
         <div className="w-full">
