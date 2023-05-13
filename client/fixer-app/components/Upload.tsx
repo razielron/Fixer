@@ -31,28 +31,32 @@ const Upload: React.FC<UploadProps> = ({
     }
 
     async function uploadFile() {
-        const token : string = getCookie('jwt_auth')?.toString() || '';
-        const headers = {Authorization: `Bearer ${token}`};
-        const bodyData = {fileType: file?.type};
-        let res = await fetch('/api/upload', {headers, method: 'POST', body: JSON.stringify(bodyData)});
-        let response: ApiResponseModel<PresignedUrlModel> = await res.json();
-        console.log({response});
-    
-        if(!response?.data?.presignedUrl) {
-          console.error(response?.error);
-          return;
+        try {
+            const token : string = getCookie('jwt_auth')?.toString() || '';
+            const headers = {Authorization: `Bearer ${token}`};
+            const bodyData = {fileType: file?.type};
+            let res = await fetch('/api/upload', {headers, method: 'POST', body: JSON.stringify(bodyData)});
+            let response: ApiResponseModel<PresignedUrlModel> = await res.json();
+            console.log({response});
+        
+            if(!response?.data?.presignedUrl) {
+                console.error(response?.error);
+                return;
+            }
+        
+            if(!file) {
+                console.error('no image selected');
+                return;
+            }
+        
+            let uploadImage = renameFile(file, response?.data?.key);
+        
+            await fetch(response.data.presignedUrl, {method: 'PUT', headers: {'Content-Type': file.type}, body: uploadImage});
+            console.log('image uploaded');
+            setFile(undefined);
+        } catch (error) {
+            console.error({error});
         }
-    
-        if(!file) {
-          console.error('no image selected');
-          return;
-        }
-    
-        let uploadImage = renameFile(file, response?.data?.key);
-    
-        await fetch(response.data.presignedUrl, {method: 'PUT', headers: {'Content-Tpye': file.type}, body: uploadImage});
-        console.log('image uploaded');
-        setFile(undefined);
     }
 
     return (
