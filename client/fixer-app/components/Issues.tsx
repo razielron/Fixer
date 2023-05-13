@@ -42,7 +42,7 @@ export default function Issues() {
 
   return (
     <div>
-      <div className="text-center text-5xl">Issues </div>
+      <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Issues </div>
       {isLoading
         ? (<Spinner></Spinner>)
         : allIssues.map((issue : IssueModel) => (

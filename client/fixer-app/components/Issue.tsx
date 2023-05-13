@@ -24,25 +24,25 @@ const Issue: React.FC<Props> =(props) => {
 
   return (
     <div className="post__container">
-      <div className="post__title-container">
-        <div className="text-lg text-left	font-bold	">
-          {props.title}
-          <img className="header__avatar" src={props.userAvatar} />
-          <div>
-            {props.timestamp ? (
-              <p className="post__timestamp">
-                {(new Date(props.timestamp)).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'}) + ` written by ${props.createdBy}`}
-              </p>
-            ) : (
-              <p className="post__timestamp">Loading</p>
-            )}
+        <div className="post__title-container">
+          <div className="text-lg text-left	font-bold pl-5 pt-5	">
+            {props.title}
+            <img className="header__avatar" src={props.userAvatar} />
+            <div>
+              {props.timestamp ? (
+                <p className="post__timestamp">
+                  {(new Date(props.timestamp)).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'}) + ` written by ${props.createdBy}`}
+                </p>
+              ) : (
+                <p className="post__timestamp">Loading</p>
+              )}
+            </div>
           </div>
+  
+          <p className="post__message pl-5">{props.body}</p>
         </div>
-
-        <p className="post__message">{props.body}</p>
-      </div>
       {props.imageUrl && (
-          <img className="h-28 w-28" src={image} />
+          <img className="h-28 w-28 pl-5" src={image} />
       )}
 
       {/* Post Footer */}

@@ -45,7 +45,7 @@ export default function Modal() {
   return (
     <>
       <button
-        className="h-12 px-6 content-center bg-yellow-400"
+        className="fixed z-90 bottom-10 left-8 bg-yellow-500 w-20 h-20 rounded-full drop-shadow-lg flex justify-center items-center text-white text-2xl hover:bg-yellow-400 hover:drop-shadow-2xl hover:animate-bounce duration-300"
         type="button"
         onClick={() => setShowModal(true)}
       >
