@@ -38,7 +38,6 @@ export default function Modal() {
     fetch('/api/issue', {method: 'POST', headers, body: JSON.stringify(createIssueModel)})
       .then(res => res.json())
       .then((response: ApiResponseModel<IssueModel[]>) => {
-        console.log({response});
         setShowModal(false);
     });
   };

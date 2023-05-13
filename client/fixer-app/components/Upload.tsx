@@ -20,7 +20,6 @@ const Upload: React.FC<UploadProps> = ({
             return;
         }
         setFile(eventFile);
-        console.log({file})
         if(file) await uploadFile();
     };
 
@@ -31,7 +30,6 @@ const Upload: React.FC<UploadProps> = ({
             const bodyData = {fileType: file?.type};
             let res = await fetch('/api/upload', {headers, method: 'POST', body: JSON.stringify(bodyData)});
             let response: ApiResponseModel<PresignedUrlModel> = await res.json();
-            console.log({response});
         
             if(!response?.data?.presignedUrl) {
                 console.error(response?.error);

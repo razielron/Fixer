@@ -28,13 +28,10 @@ export default async function handler(
   res: NextApiResponse<ApiResponseModel<PresignedUrlModel>>
 ) {
     try {
-        console.log({fileType: req.body});
         const token = req.headers.authorization || '';
         const bodyJson = JSON.parse(req.body);
         const fileType = bodyJson.fileType;
-        console.log({fileType});
         let response: ApiResponseModel<PresignedUrlModel> = await getUploadPresignedUrl(fileType, token);
-        console.log({response});
         res.status(200).json(response);
     }
     catch(error: unknown) {

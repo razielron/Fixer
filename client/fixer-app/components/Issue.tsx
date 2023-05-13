@@ -13,15 +13,12 @@ const Issue: React.FC<Props> =(props) => {
   const [image, setImage] = useState('');
 
   useEffect(() => {
-    console.log({imageUrl: props.imageUrl})
     if(!props?.imageUrl) return;
-    console.log({imageUrl: props.imageUrl})
     fetch(props.imageUrl)
       .then(response => response.blob())
       .then(imageBlob => {
         const imageObjectUrl = URL.createObjectURL(imageBlob);
         setImage(imageObjectUrl);
-        console.log({image})
       });
   } ,[]);
 

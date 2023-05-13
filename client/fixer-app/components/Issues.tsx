@@ -31,7 +31,6 @@ export default function Issues() {
           let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
           return secondDate - firstDate;
         });
-        console.log({response})
         if(!data?.length) {
           data = [post, post];
         }
