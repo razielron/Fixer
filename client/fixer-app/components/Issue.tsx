@@ -13,12 +13,15 @@ const Issue: React.FC<Props> =(props) => {
   const [image, setImage] = useState('');
 
   useEffect(() => {
+    console.log({imageUrl: props.imageUrl})
     if(!props?.imageUrl) return;
+    console.log({imageUrl: props.imageUrl})
     fetch(props.imageUrl)
       .then(response => response.blob())
       .then(imageBlob => {
         const imageObjectUrl = URL.createObjectURL(imageBlob);
         setImage(imageObjectUrl);
+        console.log({image})
       });
   } ,[]);
 
@@ -42,9 +45,7 @@ const Issue: React.FC<Props> =(props) => {
         <p className="post__message">{props.body}</p>
       </div>
       {props.imageUrl && (
-        <div className="post__background">
-          <img src={image} />
-        </div>
+          <img className="h-28 w-28" src={image} />
       )}
 
       {/* Post Footer */}

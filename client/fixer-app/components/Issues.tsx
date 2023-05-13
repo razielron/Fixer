@@ -53,7 +53,7 @@ export default function Issues() {
             title={issue.title}
             body={issue.body}
             timestamp={issue.createdAt}
-            imageUrl={s3.imageUrl}
+            imageUrl={issue.photoUrl}
             userAvatar={s3.userAvatar}
           />))
       }
