@@ -85,6 +85,7 @@ class IssueRepository {
             title: issue.title,
             body: issue.body,
             profession: issue.profession,
+            photo: issue?.photo,
             auther: {
                 connect: { id: issue?.autherId }
             }

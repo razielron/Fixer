@@ -86,6 +86,7 @@ class IssueRepository {
             title: issue.title,
             body: issue.body,
             profession: issue.profession,
+            photo: issue === null || issue === void 0 ? void 0 : issue.photo,
             auther: {
                 connect: { id: issue === null || issue === void 0 ? void 0 : issue.autherId }
             }
