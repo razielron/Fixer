@@ -119,7 +119,6 @@ async function createIssue(req: Request, res: Response): Promise<void> {
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
         res.json({ error: `internal error: coudn't create issue` });
-
     }
 }
 

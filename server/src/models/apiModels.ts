@@ -15,4 +15,15 @@ interface IssueApiModel {
     updatedAt?: Date;
 }
 
-export type { ApiResponseModel, IssueApiModel };
+interface CommentApiModel {
+    id?: string;
+    body?: string;
+    autherId?: string;
+    autherName?: string;
+    issueId?: string | null;
+    postId?: string | null;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export type { ApiResponseModel, IssueApiModel, CommentApiModel };
