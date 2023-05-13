@@ -5,6 +5,7 @@ import { issueRepository } from '../DB/issueRepository.js';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
 import { ApiResponseModel, IssueApiModel } from '../models/apiModels.js';
+import { s3Service } from '../services/s3Service.js';
 
 async function getIssueById(req: Request, res: Response): Promise<void> {
     try {
@@ -56,7 +57,7 @@ async function getIssuesByUserId(req: Request, res: Response): Promise<void> {
             let user = users.find(user => user?.id === issue?.autherId);
             return {
                 ...issue,
-                autherName: user?.name
+                autherName: user?.name,
             }
         });
 
@@ -84,13 +85,20 @@ async function getIssuesByProfession(req: Request, res: Response): Promise<void>
             return;
         }
 
-        let issueApiModels: IssueApiModel[] = issues.map(issue => {
+        let issueApiModels: IssueApiModel[] = await Promise.all(issues.map(async (issue) => {
             let user = users.find(user => user?.id === issue?.autherId);
+            let photoUrl: string | null = null;
+            
+            if(issue?.photo) {
+                photoUrl = await s3Service.generateDownloadPresignedUrl(issue?.photo);
+            }
+
             return {
                 ...issue,
-                autherName: user?.name
+                autherName: user?.name,
+                photoUrl
             }
-        });
+        }));
 
         res.json({data: issueApiModels});
     }
