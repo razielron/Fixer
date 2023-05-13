@@ -23,7 +23,7 @@ export default function Modal() {
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('');
   const [role, setRole] = useState('');
-  const [s3file, setS3file] = useState<string>('');
+  const [s3key, setS3key] = useState<string>('');
   const [error, setError] = useState('');
   const [showModal, setShowModal] = React.useState(false);
 
@@ -32,6 +32,7 @@ export default function Modal() {
       title,
       body,
       profession: role,
+      photo: s3key
     };
 
     fetch('/api/issue', {method: 'POST', headers, body: JSON.stringify(createIssueModel)})
@@ -99,7 +100,7 @@ export default function Modal() {
                 </div>
                 {/*footer*/}
                 <div className="flex justify-center p-4 pt-0">
-                  <Upload onChange={(s3file: string)=> setS3file(s3file)}></Upload>
+                  <Upload updateKey={setS3key}></Upload>
                 </div>
                 <div className="flex items-center justify-end p-4 pt-0 border-t border-solid border-slate-200 rounded-b">
                   <button

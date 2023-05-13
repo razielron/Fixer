@@ -3,12 +3,12 @@ import { getCookie } from 'cookies-next';
 import React, { useState, useEffect, ChangeEvent } from 'react';
 
 interface UploadProps{
-    onChange: any;
+    updateKey: (key: string) => void;
 }
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const Upload: React.FC<UploadProps> = ({
-    onChange
+    updateKey
 }) => {
     const [file, setFile] = useState<File>();
 
@@ -23,12 +23,6 @@ const Upload: React.FC<UploadProps> = ({
         console.log({file})
         if(file) await uploadFile();
     };
-
-    function renameFile(file: File, newName: string) : FormData {
-        let results = new FormData();
-        results.append('file', file, newName);
-        return results;
-    }
 
     async function uploadFile() {
         try {
@@ -48,12 +42,10 @@ const Upload: React.FC<UploadProps> = ({
                 console.error('no image selected');
                 return;
             }
-        
-            let uploadImage = renameFile(file, response?.data?.key);
-        
-            await fetch(response.data.presignedUrl, {method: 'PUT', headers: {'Content-Type': file.type}, body: uploadImage});
+
+            await fetch(response.data.presignedUrl, {method: 'PUT', body: file});
             console.log('image uploaded');
-            setFile(undefined);
+            updateKey(response?.data?.key);
         } catch (error) {
             console.error({error});
         }
