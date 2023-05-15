@@ -3,7 +3,6 @@ import Slider from "./Slider"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GalleryModal from "./GalleryModal"
 
-
 type Props =   {
     createdBy?: string
     title?: string

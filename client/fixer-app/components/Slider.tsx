@@ -1,22 +1,21 @@
 import Carousel from 'react-bootstrap/Carousel';
 
 type Props =   {
-  pictures: string[]
-
+  iamgeArray: string[]
 }
 
 const Slider: React.FC<Props> =(props) => {
   return (
     <Carousel>
-      {props.pictures.map((picture : string) => (
+      {props.iamgeArray.map((image : string) => (
         <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src={picture}
-          alt="First slide"
-        />
-      </Carousel.Item>))}
-
+          <img
+            className="d-block w-100"
+            src={image}
+            alt="First slide"
+          />
+        </Carousel.Item>
+      ))}
     </Carousel>
   );
 }
