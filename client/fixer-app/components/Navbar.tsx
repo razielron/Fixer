@@ -3,8 +3,6 @@ import NavbarItem from "@/components/NavbarItem";
 import AccountMenu from "./AccountMenu";
 import { BsChevronDown ,BsSearch, BsBell} from 'react-icons/bs';
 
-
-
 const Navbar = () => {
     const [showAccountMenu, setShowAccountMenu] = useState(false)
 

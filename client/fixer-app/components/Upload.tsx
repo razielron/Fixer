@@ -1,15 +1,13 @@
 import { ApiResponseModel, PresignedUrlModel } from '@/src/models/apiModel';
 import { getCookie } from 'cookies-next';
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface UploadProps{
     updateKey: (key: string) => void;
 }
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
-const Upload: React.FC<UploadProps> = ({
-    updateKey
-}) => {
+const Upload: React.FC<UploadProps> = ({ updateKey }) => {
     const [file, setFile] = useState<File>();
 
     const handleFileChange = async (e: any) => {
@@ -20,8 +18,12 @@ const Upload: React.FC<UploadProps> = ({
             return;
         }
         setFile(eventFile);
-        if(file) await uploadFile();
     };
+
+    useEffect( () => {
+        if(file) uploadFile();
+    }
+    ,[file]);
 
     async function uploadFile() {
         try {
@@ -79,7 +81,7 @@ const Upload: React.FC<UploadProps> = ({
                     </span>}
             </label>
         </div>
-    )
+    );
 }
 
 export default Upload;

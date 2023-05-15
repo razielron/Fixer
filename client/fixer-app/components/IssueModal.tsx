@@ -1,7 +1,7 @@
 import { ApiResponseModel } from "@/src/models/apiModel";
 import { IssueModel } from "@/src/models/issueModel";
 import { getCookie } from "cookies-next";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DropDown from "./DropDown";
 import Input from "./input";
 import Upload from "./Upload";
