@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import Slider from "./Slider"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GalleryModal from "./GalleryModal"
 

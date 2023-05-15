@@ -1,14 +1,12 @@
-
-import React, { useState } from "react";
+import React from "react";
 import Slider from "./Slider";
 
 type Props =   {
     imageArray: string[]
     hideModal : () => void
-  }
+}
 
-const GalleryModal: React.FC<Props> =(props) => {
-
+const GalleryModal: React.FC<Props> = (props) => {
   return (
     <>
         <div
@@ -19,7 +17,7 @@ const GalleryModal: React.FC<Props> =(props) => {
                     {/*header*/}
                     <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                         <button onClick={props.hideModal}>X</button>
-                        <Slider pictures={props.imageArray}></Slider>
+                        <Slider iamgeArray={props.imageArray}></Slider>
                     </div>
                 </div>
             </div>
