@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react"
+import Slider from "./Slider"
+import 'bootstrap/dist/css/bootstrap.min.css'
+import GalleryModal from "./GalleryModal"
+
 
 type Props =   {
     createdBy?: string
@@ -11,6 +15,7 @@ type Props =   {
 
 const Issue: React.FC<Props> =(props) => {
   const [image, setImage] = useState('');
+  const [isShowGalleryModal, setIsShowGalleryModal] = useState(false);
 
   useEffect(() => {
     if(!props?.imageUrl) return;
@@ -21,6 +26,14 @@ const Issue: React.FC<Props> =(props) => {
         setImage(imageObjectUrl);
       });
   } ,[]);
+
+  const showGalleryModal = () => {
+    setIsShowGalleryModal(true);
+  }
+
+  const hideGalleryModal = () => {
+    setIsShowGalleryModal(false);
+  }
 
   return (
     <div className="post__container">
@@ -41,8 +54,11 @@ const Issue: React.FC<Props> =(props) => {
   
           <p className="post__message pl-5">{props.body}</p>
         </div>
-      {props.imageUrl && (
-          <img className="h-28 w-28 pl-5" src={image} />
+      {props.imageUrl && !isShowGalleryModal && (
+           <img onClick={showGalleryModal} className="h-28 w-28 pl-5" src={image} />
+      )}
+      {props.imageUrl && isShowGalleryModal && (
+           <GalleryModal hideModal={hideGalleryModal} imageArray={[image,image,image]}/>
       )}
 
       {/* Post Footer */}

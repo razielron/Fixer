@@ -20,8 +20,12 @@ const Upload: React.FC<UploadProps> = ({
             return;
         }
         setFile(eventFile);
-        if(file) await uploadFile();
     };
+
+    useEffect( () => {
+        if(file) uploadFile();
+    }
+    ,[file]);
 
     async function uploadFile() {
         try {
