@@ -11,6 +11,10 @@ export default function Index() {
     router.push('/register');
 } 
 
+  const proffesionRedirect = () => {
+    router.push('/ProfessionalRegister');
+  }
+
   return (
 
     <div className="min-h-screen reative  h-full w-full bg-[url('/images/peakpx.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -18,8 +22,11 @@ export default function Index() {
         <nav className="px-12 py-5">
           <img src="/images/fixerLogo.png" alt="Logo" className="h-12"/>
         </nav>
-        <button onClick={registerRedirect} className="py-1 px-10 absolute top-0 right-0 bg-yellow-400 rounded-md mt-10 transion">
+        <button onClick={proffesionRedirect} className="py-1 px-10 absolute top-0 right-0 bg-yellow-400 rounded-md mt-2 mr-2 transion">
                 JOIN AS A SERVICE PROVIDER
+        </button>
+        <button onClick={registerRedirect} className="py-1 px-10 absolute top-0 right-0 bg-yellow-400 rounded-md mt-12 mr-2 transion">
+                JOIN AS A MEMBER
         </button>
           <div className="min-h-screen bg-black bg-opacity-10 flex justify-center">
             <div className="py-5 self-center lg:max-w-md rounded-md w-full">

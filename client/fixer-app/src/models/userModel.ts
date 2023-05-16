@@ -1,3 +1,4 @@
+import { Profession } from '../enums/profession.js';
 import { Role } from '../enums/role.js';
 
 interface UserModel {
@@ -5,6 +6,8 @@ interface UserModel {
     name?: string,
     email?: string,
     role?: Role,
+    certificate?: string,
+    profession?: string
     password?: string,
     createdAt?: Date,
     updatedAt?: Date,
