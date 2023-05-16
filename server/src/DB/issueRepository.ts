@@ -1,8 +1,8 @@
-import { PrismaClient, Profession } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { IssueModel } from '../models/dbModels.js';
 import { Prisma as PrismaTypes } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient();``
 
 class IssueRepository {
     public async getIssueById(issueId: string): Promise<IssueModel> {
@@ -20,11 +20,7 @@ class IssueRepository {
     }
 
     public async getIssuesByProfession(profession: string): Promise<IssueModel[]> {
-        if (!Object.values(Profession).includes(profession as unknown as Profession)) {
-            throw new Error("Profession not exist in ENUM");
-        }
-        
-        let where = { profession: profession as Profession };
+        let where = { profession: profession };
         let issues: IssueModel[] = await prisma.issue.findMany({ where });
 
         return issues;
