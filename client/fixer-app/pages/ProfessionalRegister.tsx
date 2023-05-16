@@ -1,37 +1,31 @@
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import Input from "@/components/input";
 import DropDown from "@/components/DropDown";
 import Link from "next/link";
 import UserPool from "@/pages/api/userPool";
 import { UserModel } from "@/src/models/userModel";
 import { Role } from "@/src/enums/role";
-import Select from "react-dropdown-select";
+import { Profession, professionOptions } from "@/src/enums/profession";
+import Upload from "@/components/Upload";
 
-const Register = () => {
-    const options = [
-        { 
-            value: 1,
-            label: "BASIC"
-        },
-        {
-            value:  2,
-            label: "PROFESSIONAL"
-        }
-    ];
-    const defaultOption = options[0];
+
+
+
+const ProfessionalRegister = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [check, setCheck] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
+    const [profession, setProffesion] = useState('');
     const [error, setError] = useState('');
+    const [s3key, setS3key] = useState<string>('');
     
     const signupRedirectVladition = async () => {
     
         let newError = '';
-        if(name === '' || email === ''||password === '' || confirmPassword === ''){
+        if(name === '' || email === ''||password === '' || confirmPassword === ''|| profession === ''){
             newError = (`Please fill all fields`);
         }
 
@@ -52,7 +46,9 @@ const Register = () => {
             const user : UserModel = {
                 email: email,
                 name: name,
-                role: Role.BASIC   
+                role: Role.PROFESSIONAL,
+                certificate: s3key,
+                profession: profession
             };
 
             let response = await fetch('/api/user', {method: 'POST', body: JSON.stringify(user)});
@@ -109,6 +105,12 @@ const Register = () => {
                         placeHolder = "Confirm password"
                         
                     /> 
+                    <DropDown  
+                        options={professionOptions} 
+                        onChange={(event:any)=> setProffesion(event[0].label)}
+                        placeHolder="Profession"   
+                    />
+                    <Upload updateKey={setS3key}></Upload>
                 </div>
                 <div>
                     <p className="text-red-600 mt-5">{error}</p>
@@ -128,4 +130,4 @@ const Register = () => {
     )
 }
 
-export default Register;
+export default ProfessionalRegister;
