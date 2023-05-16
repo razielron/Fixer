@@ -7,8 +7,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { PrismaClient, Profession } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
+``;
 class IssueRepository {
     getIssueById(issueId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -26,9 +27,6 @@ class IssueRepository {
     }
     getIssuesByProfession(profession) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!Object.values(Profession).includes(profession)) {
-                throw new Error("Profession not exist in ENUM");
-            }
             let where = { profession: profession };
             let issues = yield prisma.issue.findMany({ where });
             return issues;
