@@ -1,7 +1,7 @@
 import axios from 'axios';
 import path from 'path';
 import { CommentModel } from '../models/commentModel.js';
-import ApiResponseModel from '@/src/models/apiModel';
+import {ApiResponseModel} from '@/src/models/apiModel';
 
 const baseUrl = `${process.env.SERVER_URL}:${process.env.SERVER_PORT}`;
 const getByIdEndpoint: string = '/comment/';
