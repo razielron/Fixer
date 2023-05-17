@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { CommentModel } from '@/src/models/commentModel';
-import ApiResponseModel from '@/src/models/apiModel';
+import {ApiResponseModel} from '@/src/models/apiModel';
 import { commentClient } from '@/src/apiClients/commentClient';
 
 async function getCommentByIssueHandler (
