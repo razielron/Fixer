@@ -1,3 +1,4 @@
+import { professionOptions } from "@/src/enums/profession";
 import { ApiResponseModel } from "@/src/models/apiModel";
 import { IssueModel } from "@/src/models/issueModel";
 import { getCookie } from "cookies-next";
@@ -6,18 +7,7 @@ import DropDown from "./DropDown";
 import Input from "./input";
 import Upload from "./Upload";
 
-export default function Modal() {
-  const options = [
-    { 
-        value: 1,
-        label: "ELECTRICIAN"
-    },
-    {
-        value:  2,
-        label: "PROGRAMER"
-    }
-];
-
+const IssueModal: React.FC = () => {
   const token : string = getCookie('jwt_auth')?.toString() || '';
   const headers = {Authorization: `Bearer ${token}`};
   const [title, setTitle] = useState('')
@@ -39,6 +29,8 @@ export default function Modal() {
       .then(res => res.json())
       .then((response: ApiResponseModel<IssueModel[]>) => {
         setShowModal(false);
+        console.log('modal 1')
+        console.log('modal 2')
     });
   };
 
@@ -91,7 +83,7 @@ export default function Modal() {
                       placeHolder = "Body"
                   />
                   <DropDown 
-                      options={options} 
+                      options={professionOptions} 
                       onChange={(event:any)=> setRole(event[0].label)}
                       placeHolder="Role"   
                   />
@@ -126,3 +118,5 @@ export default function Modal() {
     </>
   );
 }
+
+export default IssueModal

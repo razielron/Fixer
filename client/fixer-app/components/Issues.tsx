@@ -4,6 +4,7 @@ import Spinner from './Spinner';
 import { getCookie } from 'cookies-next';
 import { IssueModel } from '@/src/models/issueModel.js';
 import { ApiResponseModel } from '@/src/models/apiModel';
+import IssueModal from "@/components/IssueModal";
 
 export default function Issues() {
   const token : string = getCookie('jwt_auth')?.toString() || '';
@@ -11,6 +12,7 @@ export default function Issues() {
   const s3 = {imageUrl: '', userAvatar: ''};
   const [allIssues, setAllIssues] = useState<IssueModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [newIssue, setNewIssue] = useState<IssueModel>();
 
   const post: IssueModel = {
       id: 'id',
@@ -40,22 +42,32 @@ export default function Issues() {
       })
   }, []);
 
+  useEffect(() => {
+
+  },[])
+
+
+
+
   return (
-    <div>
-      <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Issues </div>
-      {isLoading
-        ? (<Spinner></Spinner>)
-        : allIssues.map((issue : IssueModel) => (
-          <Issue
-            key={issue.id}
-            createdBy={issue.autherName}
-            title={issue.title}
-            body={issue.body}
-            timestamp={issue.createdAt}
-            imageUrl={issue.photoUrl}
-            userAvatar={s3.userAvatar}
-          />))
-      }
-    </div>
+    <>
+      <IssueModal></IssueModal>
+      <div>
+        <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Issues </div>
+        {isLoading
+          ? (<Spinner></Spinner>)
+          : allIssues.map((issue : IssueModel) => (
+            <Issue
+              key={issue.id}
+              createdBy={issue.autherName}
+              title={issue.title}
+              body={issue.body}
+              timestamp={issue.createdAt}
+              imageUrl={issue.photoUrl}
+              userAvatar={s3.userAvatar}
+            />))
+        }
+      </div>
+    </>
   );
 }
