@@ -12,7 +12,6 @@ export default function Issues() {
   const s3 = {imageUrl: '', userAvatar: ''};
   const [allIssues, setAllIssues] = useState<IssueModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newIssue, setNewIssue] = useState<IssueModel>();
 
   const post: IssueModel = {
       id: 'id',
@@ -21,7 +20,7 @@ export default function Issues() {
       title: 'A washing machine gets the clothes dirty',
       body: 'After running the machine, the clothes come out with black stains',
       createdAt: new Date(),
-    };
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -42,16 +41,17 @@ export default function Issues() {
       })
   }, []);
 
-  useEffect(() => {
-
-  },[])
-
-
-
+  function handleNewIssue(issue: IssueModel) {
+    issue.id = Math.floor(Math.random() * 100000).toString();
+    issue.createdAt = new Date();
+    setAllIssues([issue, ...allIssues]);
+    //TODO: fix this hack
+    window.location.reload();
+  }
 
   return (
     <>
-      <IssueModal></IssueModal>
+      <IssueModal handleNewIssue={handleNewIssue}></IssueModal>
       <div>
         <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Issues </div>
         {isLoading

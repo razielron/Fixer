@@ -7,7 +7,11 @@ import DropDown from "./DropDown";
 import Input from "./input";
 import Upload from "./Upload";
 
-const IssueModal: React.FC = () => {
+interface Props {
+  handleNewIssue: (issue: IssueModel) => void;
+}
+
+const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
   const token : string = getCookie('jwt_auth')?.toString() || '';
   const headers = {Authorization: `Bearer ${token}`};
   const [title, setTitle] = useState('')
@@ -24,13 +28,13 @@ const IssueModal: React.FC = () => {
       profession: role,
       photo: s3key
     };
+    console.log({createIssueModel});
 
     fetch('/api/issue', {method: 'POST', headers, body: JSON.stringify(createIssueModel)})
       .then(res => res.json())
       .then((response: ApiResponseModel<IssueModel[]>) => {
+        handleNewIssue(createIssueModel);
         setShowModal(false);
-        console.log('modal 1')
-        console.log('modal 2')
     });
   };
 
