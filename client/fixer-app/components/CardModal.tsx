@@ -8,9 +8,12 @@ import { CardModel } from "@/src/models/CardModel";
 type Props =   {
     commentArray?: CommentModel[]
     cardData: CardModel
-    getComments: (cardId: string) => Promise<CommentModel[]>
-    createComment: (comment: CommentModel, autherId: string, cardId: string) => Promise<CommentModel>
-    hideModal: () => void
+    getComments?: (cardId: string) => Promise<CommentModel[]>
+    createComment?: (comment: CommentModel, autherId: string, cardId: string) => Promise<CommentModel>
+    hideModal?: () => void
+}
+let commentModel = {
+    body: 'hello im ajajajaj ajjajaja jajajaj jajaja jajaja'
 }
 
 const CardModal: React.FC<Props> = (props) => {
@@ -18,18 +21,19 @@ const CardModal: React.FC<Props> = (props) => {
 
   let handleNewComment = (comment: CommentModel) => {
     if(!props.cardData?.autherId || !props.cardData?.id) return;
-    props.createComment(comment, props.cardData.autherId, props.cardData.id)
-        .then((createdComment) => {
-            setComments([...comments, createdComment]);
-        });
+    // props.createComment(comment, props.cardData.autherId, props.cardData.id)
+    //     .then((createdComment) => {
+    //         setComments([...comments, createdComment]);
+    //     });
   }
 
   useEffect(() => {
     if(!props.cardData?.id) return;
-    props.getComments(props.cardData.id)
-        .then((comments) => {
-            setComments(comments);
-        });
+    setComments([commentModel])
+    // props.getComments(props.cardData.id)
+    //     .then((comments) => {
+    //         setComments(comments);
+    //     });
   }, []);
   
   return (

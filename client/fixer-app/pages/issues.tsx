@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import Issue from './Issue';
-import Spinner from './Spinner';
 import { getCookie } from 'cookies-next';
 import { IssueModel } from '@/src/models/issueModel.js';
 import { ApiResponseModel } from '@/src/models/apiModel';
 import IssueModal from "@/components/IssueModal";
 import Card from "@/components/Card";
 import { CardModel } from '@/src/models/CardModel';
+import Spinner from '@/components/Spinner';
+import CardModal from '@/components/CardModal';
 
 export default function Issues() {
   const token : string = getCookie('jwt_auth')?.toString() || '';
@@ -14,6 +14,8 @@ export default function Issues() {
   const s3 = {imageUrl: '', userAvatar: ''};
   const [allIssues, setAllIssues] = useState<IssueModel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [issueView, setIssueView] = useState(false);
+  const [issueData, setIssueData] = useState<CardModel>({});
 
   const post: IssueModel = {
       id: 'id',
@@ -51,24 +53,22 @@ export default function Issues() {
     window.location.reload();
   }
 
+  let openCardView = (card: CardModel) => {
+    setIssueData(card);
+    setIssueView(true);
+    console.log({card})
+  }
+
   return (
     <>
       <IssueModal handleNewIssue={handleNewIssue}></IssueModal>
+      {issueView && (<CardModal cardData={issueData} hideModal={() => setIssueView(false)}></CardModal>)}
       <div>
         <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Issues </div>
         {isLoading
           ? (<Spinner></Spinner>)
           : allIssues.map((issue : IssueModel) => (
-            // <Issue
-            //   key={issue.id}
-            //   createdBy={issue.autherName}
-            //   title={issue.title}
-            //   body={issue.body}
-            //   timestamp={issue.createdAt}
-            //   imageUrl={issue.photoUrl}
-            //   userAvatar={s3.userAvatar}
-            // />
-              <Card cardData={issue as CardModel}></Card>
+              <Card cardData={issue as CardModel} openCardView={openCardView}></Card>
             ))
         }
       </div>

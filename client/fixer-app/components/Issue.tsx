@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GalleryModal from "./GalleryModal"
 import Comment from './Comment';
+import CommentTemp from "./Comment";
 
 type Props =   {
     createdBy?: string
@@ -69,7 +70,7 @@ const Issue: React.FC<Props> =(props) => {
         <div className="post__footer-item flex items-center flex-col ">
           <svg className="h-8 w-8 text-yellow-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21 2H3v16h5v4l4-4h5l4-4V2zM11 11V7M16 11V7" /></svg>
           <button onClick={() => setShowComment(true)} className="post__reaction">Comment</button>
-          {showComment && <Comment comment={{}} ></Comment>}
+          {showComment && <CommentTemp comment={{}} ></CommentTemp>}
         </div>
       </div>
     </div>

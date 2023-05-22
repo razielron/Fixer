@@ -1,5 +1,3 @@
-import { useState } from "react";
-import Input from "./input";
 import { CommentModel } from "@/src/models/commentModel";
 
 interface Props {
@@ -9,50 +7,52 @@ interface Props {
 const Comment: React.FC<Props> = (props) => {
     return (
         <>
-            <div className="flex items-center space-x-2">
-                <div className="group relative flex flex-shrink-0 self-start cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1507965613665-5fbb4cbb8399?ixid=MXwxMjA3fDB8MHx0b3BpYy1mZWVkfDQzfHRvd0paRnNrcEdnfHxlbnwwfHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="" className="h-8 w-8 object-fill rounded-full"/>
-                </div>
-
-                <div className="flex items-center justify-center space-x-2">
-                    <div className="block">
-                        <div className="flex justify-center items-center space-x-2">
-                            <div className="bg-gray-100 w-auto rounded-xl px-2 pb-2">
-                                <div className="font-medium">
-                                    <a href="#" className="hover:underline text-sm">
-                                        <small>Ganendra</small>
-                                    </a>
-                                </div>
-                                <div className="text-xs">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Expedita, maiores!
-                                </div>
-                            </div>
-                            <div className="self-stretch flex justify-center items-center transform transition-opacity duration-200 opacity-0 hover:opacity-100">
-                                <a href="#" className="">
-                                    <div className="text-xs cursor-pointer flex h-6 w-6 transform transition-colors duration-200 hover:bg-gray-100 rounded-full items-center justify-center">
-                                        <svg className="w-4 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="flex justify-start items-center text-xs w-full">
-                            <div className="font-semibold text-gray-700 px-2 flex items-center justify-center space-x-1">
-                                <a href="#" className="hover:underline">
-                                    <small>Like</small>
-                                </a>
-                                <small className="self-center">.</small>
-                                <a href="#" className="hover:underline">
-                                    <small>Reply</small>
-                                </a>
-                                <small className="self-center">.</small>
-                                <a href="#" className="hover:underline">
-                                    <small>15 hour</small>
-                                </a>
-                            </div>
-                        </div>
+            <article className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900">
+                <footer className="flex justify-between items-center mb-2">
+                    <div className="flex items-center">
+                        <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                            <img
+                                className="mr-2 w-6 h-6 rounded-full"
+                                src={props.comment.avatar || 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'}
+                                alt="Michael Gough"/>{props.comment.autherName}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {(new Date(props.comment.createdAt || '')).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'})}
+                        </p>
                     </div>
-                </div>
-            </div>
+                    <button id="dropdownComment1Button" data-dropdown-toggle="dropdownComment1"
+                        className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                        type="button">
+                        <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
+                            </path>
+                        </svg>
+                        <span className="sr-only">Comment settings</span>
+                    </button>
+                    <div id="dropdownComment1"
+                        className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+                        <ul className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                            aria-labelledby="dropdownMenuIconHorizontalButton">
+                            <li>
+                                <a href="#"
+                                    className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
+                            </li>
+                        </ul>
+                    </div>
+                </footer>
+                <p className="text-gray-500 dark:text-gray-400">
+                    {props.comment.body}
+                </p>
+            </article>
         </>
     );
   }

@@ -9,6 +9,8 @@ interface CommentModel {
     updatedAt?: Date,
     imageUrls?: string[] | null,
     images?: string[] | null,
+    avatarUrl?: string | null,
+    avatar?: string | null,
 };
 
 export type {CommentModel};
