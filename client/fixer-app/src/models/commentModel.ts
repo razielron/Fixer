@@ -7,6 +7,8 @@ interface CommentModel {
     postId?: string | null,
     createdAt?: Date,
     updatedAt?: Date,
+    imageUrls?: string[] | null,
+    images?: string[] | null,
 };
 
 export type {CommentModel};
