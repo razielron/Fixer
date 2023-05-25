@@ -11,8 +11,8 @@ type Props =   {
     commentArray?: CommentModel[]
     cardData: CardModel
     getComments: (cardId: string) => Promise<CommentModel[]>
-    createComment?: (comment: CommentModel, autherId: string, cardId: string) => Promise<CommentModel>
-    hideModal?: () => void
+    createComment: (comment: CommentModel, autherId: string, cardId: string) => Promise<CommentModel>
+    hideModal: () => void
 }
 
 
@@ -23,10 +23,10 @@ const CardModal: React.FC<Props> = (props) => {
 
   let handleNewComment = (comment: CommentModel) => {
     if(!props.cardData?.autherId || !props.cardData?.id) return;
-    // props.createComment(comment, props.cardData.autherId, props.cardData.id)
-    //     .then((createdComment) => {
-    //         setComments([...comments, createdComment]);
-    //     });
+    props.createComment(comment, props.cardData.autherId, props.cardData.id)
+        .then((createdComment) => {
+            setComments([...comments, createdComment]);
+        });
   }
 
   useEffect(() => {

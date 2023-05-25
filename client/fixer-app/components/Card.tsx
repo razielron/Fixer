@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import GalleryModal from "./GalleryModal";
 import { CardModel } from "@/src/models/CardModel";
-import CommentTemp from "./Comment";
 
 type Props =   {
     cardData: CardModel
