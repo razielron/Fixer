@@ -7,6 +7,7 @@ import Card from "@/components/Card";
 import { CardModel } from '@/src/models/CardModel';
 import Spinner from '@/components/Spinner';
 import CardModal from '@/components/CardModal';
+import { CommentModel } from '@/src/models/commentModel';
 
 export default function Issues() {
   const token : string = getCookie('jwt_auth')?.toString() || '';
@@ -16,6 +17,10 @@ export default function Issues() {
   const [isLoading, setIsLoading] = useState(false);
   const [issueView, setIssueView] = useState(false);
   const [issueData, setIssueData] = useState<CardModel>({});
+
+  let commentModel = {
+    body: 'raz & omer = <3'
+  };
 
   const post: IssueModel = {
       id: 'id',
@@ -45,6 +50,31 @@ export default function Issues() {
       })
   }, []);
 
+  let getComment = async () => {
+    let response = await fetch('/api/comment', {headers});
+    let resJson = await response.json() as ApiResponseModel<CommentModel[]>;
+    let data = resJson?.data?.sort((x, y) => { 
+        let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
+        let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
+        return secondDate - firstDate;
+    });
+    if(!data?.length) {
+        data = [commentModel, commentModel];
+    }
+    console.log({data});
+    return data;
+  };
+
+  let createComment = async (comment: CommentModel, autherId: string, cardId: string) => {
+    comment.issueId = cardId;
+    comment.autherId = autherId;
+    let response = await fetch('/api/comment', {method: 'POST', headers, body: JSON.stringify(comment)});
+    let resJson = await response.json() as CommentModel;
+    return resJson;
+  };
+  
+
+
   function handleNewIssue(issue: IssueModel) {
     issue.id = Math.floor(Math.random() * 100000).toString();
     issue.createdAt = new Date();
@@ -62,7 +92,7 @@ export default function Issues() {
   return (
     <>
       <IssueModal handleNewIssue={handleNewIssue}></IssueModal>
-      {issueView && (<CardModal cardData={issueData} hideModal={() => setIssueView(false)}></CardModal>)}
+      {issueView && (<CardModal cardData={issueData} getComments={getComment} createComment={createComment} hideModal={() => setIssueView(false)}></CardModal>)}
       <div>
         <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Issues </div>
         {isLoading

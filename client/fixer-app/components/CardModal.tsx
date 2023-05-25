@@ -4,20 +4,22 @@ import Comment from './Comment';
 import CommentForm from './CommentForm';
 import { CommentModel } from "@/src/models/commentModel";
 import { CardModel } from "@/src/models/CardModel";
+import { getCookie } from "cookies-next";
+import { ApiResponseModel } from "@/src/models/apiModel";
 
 type Props =   {
     commentArray?: CommentModel[]
     cardData: CardModel
-    getComments?: (cardId: string) => Promise<CommentModel[]>
+    getComments: (cardId: string) => Promise<CommentModel[]>
     createComment?: (comment: CommentModel, autherId: string, cardId: string) => Promise<CommentModel>
     hideModal?: () => void
 }
-let commentModel = {
-    body: 'hello im ajajajaj ajjajaja jajajaj jajaja jajaja'
-}
+
 
 const CardModal: React.FC<Props> = (props) => {
   const [comments, setComments] = useState<CommentModel[]>([]);
+  const token : string = getCookie('jwt_auth')?.toString() || '';
+  const headers = {Authorization: `Bearer ${token}`};
 
   let handleNewComment = (comment: CommentModel) => {
     if(!props.cardData?.autherId || !props.cardData?.id) return;
@@ -29,12 +31,12 @@ const CardModal: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if(!props.cardData?.id) return;
-    setComments([commentModel])
-    // props.getComments(props.cardData.id)
-    //     .then((comments) => {
-    //         setComments(comments);
-    //     });
+    props.getComments(props.cardData.id)
+        .then((comments:CommentModel[]) => {
+            setComments(comments);
+        });
   }, []);
+
   
   return (
     <>
@@ -43,11 +45,16 @@ const CardModal: React.FC<Props> = (props) => {
                 {/*content*/}
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                     {/*header*/}
-                    <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                    <div className="flow-root flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                         <button onClick={props.hideModal}>X</button>
                         <Card cardData={props.cardData} />
-                        <CommentForm onSubmit={handleNewComment} />
+                        <div className="overflow-auto">
                         {comments && comments.map((comment) => (<Comment comment={comment} />))}
+                        </div>
+                        <div className="sticky bottom-0">
+                        <CommentForm onSubmit={handleNewComment} />
+                        </div>
+                        
                     </div>
                 </div>
             </div>

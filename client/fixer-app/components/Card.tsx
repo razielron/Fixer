@@ -25,10 +25,8 @@ const Card: React.FC<Props> = (props) => {
   }, []);
 
   let handleCommentClick = () => {
-    console.log('here')
     if(!props?.openCardView) return;
     props.openCardView(props.cardData);
-    console.log('here1')
   }
 
   const showGalleryModal = () => {
