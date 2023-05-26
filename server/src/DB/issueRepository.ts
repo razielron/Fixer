@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { IssueModel } from '../models/dbModels.js';
 import { Prisma as PrismaTypes } from '@prisma/client';
-import GetProfessionEnumByString from '../models/profession.js';
 
 const prisma = new PrismaClient();``
 
@@ -21,7 +20,7 @@ class IssueRepository {
     }
 
     public async getIssuesByProfession(profession: string): Promise<IssueModel[]> {
-        let where = { profession: GetProfessionEnumByString(profession) };
+        let where = { profession: profession };
         let issues: IssueModel[] = await prisma.issue.findMany({ where });
 
         return issues;
