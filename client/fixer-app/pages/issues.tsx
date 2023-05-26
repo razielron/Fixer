@@ -50,18 +50,19 @@ export default function Issues() {
       })
   }, []);
 
-  let getComment = async () => {
-    let response = await fetch('/api/comment', {headers});
+  let getComments = async (issueId: string) => {
+    let response = await fetch(`/api/comment?issueId=${issueId}`, {headers});
     let resJson = await response.json() as ApiResponseModel<CommentModel[]>;
+    console.log({commentDataJson: resJson});
     let data = resJson?.data?.sort((x, y) => { 
         let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
         let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
         return secondDate - firstDate;
     });
+    console.log({commentData: data});
     if(!data?.length) {
         data = [commentModel, commentModel];
     }
-    console.log({data});
     return data;
   };
 
@@ -70,6 +71,7 @@ export default function Issues() {
     comment.autherId = autherId;
     let response = await fetch('/api/comment', {method: 'POST', headers, body: JSON.stringify(comment)});
     let resJson = await response.json() as CommentModel;
+    console.log({resJson});
     return resJson;
   };
   
@@ -92,7 +94,7 @@ export default function Issues() {
   return (
     <>
       <IssueModal handleNewIssue={handleNewIssue}></IssueModal>
-      {issueView && (<CardModal cardData={issueData} getComments={getComment} createComment={createComment} hideModal={() => setIssueView(false)}></CardModal>)}
+      {issueView && (<CardModal cardData={issueData} getComments={getComments} createComment={createComment} hideModal={() => setIssueView(false)}></CardModal>)}
       <div>
         <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Issues </div>
         {isLoading
