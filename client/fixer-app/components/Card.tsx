@@ -8,20 +8,26 @@ type Props =   {
 }
 
 const Card: React.FC<Props> = (props) => {
-  const [imageArray, setImage] = useState<string[]>([]);
+  const [imageArray, setImageArray] = useState<string[]>([]);
   const [isShowGalleryModal, setIsShowGalleryModal] = useState(false);
 
   useEffect(() => {
-    if(!props.cardData?.imageUrls) return;
-    for(let i = 0; i < props.cardData.imageUrls.length; i++) {
-        fetch(props.cardData.imageUrls[i])
-            .then(response => response.blob())
-            .then(imageBlob => {
-                const imageObjectUrl = URL.createObjectURL(imageBlob);
-                setImage([...imageArray, imageObjectUrl]);
-            });
-    }
+    console.log({cardData: props.cardData})
+    fetchCardImages();
   }, []);
+
+  let fetchCardImages = async () => {
+    if(!props.cardData?.imageUrls?.length) return;
+
+    let asyncImages = props.cardData.imageUrls.map(async (imageUrl) => {
+        let response = await fetch(imageUrl);
+        let imageBlob = await response.blob();
+        return URL.createObjectURL(imageBlob);
+    });
+
+    let imageArrayResponse = await Promise.all(asyncImages);
+    setImageArray(imageArrayResponse);
+  }
 
   let handleCommentClick = () => {
     if(!props?.openCardView) return;
@@ -57,7 +63,7 @@ const Card: React.FC<Props> = (props) => {
             </div>
 
             <div className="mt-4 mb-6">
-                {imageArray && !isShowGalleryModal && (
+                {imageArray && (
                     <div className="flex content-center w-full">
                         {imageArray.map((image) => (
                             <img onClick={showGalleryModal} className="h-28 w-28 pl-5" src={image} />

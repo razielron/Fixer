@@ -66,6 +66,14 @@ export default function Issues() {
     return data;
   };
 
+  let convertIssueToCard = (issue: IssueModel) => {
+    let card: CardModel = {
+      ...issue,
+      imageUrls: issue.photoUrl ? [issue.photoUrl, issue.photoUrl, issue.photoUrl] : null,
+    };
+    return card;
+  }
+
   let createComment = async (comment: CommentModel, autherId: string, cardId: string) => {
     comment.issueId = cardId;
     comment.autherId = autherId;
@@ -74,8 +82,6 @@ export default function Issues() {
     console.log({resJson});
     return resJson;
   };
-  
-
 
   function handleNewIssue(issue: IssueModel) {
     issue.id = Math.floor(Math.random() * 100000).toString();
@@ -91,16 +97,20 @@ export default function Issues() {
     console.log({card})
   }
 
+  let closeCardView = () => {
+    setIssueView(false);
+  }
+
   return (
     <>
       <IssueModal handleNewIssue={handleNewIssue}></IssueModal>
-      {issueView && (<CardModal cardData={issueData} getComments={getComments} createComment={createComment} hideModal={() => setIssueView(false)}></CardModal>)}
+      {issueView && (<CardModal cardData={issueData} getComments={getComments} createComment={createComment} hideModal={closeCardView}></CardModal>)}
       <div>
         <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Issues </div>
         {isLoading
           ? (<Spinner></Spinner>)
           : allIssues.map((issue : IssueModel) => (
-              <Card cardData={issue as CardModel} openCardView={openCardView}></Card>
+              <Card cardData={convertIssueToCard(issue)} openCardView={openCardView}></Card>
             ))
         }
       </div>
