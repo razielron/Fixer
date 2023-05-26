@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { PrismaClient } from '@prisma/client';
+import GetProfessionEnumByString from '../models/profession.js';
 const prisma = new PrismaClient();
 ``;
 class IssueRepository {
@@ -27,7 +28,7 @@ class IssueRepository {
     }
     getIssuesByProfession(profession) {
         return __awaiter(this, void 0, void 0, function* () {
-            let where = { profession: profession };
+            let where = { profession: GetProfessionEnumByString(profession) };
             let issues = yield prisma.issue.findMany({ where });
             return issues;
         });
