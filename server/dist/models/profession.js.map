@@ -1,0 +1,1 @@
+{"version":3,"file":"profession.js","sourceRoot":"","sources":["../../src/models/profession.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,MAAM,gBAAgB,CAAC;AAE5C,MAAM,CAAC,OAAO,UAAU,yBAAyB,CAAC,UAAkB;IAChE,OAAO,UAAU,CAAC,UAAU,CAAC,WAAW,EAA6B,CAAC,CAAC;AAC3E,CAAC"}

@@ -17,7 +17,8 @@ After that you can use the aws cli for your purpose
 4. lock the files: sudo chmod 500 fixer_frontend_key_file
 5. ssh to an instance using WSL:
     * cd ~/.ssh
-    * ssh -i fixer_server_dev_key_file ubuntu@--ip--
+    * ssh -i fixer_server_dev_key_file ubuntu@44.205.110.82
+    * ssh -i fixer_frontend_key_file ubuntu@44.207.48.75
 
 # EC2
 1. to add Nodejs:
@@ -27,13 +28,19 @@ After that you can use the aws cli for your purpose
     * nvm install --lts
 2. to clone the project: git clone https://github.com/razielron/Fixer.git
 3. to run the server:
-    * cd server
+    * cd Fixer/server
+    * add .env.prod file
+    * add .env file for Prisma
     * npm i
-    * npm run migration
+    * export NODE_ENV=prod
+    * npx prisma generate
+    * npm run migrate-dev
     * npm run build
     * npm run start
 4. to run the frontend:
+    * cd Fixer
     * cd client/fixer-app
+    * add .env.prod file
     * npm i
     * npm run build
     * sudo su
@@ -42,7 +49,7 @@ After that you can use the aws cli for your purpose
 # RDS
 1. conenct from ec2:
     * you might need to install mysql: apt install mysql-client-core-8.0
-    * connect: mysql -h terraform-20230331152420071000000001.cqsyftuemdcq.us-east-1.rds.amazonaws.com -P 3306 -u admin -p
+    * connect: mysql -h terraform-20230525121928139400000004.cbsddfyptf6p.us-east-1.rds.amazonaws.com -P 3306 -u admin -p
 2. common queries:
     * select * from test.User
 

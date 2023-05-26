@@ -31,8 +31,8 @@ app.get('/userTokenCheck', authenticateUser, (req, res) => {
 app.use('/user', userRoute);
 app.use('/post', postRoute);
 app.use('/issue', issueRoute);
-app.use('/s3', commentRoute);
-app.use('/comment', s3Route);
+app.use('/comment', commentRoute);
+app.use('/s3', s3Route);
 app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running on port: ${PORT}`);
 });
