@@ -30,7 +30,30 @@ function getUser(req, res) {
         catch (message) {
             console.error({ message });
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't get user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.issueId}` });
+            res.json({ error: `internal error: coudn't get user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
+        }
+    });
+}
+function getUserByEmail(req, res) {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let email = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.email;
+            let user = yield userRepository.getUserByEmail(email);
+            if (!user) {
+                res.sendStatus(StatusCodes.NOT_FOUND);
+                return;
+            }
+            let apiResponseModel = {
+                data: user
+            };
+            console.log({ getUser: user });
+            res.json(apiResponseModel);
+        }
+        catch (message) {
+            console.error({ message });
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+            res.json({ error: `internal error: coudn't get user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.email}` });
         }
     });
 }
@@ -89,6 +112,7 @@ function deleteUser(req, res) {
 }
 const userRoute = Router();
 userRoute.get('/:userId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getUser(req, res); next(); }));
+userRoute.get('/email/:email', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getUserByEmail(req, res); next(); }));
 userRoute.post('/create', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield createUser(req, res); next(); }));
 userRoute.put('/update', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield updateUser(req, res); next(); }));
 userRoute.delete('/:userId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield deleteUser(req, res); next(); }));
