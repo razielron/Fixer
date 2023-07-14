@@ -2,12 +2,19 @@ import { useCallback, useState } from "react";
 import NavbarItem from "@/components/NavbarItem";
 import AccountMenu from "./AccountMenu";
 import { BsChevronDown ,BsSearch, BsBell} from 'react-icons/bs';
+import { getCookie } from "cookies-next";
 
 const Navbar = () => {
     const [showAccountMenu, setShowAccountMenu] = useState(false)
+    const [userInformation, setUserInformaion] = useState<any>('');
 
     const toggleAccountMenu = useCallback(() => {
-    setShowAccountMenu((current) => !current);
+        setShowAccountMenu((current) => !current);
+        let cookie = getCookie('userInformation') as string;
+        if(!cookie) return;
+        let userInfo = JSON.parse(cookie);
+        if(!userInfo) return;
+        setUserInformaion(userInfo);
     }, []);
 
     return (
@@ -47,10 +54,10 @@ const Navbar = () => {
 
                     <div onClick={toggleAccountMenu} className="flex flex-row items-center gap-2 cursor-pointer relative">
                         <div className="w-6 h-6 lg:w-10 lg:h-10 rounded-md overflow-hidden">
-                            <img src="/images/omer.png" alt=""/>
+                            <img src="/images/profile.jpg" alt=""/>
                         </div>
                         <BsChevronDown className="text-white transition" />
-                        <AccountMenu visible={showAccountMenu} />
+                        {showAccountMenu && <AccountMenu name={userInformation.name} />}
 
                     </div>
               </div>

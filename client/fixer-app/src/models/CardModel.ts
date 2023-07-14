@@ -1,15 +1,16 @@
-interface IssueModel {
+interface CardModel {
     id?: string,
     title?: string,
     body?: string,
     profession?: string,
-    photo?: string,
-    photoUrl?: string,
+    imageArray?: string[] | null,
+    imageUrls?: string[] | null,
     autherId?: string,
     autherName?: string,
+    avatarUrl?: string,
+    avatar?: string,
     createdAt?: Date,
     updatedAt?: Date,
-    imageArray?: string[] | null,
 };
 
-export type {IssueModel};
+export type {CardModel};

@@ -44,6 +44,8 @@ After that you can use the aws cli for your purpose
     * npm i
     * npm run build
     * sudo su
+    * export NODE_ENV=prod
+    * npm run build
     * npm run start
 
 # RDS
