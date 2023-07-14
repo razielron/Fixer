@@ -48,7 +48,7 @@ const Card: React.FC<Props> = (props) => {
 
             <div className="flex w-full items-center justify-between border-b pb-3">
                 <div className="flex items-center space-x-3">
-                    <div className="h-8 w-8 rounded-full bg-slate-400 bg-[url('https://i.pravatar.cc/32')]"></div>
+                    <img className="h-8 w-8 rounded-full bg-slate-400" src="/images/profile.jpg" alt="" />
                     <div className="text-lg font-bold text-slate-700">{props.cardData?.autherName}</div>
                 </div>
                 <div className="flex items-center space-x-8">

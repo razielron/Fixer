@@ -13,7 +13,7 @@ const Comment: React.FC<Props> = (props) => {
                         <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                             <img
                                 className="mr-2 w-6 h-6 rounded-full"
-                                src={props.comment.avatar || 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'}
+                                src={props.comment.avatar || "/images/profile.jpg"}
                                 alt="Michael Gough"/>{props.comment.autherName}</p>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                             {(new Date(props.comment.createdAt || '')).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'})}
