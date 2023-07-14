@@ -25,7 +25,31 @@ async function getUser(req : Request, res : Response) : Promise<void> {
     catch(message : unknown) {
         console.error({message});
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't get user ${req?.params?.issueId}` });
+        res.json({ error: `internal error: coudn't get user ${req?.params?.userId}` });
+    }
+}
+
+async function getUserByEmail(req : Request, res : Response) : Promise<void> {
+    try {
+        let email : string = req?.params?.email;
+        let user : UserModel = await userRepository.getUserByEmail(email);
+
+        if(!user) {
+            res.sendStatus(StatusCodes.NOT_FOUND);
+            return;
+        }
+
+        let apiResponseModel: ApiResponseModel<UserModel> = {
+            data: user
+        };
+
+        console.log({getUser: user});
+        res.json(apiResponseModel);
+    }
+    catch(message : unknown) {
+        console.error({message});
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+        res.json({ error: `internal error: coudn't get user ${req?.params?.email}` });
     }
 }
 
@@ -79,6 +103,7 @@ async function deleteUser(req : Request, res : Response) : Promise<void> {
 const userRoute : Router = Router();
 
 userRoute.get('/:userId', authenticateUser, async (req : Request, res : Response, next : NextFunction) => { await getUser(req, res); next(); } );
+userRoute.get('/email/:email', authenticateUser, async (req : Request, res : Response, next : NextFunction) => { await getUserByEmail(req, res); next(); } );
 userRoute.post('/create', async (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { await createUser(req, res); next(); } );
 userRoute.put('/update', authenticateUser, async (req : Request<{}, {}, UserModel>, res : Response, next : NextFunction) => { await updateUser(req, res); next(); } );
 userRoute.delete('/:userId', authenticateUser, async (req : Request, res : Response, next : NextFunction) => { await deleteUser(req, res); next(); } );
