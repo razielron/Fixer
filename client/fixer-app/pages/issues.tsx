@@ -8,6 +8,7 @@ import { CardModel } from '@/src/models/CardModel';
 import Spinner from '@/components/Spinner';
 import CardModal from '@/components/CardModal';
 import { CommentModel } from '@/src/models/commentModel';
+import Navbar from "@/components/Navbar";
 
 export default function Issues() {
   const token : string = getCookie('jwt_auth')?.toString() || '';
@@ -103,6 +104,7 @@ export default function Issues() {
 
   return (
     <>
+      <Navbar></Navbar>
       <IssueModal handleNewIssue={handleNewIssue}></IssueModal>
       {issueView && (<CardModal cardData={issueData} getComments={getComments} createComment={createComment} hideModal={closeCardView}></CardModal>)}
       <div>

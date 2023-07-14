@@ -1,16 +1,31 @@
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import Input from "@/components/input";
 import Link from "next/link";
 import UserPool from "@/pages/api/userPool";
 import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
-import { setCookie } from 'cookies-next';
+import { ApiResponseModel } from "@/src/models/apiModel";
+import { UserModel } from "@/src/models/userModel";
+import { json } from "stream/consumers";
 
 const Login = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const token : string = getCookie('jwt_auth')?.toString() || '';
+
+    const saveUserInformation = (apiToken: string) => {
+        const headers = {Authorization: `Bearer ${apiToken}`};
+        let params = new URLSearchParams({email});
+        fetch(`/api/user?${params}`, {headers})
+          .then(res => res.json())
+          .then((response: ApiResponseModel<UserModel[]>) => {
+            let data = response?.data;
+            setCookie('userInformation', data);
+          })
+    }
 
     const loginRedirect = () => {
         if(!UserPool) return;
@@ -23,18 +38,18 @@ const Login = () => {
             Username: email,
             Pool: UserPool
         });
-
+        
         user.authenticateUser(authDetails, {
             onSuccess: data => {
-                const token = data.getIdToken().getJwtToken();
-                setCookie('jwt_auth', token);
-                router.push('/home'); },
+                const authToken = data.getIdToken().getJwtToken();
+                setCookie('jwt_auth', authToken);
+                saveUserInformation(authToken);
+                router.push('/issues'); },
 
             onFailure: err => setError(err.toString()),
             newPasswordRequired: data => console.log("newPasswordRequired", {data})
         });
     }
-
 
     return(
     <div className="reative min-h-screen h-full w-full bg-[url('/images/peakpx.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">

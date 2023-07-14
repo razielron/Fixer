@@ -5,6 +5,7 @@ import {ApiResponseModel} from '@/src/models/apiModel';
 
 const baseUrl = `${process.env.SERVER_URL}:${process.env.SERVER_PORT}`;
 const getEndpoint: string = '/user/';
+const getByEmailEndpoint: string = '/user/email/';
 const createEndpoint: string = '/user/create/';
 const updateEndpoint: string = '/user/update/';
 const deleteEndpoint: string = '/user/';
@@ -24,6 +25,26 @@ class UserClient {
         }
         catch(error: unknown) {
             let errorMessage = `Internal error when trying to get user ${userId}`;
+            console.log({error});
+            const response: ApiResponseModel<UserModel> = {
+                error: errorMessage
+            }
+
+            return response;
+        }
+    }
+
+    public async getUserByEmail(email: string, token: string) : Promise<ApiResponseModel<UserModel>> {
+        try {
+            let getUserBaseUrl: URL = new URL(getByEmailEndpoint, baseUrl);
+            let getUserUrl : URL = new URL (email, getUserBaseUrl);
+            headers.Authorization = token;
+            const {data} = await axios.get(getUserUrl.toString(), {headers});
+            
+            return data;
+        }
+        catch(error: unknown) {
+            let errorMessage = `Internal error when trying to get user ${email}`;
             console.log({error});
             const response: ApiResponseModel<UserModel> = {
                 error: errorMessage

@@ -56,7 +56,7 @@ const Register = () => {
             };
 
             let response = await fetch('/api/user', {method: 'POST', body: JSON.stringify(user)});
-            router.push('/home');
+            router.push('/login');
         });
     };
 
