@@ -9,26 +9,46 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-``;
 class IssueRepository {
     getIssueById(issueId) {
         return __awaiter(this, void 0, void 0, function* () {
             let where = { id: issueId };
-            let issue = yield prisma.issue.findFirst({ where });
+            let issue = yield prisma.issue
+                .findFirst({
+                where,
+                include: {
+                    auther: true,
+                    photos: true
+                }
+            });
             return issue;
         });
     }
     getIssuesByUserId(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             let where = { autherId: userId };
-            let issues = yield prisma.issue.findMany({ where });
+            let issues = yield prisma.issue
+                .findMany({
+                where,
+                include: {
+                    auther: true,
+                    photos: true
+                }
+            });
             return issues;
         });
     }
     getIssuesByProfession(profession) {
         return __awaiter(this, void 0, void 0, function* () {
             let where = { profession: profession };
-            let issues = yield prisma.issue.findMany({ where });
+            let issues = yield prisma.issue
+                .findMany({
+                where,
+                include: {
+                    auther: true,
+                    photos: true
+                }
+            });
             return issues;
         });
     }
@@ -84,7 +104,6 @@ class IssueRepository {
             title: issue.title,
             body: issue.body,
             profession: issue.profession,
-            photo: issue === null || issue === void 0 ? void 0 : issue.photo,
             auther: {
                 connect: { id: issue === null || issue === void 0 ? void 0 : issue.autherId }
             }

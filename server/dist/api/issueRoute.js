@@ -19,18 +19,13 @@ function getIssueById(req, res) {
         try {
             let issueId = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.issueId;
             let issue = yield issueRepository.getIssueById(issueId);
-            let user = null;
-            if (issue === null || issue === void 0 ? void 0 : issue.autherId) {
-                user = yield userRepository.getUser(issue.autherId);
-            }
-            if (!issue || !user) {
+            if (!issue) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
-            let apiResponseModel = {
-                data: Object.assign(Object.assign({}, issue), { autherName: user === null || user === void 0 ? void 0 : user.name })
-            };
-            res.json(apiResponseModel);
+            issue = yield getIssueModelWithS3Photos(issue);
+            let apiResponseModel = convertIssueToIssueApiModel(issue);
+            res.json({ data: apiResponseModel });
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -44,18 +39,16 @@ function getIssuesByUserId(req, res) {
         try {
             let userId = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.userId;
             let issues = yield issueRepository.getIssuesByUserId(userId);
-            let users = [];
-            if (issues) {
-                let filteredIssues = issues.map(issue => issue === null || issue === void 0 ? void 0 : issue.autherId).filter(item => item);
-                users = yield userRepository.getUsers(filteredIssues);
-            }
-            if (!issues || !users) {
+            if (!issues) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
+            let getPhotosFromS3Promises = issues.map(issue => {
+                return getIssueModelWithS3Photos(issue);
+            });
+            issues = yield Promise.all(getPhotosFromS3Promises);
             let issueApiModels = issues.map(issue => {
-                let user = users.find(user => (user === null || user === void 0 ? void 0 : user.id) === (issue === null || issue === void 0 ? void 0 : issue.autherId));
-                return Object.assign(Object.assign({}, issue), { autherName: user === null || user === void 0 ? void 0 : user.name });
+                return convertIssueToIssueApiModel(issue);
             });
             res.json({ data: issueApiModels });
         }
@@ -71,23 +64,17 @@ function getIssuesByProfession(req, res) {
         try {
             let profession = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.profession;
             let issues = yield issueRepository.getIssuesByProfession(profession);
-            let users = [];
-            if (issues) {
-                let filteredIssues = issues.map(issue => issue === null || issue === void 0 ? void 0 : issue.autherId).filter(item => item);
-                users = yield userRepository.getUsers(filteredIssues);
-            }
-            if (!issues || !users) {
+            if (!issues) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
-            let issueApiModels = yield Promise.all(issues.map((issue) => __awaiter(this, void 0, void 0, function* () {
-                let user = users.find(user => (user === null || user === void 0 ? void 0 : user.id) === (issue === null || issue === void 0 ? void 0 : issue.autherId));
-                let photoUrl = null;
-                if (issue === null || issue === void 0 ? void 0 : issue.photo) {
-                    photoUrl = yield s3Service.generateDownloadPresignedUrl(issue === null || issue === void 0 ? void 0 : issue.photo);
-                }
-                return Object.assign(Object.assign({}, issue), { autherName: user === null || user === void 0 ? void 0 : user.name, photoUrl });
-            })));
+            let getPhotosFromS3Promises = issues.map(issue => {
+                return getIssueModelWithS3Photos(issue);
+            });
+            issues = yield Promise.all(getPhotosFromS3Promises);
+            let issueApiModels = issues.map(issue => {
+                return convertIssueToIssueApiModel(issue);
+            });
             res.json({ data: issueApiModels });
         }
         catch (message) {
@@ -151,6 +138,33 @@ function deleteIssue(req, res) {
             res.json({ error: `internal error: coudn't delete issue ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.issueId}` });
         }
     });
+}
+function getIssueModelWithS3Photos(issue) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if (issue === null || issue === void 0 ? void 0 : issue.photos) {
+            let getPhotosFromS3Promises = (_a = issue === null || issue === void 0 ? void 0 : issue.photos) === null || _a === void 0 ? void 0 : _a.map((photo) => __awaiter(this, void 0, void 0, function* () {
+                let s3photo = yield s3Service.generateDownloadPresignedUrl(photo.url);
+                photo.url = s3photo;
+                return photo;
+            }));
+            issue.photos = yield Promise.all(getPhotosFromS3Promises);
+        }
+        return issue;
+    });
+}
+function convertIssueToIssueApiModel(issue) {
+    var _a, _b;
+    return {
+        id: issue === null || issue === void 0 ? void 0 : issue.id,
+        title: issue === null || issue === void 0 ? void 0 : issue.title,
+        body: issue === null || issue === void 0 ? void 0 : issue.body,
+        profession: issue === null || issue === void 0 ? void 0 : issue.profession,
+        photos: (_a = issue === null || issue === void 0 ? void 0 : issue.photos) === null || _a === void 0 ? void 0 : _a.map(photo => photo === null || photo === void 0 ? void 0 : photo.url).filter(item => item !== null),
+        autherName: (_b = issue === null || issue === void 0 ? void 0 : issue.auther) === null || _b === void 0 ? void 0 : _b.name,
+        createdAt: issue === null || issue === void 0 ? void 0 : issue.createdAt,
+        updatedAt: issue === null || issue === void 0 ? void 0 : issue.updatedAt
+    };
 }
 const issueRoute = Router();
 issueRoute.get('/:issueId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getIssueById(req, res); next(); }));

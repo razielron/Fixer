@@ -8,8 +8,7 @@ interface IssueApiModel {
     title?: string;
     body?: string;
     profession?: string;
-    photo?: string | null;
-    photoUrl?: string | null;
+    photos?: string[] | null;
     autherId?: string;
     autherName?: string;
     createdAt?: Date;

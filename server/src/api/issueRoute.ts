@@ -11,25 +11,16 @@ async function getIssueById(req: Request, res: Response): Promise<void> {
     try {
         let issueId: string = req?.params?.issueId;
         let issue: IssueModel = await issueRepository.getIssueById(issueId);
-        let user: UserModel = null;
 
-        if(issue?.autherId) {
-            user = await userRepository.getUser(issue.autherId);
-        }
-
-        if (!issue || !user) {
+        if (!issue) {
             res.sendStatus(StatusCodes.NOT_FOUND);
             return;
         }
 
-        let apiResponseModel: ApiResponseModel<IssueApiModel> = {
-            data: {
-                ...issue,
-                autherName: user?.name
-            }
-        };
+        issue = await getIssueModelWithS3Photos(issue);
+        let apiResponseModel: IssueApiModel = convertIssueToIssueApiModel(issue);
 
-        res.json(apiResponseModel);
+        res.json({ data: apiResponseModel });
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -41,24 +32,20 @@ async function getIssuesByUserId(req: Request, res: Response): Promise<void> {
     try {
         let userId: string = req?.params?.userId;
         let issues: IssueModel[] = await issueRepository.getIssuesByUserId(userId);
-        let users: UserModel[] = [];
-        
-        if(issues) {
-            let filteredIssues: string[] = issues.map(issue => issue?.autherId).filter(item => item) as string[];
-            users = await userRepository.getUsers(filteredIssues);
-        }
 
-        if (!issues || !users) {
+        if (!issues) {
             res.sendStatus(StatusCodes.NOT_FOUND);
             return;
         }
 
+        let getPhotosFromS3Promises = issues.map(issue => {
+            return getIssueModelWithS3Photos(issue);
+        });
+
+        issues = await Promise.all(getPhotosFromS3Promises);
+
         let issueApiModels: IssueApiModel[] = issues.map(issue => {
-            let user = users.find(user => user?.id === issue?.autherId);
-            return {
-                ...issue,
-                autherName: user?.name,
-            }
+            return convertIssueToIssueApiModel(issue);
         });
 
         res.json({data: issueApiModels});
@@ -73,32 +60,21 @@ async function getIssuesByProfession(req: Request, res: Response): Promise<void>
     try {
         let profession: string = req?.params?.profession;
         let issues: IssueModel[] = await issueRepository.getIssuesByProfession(profession);
-        let users: UserModel[] = [];
-        
-        if(issues) {
-            let filteredIssues: string[] = issues.map(issue => issue?.autherId).filter(item => item) as string[];
-            users = await userRepository.getUsers(filteredIssues);
-        }
 
-        if (!issues || !users) {
+        if (!issues) {
             res.sendStatus(StatusCodes.NOT_FOUND);
             return;
         }
 
-        let issueApiModels: IssueApiModel[] = await Promise.all(issues.map(async (issue) => {
-            let user = users.find(user => user?.id === issue?.autherId);
-            let photoUrl: string | null = null;
-            
-            if(issue?.photo) {
-                photoUrl = await s3Service.generateDownloadPresignedUrl(issue?.photo);
-            }
+        let getPhotosFromS3Promises = issues.map(issue => {
+            return getIssueModelWithS3Photos(issue);
+        });
 
-            return {
-                ...issue,
-                autherName: user?.name,
-                photoUrl
-            }
-        }));
+        issues = await Promise.all(getPhotosFromS3Promises);
+
+        let issueApiModels: IssueApiModel[] = issues.map(issue => {
+            return convertIssueToIssueApiModel(issue);
+        });
 
         res.json({data: issueApiModels});
     }
@@ -158,6 +134,33 @@ async function deleteIssue(req: Request, res: Response): Promise<void> {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
         res.json({ error: `internal error: coudn't delete issue ${req?.params?.issueId}` });
     }
+}
+
+async function getIssueModelWithS3Photos(issue: IssueModel): Promise<IssueModel> {
+    if(issue?.photos) {
+        let getPhotosFromS3Promises = issue?.photos?.map(async photo => {
+            let s3photo = await s3Service.generateDownloadPresignedUrl(photo.url as string);
+            photo.url = s3photo;
+            return photo;
+        });
+
+        issue.photos = await Promise.all(getPhotosFromS3Promises);
+    }
+
+    return issue;
+}
+
+function convertIssueToIssueApiModel(issue: IssueModel): IssueApiModel {
+    return {
+        id: issue?.id,
+        title: issue?.title,
+        body: issue?.body,
+        profession: issue?.profession,
+        photos: issue?.photos?.map(photo => photo?.url).filter(item => item !== null) as string[],
+        autherName: issue?.auther?.name,
+        createdAt: issue?.createdAt,
+        updatedAt: issue?.updatedAt
+    };
 }
 
 const issueRoute: Router = Router();

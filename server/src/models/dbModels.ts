@@ -4,6 +4,7 @@ import type {
         Issue,
         Comment,
         Review,
+        Photo,
         Product,
         Order
     }
@@ -15,9 +16,10 @@ type Nullable<T> = T | null;
 
 type UserModel = Partial<User> | null | PrismaTypes.UserCreateInput;
 type PostModel = Partial<Post> | null | PrismaTypes.PostCreateInput;
-type IssueModel = Partial<Issue> | null;
+type IssueModel = (Partial<Issue> & { auther?: Partial<User> } & { photos?: Partial<Photo>[] }) | null;
 type CommentModel = Partial<Comment> | null;
 type ReviewModel = Partial<Review> | null;
+type PhotoModel = Partial<Photo> | null;
 type ProductModel = Partial<Product> | null;
 type OrderModel = Partial<Order> | null;
 
@@ -35,6 +37,7 @@ export {
     IssueModel,
     CommentModel,
     ReviewModel,
+    PhotoModel,
     ProductModel,
     OrderModel
 }

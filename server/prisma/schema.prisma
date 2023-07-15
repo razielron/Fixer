@@ -13,12 +13,15 @@ datasource db {
 model User {
   id                 String    @id @default(uuid())
   name               String
+  firstName          String
+  lastName           String
   email              String    @unique
   role               Role      @default(BASIC)
   profession         String?
   certificate        String?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
+  photos             Photo[]
   posts              Post[]
   issues             Issue[]
   comments           Comment[]
@@ -31,25 +34,25 @@ model Post {
   id        String    @id @default(uuid())
   title     String
   body      String
-  photo     String?
   autherId  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  photos    Photo[]
   comments  Comment[]
   auther    User?     @relation(fields: [autherId], references: [id])
 }
 
 model Issue {
-  id         String     @id @default(uuid())
+  id         String    @id @default(uuid())
   title      String
   body       String
   profession String
-  photo      String?
   autherId   String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  photos     Photo[]
   comments   Comment[]
-  auther     User       @relation(fields: [autherId], references: [id])
+  auther     User      @relation(fields: [autherId], references: [id])
 }
 
 model Comment {
@@ -75,6 +78,19 @@ model Review {
   reviewedId String
   auther     User     @relation("auther", fields: [autherId], references: [id])
   reviewed   User     @relation("reviewed", fields: [reviewedId], references: [id])
+}
+
+model Photo {
+  id        String   @id @default(uuid())
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String?
+  issueId   String?
+  postId    String?
+  user      User?     @relation(fields: [userId], references: [id])
+  issue     Issue?     @relation(fields: [issueId], references: [id])
+  post      Post?     @relation(fields: [postId], references: [id])
 }
 
 model Product {

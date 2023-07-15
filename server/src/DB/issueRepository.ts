@@ -1,27 +1,48 @@
 import { PrismaClient } from '@prisma/client';
-import { IssueModel } from '../models/dbModels.js';
+import { IssueModel, PhotoModel } from '../models/dbModels.js';
 import { Prisma as PrismaTypes } from '@prisma/client';
 
-const prisma = new PrismaClient();``
+const prisma = new PrismaClient();
 
 class IssueRepository {
     public async getIssueById(issueId: string): Promise<IssueModel> {
         let where = { id: issueId };
-        let issue: IssueModel = await prisma.issue.findFirst({ where });
+        let issue: IssueModel = await prisma.issue
+        .findFirst({
+            where,
+            include: {
+                auther: true,
+                photos: true
+            }
+        });
 
         return issue;
     }
 
     public async getIssuesByUserId(userId: string): Promise<IssueModel[]> {
         let where = { autherId: userId };
-        let issues: IssueModel[] = await prisma.issue.findMany({ where });
+        let issues: IssueModel[] = await prisma.issue
+        .findMany({
+            where,
+            include: {
+                auther: true,
+                photos: true
+            }
+        });
 
         return issues;
     }
 
     public async getIssuesByProfession(profession: string): Promise<IssueModel[]> {
         let where = { profession: profession };
-        let issues: IssueModel[] = await prisma.issue.findMany({ where });
+        let issues: IssueModel[] = await prisma.issue
+        .findMany({
+            where,
+            include: {
+                auther: true,
+                photos: true
+            }
+        });
 
         return issues;
     }
@@ -50,7 +71,7 @@ class IssueRepository {
 
         try {
             let where = { id: issue.id };
-            let data: PrismaTypes.IssueUncheckedUpdateInput = issue;
+            let data: PrismaTypes.IssueUncheckedUpdateInput = issue as Omit<IssueModel, 'photos'>;
             let updatedIssue: IssueModel = await prisma.issue.update({ where, data });
 
             return updatedIssue;
@@ -81,7 +102,6 @@ class IssueRepository {
             title: issue.title,
             body: issue.body,
             profession: issue.profession,
-            photo: issue?.photo,
             auther: {
                 connect: { id: issue?.autherId }
             }
