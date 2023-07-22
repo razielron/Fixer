@@ -27,4 +27,17 @@ interface CommentApiModel {
     updatedAt?: Date;
 }
 
-export type { ApiResponseModel, IssueApiModel, CommentApiModel };
+interface PriceOfferApiModel {
+    id?: string;
+    body?: string;
+    price?: Number;
+    photo?: string | null;
+    photoUrl?: string | null;
+    autherId?: string;
+    autherName?: string;
+    issurId?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export type { ApiResponseModel, IssueApiModel, CommentApiModel, PriceOfferApiModel };

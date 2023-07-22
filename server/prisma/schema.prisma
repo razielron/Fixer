@@ -23,6 +23,7 @@ model User {
   issues             Issue[]
   comments           Comment[]
   order              Order[]
+  priceOffer         PriceOffer[]
   reviewWrittenByMe  Review[]  @relation("auther")
   reviewWrittenForMe Review[]  @relation("reviewed")
 }
@@ -49,6 +50,7 @@ model Issue {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   comments   Comment[]
+  priceOffer PriceOffer[]
   auther     User       @relation(fields: [autherId], references: [id])
 }
 
@@ -75,6 +77,19 @@ model Review {
   reviewedId String
   auther     User     @relation("auther", fields: [autherId], references: [id])
   reviewed   User     @relation("reviewed", fields: [reviewedId], references: [id])
+}
+
+model PriceOffer {
+  id        String   @id @default(uuid())
+  body      String
+  price     Float
+  photo     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  autherId  String
+  issueId   String
+  auther    User     @relation(fields: [autherId], references: [id])
+  issue     Issue    @relation(fields: [issueId], references: [id])
 }
 
 model Product {
