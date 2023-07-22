@@ -42,11 +42,25 @@ const Register = () => {
         }
 
     };
+    
+    const userPoolErrorTranslation = (error:string) => {
+        let err = ''
+        if(error.includes('Username should be an email'))
+            err = 'Please enter valid Email'
+
+        else if(error.includes('Password did not conform with policy: Password not long enough'))
+            err = 'Please enter password with 6 charcters at least'
+        
+        else
+            err = error
+            
+        return err;
+    }
 
     const signupRedirect = async () => {
         UserPool?.signUp(email, password, [], [], async (err, data) => {
             if(err) {
-                setError(err.toString());
+                setError(userPoolErrorTranslation(err.toString()));
                 return;
             }
             const user : UserModel = {
@@ -60,7 +74,7 @@ const Register = () => {
         });
     };
 
-    const checkPasswordValidation = (event:any) => {
+    const checkPasswordValidation= (event:any) => {
         setConfirmPassword(event.target.value)
 
         if(password !== event.target.value) {
@@ -68,6 +82,8 @@ const Register = () => {
         }
         else setError("")
     }
+
+
 
     return(
         <div className="reative min-h-screen h-full w-full bg-[url('/images/peakpx.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -77,7 +93,7 @@ const Register = () => {
                     <img src="/images/fixerLogo.png" alt="Logo" className="h-5 rounded-md mb-5"></img>
                 </nav>
                 <h2 className="text-white mb-2 py-2">
-                    register
+                    Register as a Member
                 </h2>
                 <div className="flex flex-col gap-4">
                     <Input
