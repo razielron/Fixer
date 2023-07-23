@@ -88,7 +88,7 @@ const Register = () => {
     return(
         <div className="reative min-h-screen h-full w-full bg-[url('/images/peakpx.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
         <div className="min-h-screen flex justify-center">
-            <div className="bg-black bg-opacity-60 px-10 py-10 self-center">
+            <div className="bg-black bg-opacity-60 px-10 py-10 items-center">
                 <nav className="">
                     <img src="/images/fixerLogo.png" alt="Logo" className="h-5 rounded-md mb-5"></img>
                 </nav>

@@ -1,43 +1,40 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
-import Comment from './Comment';
-import CommentForm from './CommentForm';
-import { CommentModel } from "@/src/models/commentModel";
+import { PriceOfferModel } from "@/src/models/priceOfferModel";
 import { CardModel } from "@/src/models/CardModel";
 import { getCookie } from "cookies-next";
-import { ApiResponseModel } from "@/src/models/apiModel";
+import PriceOfferForm from "./PriceOfferForm";
+import PriceOffer from "./PriceOffer";
 
 type Props =   {
-    commentArray?: CommentModel[]
+    priceOfferArray?: PriceOfferModel[]
     cardData: CardModel
-    getComments: (cardId: string) => Promise<CommentModel[]>
-    createComment: (comment: CommentModel, autherId: string, cardId: string) => Promise<CommentModel>
+    getPriceOffers: (cardId: string) => Promise<PriceOfferModel[]>
+    createpriceOffer: (priceOffer: PriceOfferModel, autherId: string, cardId: string) => Promise<PriceOfferModel>
     hideModal: () => void
 }
 
-
-const CardModal: React.FC<Props> = (props) => {
-  const [comments, setComments] = useState<CommentModel[]>([]);
+const PriceOfferModal: React.FC<Props> = (props) => {
+  const [priceOffers, setPriceOffers] = useState<PriceOfferModel[]>([]);
   const token : string = getCookie('jwt_auth')?.toString() || '';
   const headers = {Authorization: `Bearer ${token}`};
 
-  let handleNewComment = (comment: CommentModel) => {
+  let handleNewpriceOffer = (priceOffer: PriceOfferModel) => {
     if(!props.cardData?.autherId || !props.cardData?.id) return;
-    props.createComment(comment, props.cardData.autherId, props.cardData.id)
-        .then((createdComment) => {
-            setComments([...comments, createdComment]);
+    props.createpriceOffer(priceOffer, props.cardData.autherId, props.cardData.id)
+        .then((createdpriceOffer) => {
+            setPriceOffers([...priceOffers, createdpriceOffer]);
         });
   }
 
   useEffect(() => {
     if(!props.cardData?.id) return;
-    props.getComments(props.cardData.id)
-        .then((comments:CommentModel[]) => {
-            setComments(comments);
+    props.getPriceOffers(props.cardData.id)
+        .then((priceOffers:PriceOfferModel[]) => {
+            setPriceOffers(priceOffers);
         });
   }, []);
 
-  
   return (
     <>
         <div className="mt-24 justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -49,10 +46,10 @@ const CardModal: React.FC<Props> = (props) => {
                         <button onClick={props.hideModal}>X</button>
                         <Card cardData={props.cardData} isModalOpen={false} />
                         <div className="overflow-auto">
-                        {comments && comments.map((comment) => (<Comment comment={comment} />))}
+                        {priceOffers && priceOffers.map((priceOffer) => (<PriceOffer priceOffer={priceOffer} />))}
                         </div>
                         <div className="">
-                        <CommentForm onSubmit={handleNewComment} />
+                        <PriceOfferForm onSubmit={handleNewpriceOffer} />
                         </div>
                         
                     </div>
@@ -64,4 +61,4 @@ const CardModal: React.FC<Props> = (props) => {
   );
 }
 
-export default CardModal;
+export default PriceOfferModal;

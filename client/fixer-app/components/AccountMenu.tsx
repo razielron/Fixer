@@ -21,7 +21,7 @@ const AccountMenu: React.FC<AccountMenuProps> = ({name}) => {
                 <div className="px-3 group/item flex flex-row gap-3 items-center w-full" onClick={() => router.push('/profile')}>
                     <img className="w-8 rounded-md" src="/images/profile.jpg" alt="" />
                         <p className="text-white text-sm group-hover/item:underline">
-                            {name ?? 'shachar'}
+                            {name ?? ''}
                         </p>
                 </div>
                 <hr className="bg-gray-600 border-0 h-px my-4" />

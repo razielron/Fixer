@@ -1,17 +1,39 @@
 import { useEffect, useState } from "react";
 import GalleryModal from "./GalleryModal";
 import { CardModel } from "@/src/models/CardModel";
+import PriceOfferModal from "./PriceOfferModal";
+import { getCookie } from "cookies-next";
 
 type Props =   {
+    isModalOpen: boolean
     cardData: CardModel
     openCardView?: (cardData: CardModel) => void
+    openPriceOfferView?: (cardData: CardModel) => void
 }
 
 const Card: React.FC<Props> = (props) => {
   const [imageArray, setImageArray] = useState<string[]>([]);
   const [isShowGalleryModal, setIsShowGalleryModal] = useState(false);
+  const [showPriceOffer, setShowPriceOffer] = useState<boolean>(false);
+
+  const getUserInformation = () => { 
+      let cookie = getCookie('userInformation') as string; 
+      if(!cookie) return; 
+      let userInfo = JSON.parse(cookie); 
+      if(!userInfo) return; 
+      return userInfo; 
+  }
+  
+  const shouldShowPriceOffer = () => {
+    let userInformation = getUserInformation();
+
+    if (userInformation?.role === 'PROFESSIONAL' || userInformation?.id === props.cardData.autherId){
+        setShowPriceOffer(true)
+    }
+  }
 
   useEffect(() => {
+    shouldShowPriceOffer();
     console.log({cardData: props.cardData})
     fetchCardImages();
   }, []);
@@ -32,6 +54,11 @@ const Card: React.FC<Props> = (props) => {
   let handleCommentClick = () => {
     if(!props?.openCardView) return;
     props.openCardView(props.cardData);
+  }
+
+  let handlePriceOfferClick = () => {
+    if(!props?.openPriceOfferView) return;
+    props.openPriceOfferView(props.cardData);
   }
 
   const showGalleryModal = () => {
@@ -75,7 +102,7 @@ const Card: React.FC<Props> = (props) => {
                 )}
             </div>
 
-            <div>
+           { props.isModalOpen && <div>
                 <div className="flex items-center justify-between text-slate-500">
                     <div className="flex space-x-4 md:space-x-8">
                         <div onClick={handleCommentClick} className="flex cursor-pointer items-center transition hover:text-slate-600">
@@ -84,21 +111,16 @@ const Card: React.FC<Props> = (props) => {
                             </svg>
                             <span>Comment</span>
                         </div>
-                        <div className="flex cursor-pointer items-center transition hover:text-slate-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="mr-1.5 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                            </svg>
-                            <span>Like</span>
-                        </div>
-                        <div className="flex cursor-pointer items-center transition hover:text-slate-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="mr-1.5 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                            </svg>
-                            <span>Price offer</span>
-                        </div>
+                        {showPriceOffer && 
+                        <div onClick={handlePriceOfferClick} className="flex cursor-pointer items-center transition hover:text-slate-600">
+                        <svg viewBox="0 0 24 24" fill="currentColor"className="mr-1.5 h-5 w-5" {...props}> <path fill="none" d="M0 0h24v24H0z" /> 
+                            <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16zm-3.5-6H14a.5.5 0 100-1h-4a2.5 2.5 0 110-5h1V6h2v2h2.5v2H10a.5.5 0 100 1h4a2.5 2.5 0 110 5h-1v2h-2v-2H8.5v-2z" />
+                        </svg>
+                            <span>Price Offer</span>
+                        </div>}
                     </div>
                 </div>
-            </div>
+            </div>}
         </div>
     </div>
   );
