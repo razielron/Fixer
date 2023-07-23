@@ -22,7 +22,6 @@ export default function Issues() {
   const [issueView, setIssueView] = useState(false);
   const [issueData, setIssueData] = useState<CardModel>({});
 
-
   let commentModel = {
     body: 'raz & omer = <3'
   };

@@ -9,10 +9,7 @@ import { Role } from "@/src/enums/role";
 import { Profession, professionOptions } from "@/src/enums/profession";
 import Upload from "@/components/Upload";
 
-
-
-
-const ProfessionalRegister = () => {
+const professionalRegister = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -23,7 +20,6 @@ const ProfessionalRegister = () => {
     const [s3key, setS3key] = useState<string>('');
     
     const signupRedirectVladition = async () => {
-    
         let newError = '';
         if(name === '' || email === ''||password === '' || confirmPassword === ''|| profession === ''){
             newError = (`Please fill all fields`);
@@ -34,27 +30,30 @@ const ProfessionalRegister = () => {
         if (!newError) {
             await signupRedirect();
         }
-
     };
+
     const userPoolErrorTranslation = (error:string) => {
         let err = ''
-        if(error.includes('Username should be an email'))
+        if(error.includes('Username should be an email')){
             err = 'Please enter valid Email'
-
-        else if(error.includes('Password did not conform with policy: Password not long enough'))
+        }
+        else if(error.includes('Password did not conform with policy: Password not long enough')){
             err = 'Please enter password with 6 charcters at least'
-        
-        else
+        }
+        else{
             err = error
+        }
             
         return err;
     }
+
     const signupRedirect = async () => {
         UserPool?.signUp(email, password, [], [], async (err, data) => {
             if(err) {
                 setError(userPoolErrorTranslation(err.toString()));
                 return;
             }
+
             const user : UserModel = {
                 email: email,
                 name: name,
@@ -62,22 +61,21 @@ const ProfessionalRegister = () => {
                 certificate: s3key,
                 profession: profession
             };
-            console.log("1")
-            let response = await fetch('/api/user', {method: 'POST', body: JSON.stringify(user)});
-            console.log("2  ")
 
+            let response = await fetch('/api/user', {method: 'POST', body: JSON.stringify(user)});
             router.push('/login');
-            
         });
     };
 
     const checkPasswordValidation = (event:any) => {
-        setConfirmPassword(event.target.value)
+        setConfirmPassword(event.target.value);
 
         if(password !== event.target.value) {
-            setError("Password do not match")
+            setError("Password do not match");
         }
-        else setError("")
+        else { 
+            setError("");
+        }
     }
 
     return(
@@ -145,4 +143,4 @@ const ProfessionalRegister = () => {
     )
 }
 
-export default ProfessionalRegister;
+export default professionalRegister;
