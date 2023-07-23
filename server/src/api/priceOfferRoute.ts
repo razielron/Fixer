@@ -73,7 +73,7 @@ async function createPriceOffer(req: Request, res: Response): Promise<void> {
         let priceOffer: PriceOfferModel = req.body;
         let email: string = req?.body?.cognitoUser?.email;
 
-        if(!priceOffer || !email) {
+        if(!priceOffer || !email || !priceOffer?.price) {
             res.status(StatusCodes.BAD_REQUEST);
             res.json({ error: `Missing priceOffer data or valid token` });
             return;
@@ -81,6 +81,7 @@ async function createPriceOffer(req: Request, res: Response): Promise<void> {
 
         let user: UserModel = await userRepository.getUserByEmail(email);
         priceOffer.autherId = user?.id;
+        priceOffer.price = parseFloat(priceOffer.price.toString());
         await priceOfferRepository.createPriceOffer(priceOffer);
         res.sendStatus(StatusCodes.CREATED);
     }

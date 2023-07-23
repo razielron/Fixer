@@ -70,13 +70,14 @@ function createPriceOffer(req, res) {
         try {
             let priceOffer = req.body;
             let email = (_b = (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.cognitoUser) === null || _b === void 0 ? void 0 : _b.email;
-            if (!priceOffer || !email) {
+            if (!priceOffer || !email || !(priceOffer === null || priceOffer === void 0 ? void 0 : priceOffer.price)) {
                 res.status(StatusCodes.BAD_REQUEST);
                 res.json({ error: `Missing priceOffer data or valid token` });
                 return;
             }
             let user = yield userRepository.getUserByEmail(email);
             priceOffer.autherId = user === null || user === void 0 ? void 0 : user.id;
+            priceOffer.price = parseFloat(priceOffer.price.toString());
             yield priceOfferRepository.createPriceOffer(priceOffer);
             res.sendStatus(StatusCodes.CREATED);
         }
