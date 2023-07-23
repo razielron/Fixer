@@ -7,6 +7,7 @@ import { userRoute } from './userRoute.js';
 import { postRoute } from './postRoute.js';
 import { issueRoute } from './issueRoute.js';
 import { commentRoute } from './commentRoute.js';
+import { priceOfferRoute } from './priceOfferRoute.js';
 import { s3Route } from './s3Route.js';
 dotenv.config({ path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`) });
 const app = express();
@@ -32,6 +33,7 @@ app.use('/user', userRoute);
 app.use('/post', postRoute);
 app.use('/issue', issueRoute);
 app.use('/comment', commentRoute);
+app.use('/priceOffer', priceOfferRoute);
 app.use('/s3', s3Route);
 app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running on port: ${PORT}`);
