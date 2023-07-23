@@ -9,10 +9,7 @@ import { Role } from "@/src/enums/role";
 import { Profession, professionOptions } from "@/src/enums/profession";
 import Upload from "@/components/Upload";
 
-
-
-
-const ProfessionalRegister = () => {
+const professionalRegister = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -23,7 +20,6 @@ const ProfessionalRegister = () => {
     const [s3key, setS3key] = useState<string>('');
     
     const signupRedirectVladition = async () => {
-    
         let newError = '';
         if(name === '' || email === ''||password === '' || confirmPassword === ''|| profession === ''){
             newError = (`Please fill all fields`);
@@ -34,15 +30,30 @@ const ProfessionalRegister = () => {
         if (!newError) {
             await signupRedirect();
         }
-
     };
+
+    const userPoolErrorTranslation = (error:string) => {
+        let err = ''
+        if(error.includes('Username should be an email')){
+            err = 'Please enter valid Email'
+        }
+        else if(error.includes('Password did not conform with policy: Password not long enough')){
+            err = 'Please enter password with 6 charcters at least'
+        }
+        else{
+            err = error
+        }
+            
+        return err;
+    }
 
     const signupRedirect = async () => {
         UserPool?.signUp(email, password, [], [], async (err, data) => {
             if(err) {
-                setError(err.toString());
+                setError(userPoolErrorTranslation(err.toString()));
                 return;
             }
+
             const user : UserModel = {
                 email: email,
                 name: name,
@@ -52,17 +63,19 @@ const ProfessionalRegister = () => {
             };
 
             let response = await fetch('/api/user', {method: 'POST', body: JSON.stringify(user)});
-            router.push('/home');
+            router.push('/login');
         });
     };
 
     const checkPasswordValidation = (event:any) => {
-        setConfirmPassword(event.target.value)
+        setConfirmPassword(event.target.value);
 
         if(password !== event.target.value) {
-            setError("Password do not match")
+            setError("Password do not match");
         }
-        else setError("")
+        else { 
+            setError("");
+        }
     }
 
     return(
@@ -73,7 +86,7 @@ const ProfessionalRegister = () => {
                     <img src="/images/fixerLogo.png" alt="Logo" className="h-5 rounded-md mb-5"></img>
                 </nav>
                 <h2 className="text-white mb-2 py-2">
-                    register
+                Register as a Service Provider
                 </h2>
                 <div className="flex flex-col gap-4">
                     <Input
@@ -130,4 +143,4 @@ const ProfessionalRegister = () => {
     )
 }
 
-export default ProfessionalRegister;
+export default professionalRegister;

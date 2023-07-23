@@ -62,7 +62,7 @@ const Issue: React.FC<Props> =(props) => {
           </div>
       )}
       {props.imageUrl && isShowGalleryModal && (
-           <GalleryModal hideModal={hideGalleryModal} imageArray={[image,image,image]}/>
+           <GalleryModal hideModal={hideGalleryModal} imageArray={[image]}/>
       )}
 
       {/* Post Footer */}

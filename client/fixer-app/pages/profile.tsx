@@ -1,16 +1,21 @@
 import Navbar from "@/components/Navbar";
 import { getCookie } from "cookies-next";
+import { useEffect, useState } from "react";
 
 export default function Profile() {
-    const getUserInformation = () => {
-        let cookie = getCookie('userInformation') as string;
-        if(!cookie) return;
-        let userInfo = JSON.parse(cookie);
-        if(!userInfo) return;
-        return userInfo;
-    }
-
-    const userInformation = getUserInformation();
+    const [userInformation, setUserInformaion] = useState<any>({}); 
+ 
+    const getUserInformation = () => { 
+        let cookie = getCookie('userInformation') as string; 
+        if(!cookie) return; 
+        let userInfo = JSON.parse(cookie); 
+        if(!userInfo) return; 
+        return userInfo; 
+    } 
+ 
+    useEffect(() => { 
+        setUserInformaion(getUserInformation()); 
+    }, []);
 
     return (
         <>
