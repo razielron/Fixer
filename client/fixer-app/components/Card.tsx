@@ -79,14 +79,14 @@ const Card: React.FC<Props> = (props) => {
                     <div className="text-lg font-bold text-slate-700">{props.cardData?.autherName}</div>
                 </div>
                 <div className="flex items-center space-x-8">
-                    <button className="rounded-2xl border bg-neutral-100 px-3 py-1 text-xs font-semibold">Category</button>
+                    {props.cardData?.profession &&<button className="rounded-3xl border bg-neutral-100 px-3 py-1 text-xs font-semibold">{props.cardData.profession.toLocaleLowerCase()}</button>}
                     {props.cardData?.createdAt && (<div className="text-xs text-neutral-500">{(new Date(props.cardData.createdAt)).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'})}</div>)}
                 </div>
             </div>
 
             <div className="mt-4 mb-6">
-                <div className="mb-3 text-xl font-bold">{props.cardData?.title}</div>
-                <div className="text-sm text-neutral-600">{props.cardData?.body}</div>
+                <div className="mb-3 text-3xl font-bold">{props.cardData?.title}</div>
+                <div className="text-xl text-neutral-600">{props.cardData?.body}</div>
             </div>
 
             <div className="mt-4 mb-6">
