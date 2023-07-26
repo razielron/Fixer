@@ -72,13 +72,23 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
                 <div className="flex flex-col gap-4">
-                  <Input
-                      onChange = {(event:any)=> setTitle(event.target.value)}
-                      id = "title"
-                      type = "name"
-                      value = {title}
-                      placeHolder = "Title"
-                  />
+                  <div>
+                    <p className="p-0 m-0">
+                      <b className="p-0">Title</b>
+                    </p>
+                    <Input 
+                        onChange = {(event:any)=> setTitle(event.target.value)}
+                        id = "title"
+                        type = "name"
+                        value = {title}
+                        placeHolder = "Title"
+                    />
+                  </div>
+
+                  <div>
+                    <p className="p-0 m-0">
+                      <b className="p-0">Body</b>
+                    </p>
                   <Input
                       onChange = {(event:any)=> setBody(event.target.value)}
                       id = "body"
@@ -86,11 +96,17 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
                       value = {body}
                       placeHolder = "Body"
                   />
+                  </div>
+                  <div>
+                    <p className="p-0 m-0">
+                      <b className="p-0">Profession</b>
+                    </p>
                   <DropDown 
                       options={professionOptions} 
                       onChange={(event:any)=> setRole(event[0].label)}
                       placeHolder="Role"   
                   />
+                  </div>
                 </div>
                 </div>
                 {/*footer*/}
