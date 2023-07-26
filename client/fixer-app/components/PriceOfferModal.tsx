@@ -42,12 +42,18 @@ const PriceOfferModal: React.FC<Props> = (props) => {
                 {/*content*/}
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                     {/*header*/}
-                    <div className="flow-root flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                        <button onClick={props.hideModal}>X</button>
+                    <div className="flow-root flex items-start justify-between p-2 border-b border-solid border-slate-200 rounded-t">
+                        <button onClick={props.hideModal} type="button" className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                            <span className="sr-only">Close menu</span>
+                            <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                         <Card cardData={props.cardData} isModalOpen={false} />
-                        <div className="overflow-auto">
+                        <div className="overflow-auto pl-5">
                         {priceOffers && priceOffers.map((priceOffer) => (<PriceOffer priceOffer={priceOffer} />))}
                         </div>
+                        <hr className="my-12 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />
                         <div className="">
                         <PriceOfferForm onSubmit={handleNewpriceOffer} />
                         </div>
