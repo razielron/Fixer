@@ -1,14 +1,9 @@
 import React from "react";
 import { deleteCookie} from 'cookies-next';
 import { useRouter } from "next/router";
+import { UserModel } from "@/src/models/userModel";
 
-interface UserInformation {
-    id: string
-    name: string;
-    email: string;
-}
-
-const AccountMenu: React.FC<UserInformation> = (props) => {
+const AccountMenu: React.FC<UserModel> = (props) => {
     const router = useRouter();
 
     const signOut = async () => {

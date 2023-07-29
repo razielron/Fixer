@@ -1,17 +1,10 @@
-import Navbar from "@/components/Navbar";
+import { UserModel } from "@/src/models/userModel";
 import React from "react";
 
-interface UserInformation {
-    id: string;
-    name: string;
-    email: string;
-}
-
-const Profile: React.FC<UserInformation> = (props) => {
+const Profile: React.FC<UserModel> = (props) => {
     return (
         <>
-            <Navbar></Navbar>
-            <div className="h-full p-20">
+            <div className="h-full p-20 pt-10 pb-0">
                 <div className="border-b-2 block md:flex">
                     <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 bg-white shadow-md">
                         <div className="flex justify-between">
@@ -28,7 +21,7 @@ const Profile: React.FC<UserInformation> = (props) => {
                     </div>
                     
                     <div className="w-full md:w-3/5 p-8 bg-white lg:ml-4 shadow-md">
-                    <div className="rounded  shadow p-6">
+                    <div className="rounded  shadow p-6 pb-0">
                         <div className="pb-6">
                         <label htmlFor="name" className="font-semibold text-gray-700 block pb-1">Name</label>
                         <div className="flex">

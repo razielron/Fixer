@@ -35,13 +35,73 @@ async function getUserByEmail (
     }
 }
 
+async function getUserById (
+    req: NextApiRequest,
+    res: NextApiResponse<ApiResponseModel<UserModel>>
+) {
+    try {
+        const token = req.headers.authorization as string;
+        const userId = req?.query?.id as string;
+        if(userId == null || userId == '') throw("no user id");
+        let response: ApiResponseModel<UserModel> = await userClient.getUser(userId, token);
+        res.status(200).json(response);
+    }
+    catch(error: unknown) {
+        console.log({error});
+        res.status(500).json({error: `internal error: couldn't get user by id`});
+    }
+}
+
+async function getUsersByProfession (
+    req: NextApiRequest,
+    res: NextApiResponse<ApiResponseModel<UserModel>>
+) {
+    try {
+        const token = req.headers.authorization as string;
+        const profession = req?.query?.profession as string;
+        if(profession == null || profession == '') throw("no user id");
+        let response: ApiResponseModel<UserModel> = await userClient.getUsersByProfession(profession, token);
+        res.status(200).json(response);
+    }
+    catch(error: unknown) {
+        console.log({error});
+        res.status(500).json({error: `internal error: couldn't get user by id`});
+    }
+}
+
+async function getAllUsers (
+    req: NextApiRequest,
+    res: NextApiResponse<ApiResponseModel<UserModel>>
+) {
+    res.status(404).json({error: `internal error: couldn't get user by id`});
+}
+
+async function getUserNavigator(
+    req: NextApiRequest,
+    res: NextApiResponse<ApiResponseModel<UserModel>>
+) {
+    const email = req?.query?.email as string;
+    const userId = req?.query?.id as string;
+    const profession = req?.query?.profession as string;
+
+    if(email) {
+        await getUserByEmail(req, res);
+    } else if(userId) {
+        await getUserById(req, res);
+    } else if(profession) {
+        await getUsersByProfession(req, res);
+    }else {
+        await getAllUsers(req, res);
+    }
+}
+
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
   ) {
   
       if (req.method === 'GET'){
-          await getUserByEmail(req, res);
+          await getUserNavigator(req, res);
       }
       else if (req.method === 'POST'){
           await createUserHandler(req, res);

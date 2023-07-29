@@ -3,16 +3,11 @@ import NavbarItem from "@/components/NavbarItem";
 import AccountMenu from "./AccountMenu";
 import { BsChevronDown ,BsSearch, BsBell} from 'react-icons/bs';
 import { getCookie } from "cookies-next";
-
-interface UserInformation {
-    id: string;
-    name: string;
-    email: string;
-}
+import { UserModel } from "@/src/models/userModel";
 
 const Navbar = () => {
     const [showAccountMenu, setShowAccountMenu] = useState(false)
-    const [userInformation, setUserInformation] = useState<UserInformation>({ id: '', name: '', email: '' });
+    const [userInformation, setUserInformation] = useState<UserModel>({});
 
     const toggleAccountMenu = useCallback(() => {
         let cookie = getCookie('userInformation') as string;
@@ -20,7 +15,7 @@ const Navbar = () => {
         let userInfo = JSON.parse(cookie);
         if(!userInfo) return;
         setUserInformation(userInfo);
-        setShowAccountMenu(!showAccountMenu);
+        setShowAccountMenu(current => !current);
     }, []);
 
     return (
