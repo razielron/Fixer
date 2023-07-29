@@ -4,17 +4,23 @@ import AccountMenu from "./AccountMenu";
 import { BsChevronDown ,BsSearch, BsBell} from 'react-icons/bs';
 import { getCookie } from "cookies-next";
 
+interface UserInformation {
+    id: string;
+    name: string;
+    email: string;
+}
+
 const Navbar = () => {
     const [showAccountMenu, setShowAccountMenu] = useState(false)
-    const [userInformation, setUserInformaion] = useState<any>('');
+    const [userInformation, setUserInformation] = useState<UserInformation>({ id: '', name: '', email: '' });
 
     const toggleAccountMenu = useCallback(() => {
-        setShowAccountMenu((current) => !current);
         let cookie = getCookie('userInformation') as string;
         if(!cookie) return;
         let userInfo = JSON.parse(cookie);
         if(!userInfo) return;
-        setUserInformaion(userInfo);
+        setUserInformation(userInfo);
+        setShowAccountMenu(!showAccountMenu);
     }, []);
 
     return (
@@ -40,8 +46,8 @@ const Navbar = () => {
                  hidden
                  lg:flex">
                     <NavbarItem label='Home' />
-                    <NavbarItem label='Fourm' />
-                    <NavbarItem label='Profesionals' />
+                    <NavbarItem label='Forum' />
+                    <NavbarItem label='Professionals' />
                     <NavbarItem label='Store' />
               </div>
               <div className="flex flex-row ml-auto gap-7 items-center">
@@ -54,11 +60,9 @@ const Navbar = () => {
                             <img src="/images/profile.jpg" alt=""/>
                         </div>
                         <BsChevronDown className="text-white transition" />
-                        {showAccountMenu && <AccountMenu name={userInformation.name} />}
-
+                        {showAccountMenu && <AccountMenu id={userInformation.id} name={userInformation.name} email={userInformation.email} />}
                     </div>
               </div>
-
             </div>
         </nav>
 
