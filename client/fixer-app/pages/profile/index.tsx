@@ -12,7 +12,7 @@ export default function ProfilePage() {
     const [nameFilter, setNameFilter] = useState<string>(''); 
     const [isLoading, setIsLoading] = useState(false);
 
-    async function getUsersInformation(token : string, profession: string) {
+    async function getUsersInformation(token : string, profession: string) : Promise<UserModel[]> {
         const headers = {Authorization: `Bearer ${token}`};
         profession = profession.toUpperCase();
         let params = new URLSearchParams({profession});
@@ -39,9 +39,13 @@ export default function ProfilePage() {
             {isLoading
                 ? (<Spinner></Spinner>)
                 : usersInformation.filter((user: UserModel) => {
-                    return nameFilter !== '' && user?.name?.includes(nameFilter);
+                    return !nameFilter || user?.name?.includes(nameFilter);
+                }).sort((first: UserModel, second: UserModel) => {
+                    let name1 = first?.name ?? 'a';
+                    let name2 = second?.name ?? 'b';
+                    return (name1 < name2) ? -1 : 1;
                 }).map((userInfo: UserModel) => (
-                    <Profile {...userInfo}/>
+                    <Profile key={userInfo.id} {...userInfo}/>
                 ))
             }
         </>

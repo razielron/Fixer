@@ -1,7 +1,7 @@
 import { UserModel } from "@/src/models/userModel";
 import React from "react";
 
-const Profile: React.FC<UserModel> = (props) => {
+const Profile: React.FC<UserModel & {key?: string}> = (props) => {
     return (
         <>
             <div className="h-full p-20 pt-10 pb-0">
