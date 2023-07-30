@@ -11,6 +11,49 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
+function getAllUsers(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let users = yield userRepository.getAllUsers();
+            let apiResponseModel = {
+                data: users
+            };
+            res.json(apiResponseModel);
+        }
+        catch (message) {
+            console.error({ message });
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+            res.json({ error: `internal error: couldn't get all users` });
+        }
+    });
+}
+function getUsersByProfession(req, res) {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let profession = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.profession;
+            if (!profession) {
+                res.sendStatus(StatusCodes.NOT_FOUND);
+                return;
+            }
+            let users = yield userRepository.getUsersByProfession(profession);
+            if (!users) {
+                res.sendStatus(StatusCodes.NOT_FOUND);
+                return;
+            }
+            let apiResponseModel = {
+                data: users
+            };
+            console.log({ getUsersByProfession: users });
+            res.json(apiResponseModel);
+        }
+        catch (message) {
+            console.error({ message });
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+            res.json({ error: `internal error: couldn't get users: ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.profession}` });
+        }
+    });
+}
 function getUser(req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
@@ -30,7 +73,7 @@ function getUser(req, res) {
         catch (message) {
             console.error({ message });
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't get user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
+            res.json({ error: `internal error: couldn't get user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
         }
     });
 }
@@ -53,7 +96,7 @@ function getUserByEmail(req, res) {
         catch (message) {
             console.error({ message });
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't get user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.email}` });
+            res.json({ error: `internal error: couldn't get user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.email}` });
         }
     });
 }
@@ -68,7 +111,7 @@ function createUser(req, res) {
         catch (message) {
             console.error({ message });
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't create user` });
+            res.json({ error: `internal error: couldn't create user` });
         }
     });
 }
@@ -87,7 +130,7 @@ function updateUser(req, res) {
         catch (message) {
             console.error({ message });
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't update user ${(_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.id}` });
+            res.json({ error: `internal error: couldn't update user ${(_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.id}` });
         }
     });
 }
@@ -106,13 +149,15 @@ function deleteUser(req, res) {
         catch (message) {
             console.error({ message });
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't delete user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
+            res.json({ error: `internal error: couldn't delete user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
         }
     });
 }
 const userRoute = Router();
 userRoute.get('/:userId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getUser(req, res); next(); }));
 userRoute.get('/email/:email', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getUserByEmail(req, res); next(); }));
+userRoute.get('/profession/:profession', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getUsersByProfession(req, res); next(); }));
+userRoute.get('/all', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getAllUsers(req, res); next(); }));
 userRoute.post('/create', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield createUser(req, res); next(); }));
 userRoute.put('/update', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield updateUser(req, res); next(); }));
 userRoute.delete('/:userId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield deleteUser(req, res); next(); }));

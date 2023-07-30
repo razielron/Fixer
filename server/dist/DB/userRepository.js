@@ -46,6 +46,29 @@ class UserRepository {
             }
         });
     }
+    getUsersByProfession(profession) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let where = { profession };
+                let users = yield prisma.user.findMany({ where });
+                return users;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    getAllUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let users = yield prisma.user.findMany();
+                return users;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.isUserCreateInput(user)) {

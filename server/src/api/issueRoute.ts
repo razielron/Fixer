@@ -33,7 +33,7 @@ async function getIssueById(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't get issue ${req?.params?.issueId}` });
+        res.json({ error: `internal error: couldn't get issue ${req?.params?.issueId}` });
     }
 }
 
@@ -65,7 +65,7 @@ async function getIssuesByUserId(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't get issue by user ${req?.params?.userId}` });
+        res.json({ error: `internal error: couldn't get issue by user ${req?.params?.userId}` });
     }
 }
 
@@ -104,7 +104,7 @@ async function getIssuesByProfession(req: Request, res: Response): Promise<void>
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't get issue by profession ${req?.params?.profession}` });
+        res.json({ error: `internal error: couldn't get issue by profession ${req?.params?.profession}` });
     }
 }
 
@@ -126,7 +126,7 @@ async function createIssue(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't create issue` });
+        res.json({ error: `internal error: couldn't create issue` });
     }
 }
 
@@ -141,7 +141,7 @@ async function updateIssue(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't update issue ${req?.body?.id}` });
+        res.json({ error: `internal error: couldn't update issue ${req?.body?.id}` });
     }
 }
 
@@ -156,7 +156,7 @@ async function deleteIssue(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't delete issue ${req?.params?.issueId}` });
+        res.json({ error: `internal error: couldn't delete issue ${req?.params?.issueId}` });
     }
 }
 
