@@ -34,7 +34,7 @@ function getIssueById(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't get issue ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.issueId}` });
+            res.json({ error: `internal error: couldn't get issue ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.issueId}` });
         }
     });
 }
@@ -61,7 +61,7 @@ function getIssuesByUserId(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't get issue by user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
+            res.json({ error: `internal error: couldn't get issue by user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
         }
     });
 }
@@ -92,7 +92,7 @@ function getIssuesByProfession(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't get issue by profession ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.profession}` });
+            res.json({ error: `internal error: couldn't get issue by profession ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.profession}` });
         }
     });
 }
@@ -114,7 +114,7 @@ function createIssue(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't create issue` });
+            res.json({ error: `internal error: couldn't create issue` });
         }
     });
 }
@@ -131,7 +131,7 @@ function updateIssue(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't update issue ${(_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.id}` });
+            res.json({ error: `internal error: couldn't update issue ${(_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.id}` });
         }
     });
 }
@@ -148,7 +148,7 @@ function deleteIssue(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't delete issue ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.issueId}` });
+            res.json({ error: `internal error: couldn't delete issue ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.issueId}` });
         }
     });
 }

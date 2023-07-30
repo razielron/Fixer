@@ -41,6 +41,28 @@ class UserRepository {
         }
     }
 
+    public async getUsersByProfession(profession : string) : Promise<UserModel[]> {
+        try {
+            let where = { profession };
+            let users : UserModel[] = await prisma.user.findMany({ where });
+
+            return users;
+        }
+        catch(error : unknown) {
+            throw error;
+        }
+    }
+
+    public async getAllUsers() : Promise<UserModel[]> {
+        try {
+            let users : UserModel[] = await prisma.user.findMany();
+            return users;
+        }
+        catch(error : unknown) {
+            throw error;
+        }
+    }
+
     public async createUser(user: UserModel) : Promise<UserModel> {
         if(this.isUserCreateInput(user)) {
             try {
