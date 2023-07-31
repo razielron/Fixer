@@ -4,7 +4,7 @@ import React from "react";
 const Profile: React.FC<UserModel & {key?: string}> = (props) => {
     return (
         <>
-            <div className="h-full p-20 pt-10 pb-0">
+            <div className="h-full p-20 pt-5 pb-5 pb-0">
                 <div className="border-b-2 block md:flex">
                     <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 bg-white shadow-md">
                         <div className="flex justify-between">
