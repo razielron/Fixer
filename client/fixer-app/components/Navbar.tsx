@@ -40,10 +40,10 @@ const Navbar = () => {
                  gap-7
                  hidden
                  lg:flex">
-                    <NavbarItem label='Home' />
-                    <NavbarItem label='Forum' />
-                    <NavbarItem label='Professionals' />
-                    <NavbarItem label='Store' />
+                    <NavbarItem label='Home' value="issues" />
+                    <NavbarItem label='Forum' value='forum' />
+                    <NavbarItem label='Professionals' value='professionals' />
+                    <NavbarItem label='Store' value='store' />
               </div>
               <div className="flex flex-row ml-auto gap-7 items-center">
                     <div className="text-gray-200 hover:text-gray-300 cursor-pointer transition">
