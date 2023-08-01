@@ -16,11 +16,13 @@ export default function ProfilePage() {
     const [isLoading, setIsLoading] = useState(false);
 
     async function getUsersInformation(token : string, profession: string) : Promise<UserModel[]> {
+        setIsLoading(true);
         const headers = {Authorization: `Bearer ${token}`};
         profession = profession.toUpperCase();
         let params = new URLSearchParams({profession});
         let response = await fetch(`/api/user?${params}`, {headers});
         let jsonRes = await response.json();
+        setIsLoading(false);
         return jsonRes.data;
     }
 
@@ -29,7 +31,6 @@ export default function ProfilePage() {
     }
 
     useEffect(() => {
-        setIsLoading(true);
         const token: string = getCookie('jwt_auth')?.toString() || '';
         getUsersInformation(token, selectedProfession).then((data: UserModel[]) => {
             if(!data?.length) {
@@ -41,7 +42,6 @@ export default function ProfilePage() {
                 ];
             }
             setUsersInformation(data);
-            setIsLoading(false);
         });
     }, [selectedProfession]);
 
@@ -60,7 +60,13 @@ export default function ProfilePage() {
     return (
         <>
             <Navbar></Navbar>
-            <Search defaultSearch={nameFilter} performSearch={handleSearch} options={options} performSelect={option => setSelectedProfession(option)}></Search>
+            <Search
+                key="1"
+                defaultSearch={nameFilter}
+                performSearch={handleSearch}
+                options={options}
+                performSelect={option => setSelectedProfession(option)}
+            />
             {isLoading
                 ? (<Spinner></Spinner>)
                 :
