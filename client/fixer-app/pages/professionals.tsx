@@ -8,10 +8,10 @@ import Search from "@/components/Search";
 import { Profession } from "@/src/enums/profession";
 
 export default function ProfilePage() {
-    const defaultProfession = 'electrician';
+    const options = Object.values(Profession);
     const [profilesToDisplay, setProfilesToDisplay] = useState<UserModel[]>([]); 
     const [usersInformation, setUsersInformation] = useState<UserModel[]>([]); 
-    const [selectedProfession, setSelectedProfession] = useState<string>(defaultProfession); 
+    const [selectedProfession, setSelectedProfession] = useState<string>(options[0]); 
     const [nameFilter, setNameFilter] = useState<string>(''); 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -24,9 +24,8 @@ export default function ProfilePage() {
         return jsonRes.data;
     }
 
-    function handleSearch(search: string, option: string) {
+    function handleSearch(search: string) {
         setNameFilter(search);
-        setSelectedProfession(defaultProfession.toUpperCase());
     }
 
     useEffect(() => {
@@ -61,7 +60,7 @@ export default function ProfilePage() {
     return (
         <>
             <Navbar></Navbar>
-            <Search defaultSearch={nameFilter} performSearch={handleSearch} options={Object.values(Profession)}></Search>
+            <Search defaultSearch={nameFilter} performSearch={handleSearch} options={options} performSelect={option => setSelectedProfession(option)}></Search>
             {isLoading
                 ? (<Spinner></Spinner>)
                 :
