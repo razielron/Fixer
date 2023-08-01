@@ -1,29 +1,11 @@
-import Navbar from "@/components/Navbar";
-import { getCookie } from "cookies-next";
-import { useEffect, useState } from "react";
+import { UserModel } from "@/src/models/userModel";
+import React from "react";
 
-export default function Profile() {
-    const [userInformation, setUserInformaion] = useState<any>({}); 
- 
-    const getUserInformation = () => { 
-        let cookie = getCookie('userInformation') as string; 
-        if(!cookie) return; 
-        let userInfo = JSON.parse(cookie); 
-        if(!userInfo) return; 
-        return userInfo; 
-    } 
- 
-    useEffect(() => { 
-        setUserInformaion(getUserInformation()); 
-    }, []);
-
+const Profile: React.FC<UserModel & {key?: string}> = (props) => {
     return (
         <>
-            <Navbar></Navbar>
-            <div className="h-full p-20">
-            
+            <div className="h-full p-20 pt-5 pb-5 pb-0">
                 <div className="border-b-2 block md:flex">
-
                     <div className="w-full md:w-2/5 p-4 sm:p-6 lg:p-8 bg-white shadow-md">
                         <div className="flex justify-between">
                             <span className="text-xl font-semibold block">User Profile</span>
@@ -39,26 +21,24 @@ export default function Profile() {
                     </div>
                     
                     <div className="w-full md:w-3/5 p-8 bg-white lg:ml-4 shadow-md">
-                    <div className="rounded  shadow p-6">
+                    <div className="rounded  shadow p-6 pb-0">
                         <div className="pb-6">
                         <label htmlFor="name" className="font-semibold text-gray-700 block pb-1">Name</label>
                         <div className="flex">
-                            <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value={userInformation?.name ?? 'raziel'} />
+                            <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value={props.name} />
                         </div>
                         </div>
                         <div className="pb-4">
                         <label htmlFor="about" className="font-semibold text-gray-700 block pb-1">Email</label>
-                        <input disabled id="email" className="border-1  rounded-r px-4 py-2 w-full" type="email" value={userInformation?.email ?? 'razielal@mta.ac.il'} />
+                        <input disabled id="email" className="border-1  rounded-r px-4 py-2 w-full" type="email" value={props.email} />
                         <span className="text-gray-600 pt-4 block opacity-70">Personal login information of your account</span>
                         </div>
                     </div>
                     </div>
-
                 </div>
-            
             </div>
         </>
     )
 }
 
-
+export default Profile;

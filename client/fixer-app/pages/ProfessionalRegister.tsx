@@ -9,7 +9,7 @@ import { Role } from "@/src/enums/role";
 import { Profession, professionOptions } from "@/src/enums/profession";
 import Upload from "@/components/Upload";
 
-const professionalRegister = () => {
+const ProfessionalRegister = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -143,4 +143,4 @@ const professionalRegister = () => {
     )
 }
 
-export default professionalRegister;
+export default ProfessionalRegister;

@@ -1,4 +1,4 @@
-const enum Profession { 
+enum Profession { 
     ELECTRICIAN = 'ELECTRICIAN', 
     PLUMBER = 'PLUMBER', 
     CARPENTER = 'CARPENTER', 

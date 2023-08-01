@@ -14,7 +14,6 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const token : string = getCookie('jwt_auth')?.toString() || '';
 
     const saveUserInformation = (apiToken: string) => {
         const headers = {Authorization: `Bearer ${apiToken}`};
