@@ -64,6 +64,33 @@ function getCommentsByIssueId(req, res) {
         }
     });
 }
+function getCommentsByPostId(req, res) {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let postId = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.postId;
+            let comments = yield commentRepository.getCommentsByIssueId(postId);
+            let users = [];
+            if (comments) {
+                let filteredComments = comments.map(comment => comment === null || comment === void 0 ? void 0 : comment.autherId).filter(item => item);
+                users = yield userRepository.getUsers(filteredComments);
+            }
+            if (!comments || !users) {
+                res.sendStatus(StatusCodes.NOT_FOUND);
+                return;
+            }
+            let commentApiModels = comments.map(comment => {
+                let user = users.find(user => (user === null || user === void 0 ? void 0 : user.id) === (comment === null || comment === void 0 ? void 0 : comment.autherId));
+                return Object.assign(Object.assign({}, comment), { autherName: user === null || user === void 0 ? void 0 : user.name });
+            });
+            res.json({ data: commentApiModels });
+        }
+        catch (message) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+            res.json({ error: `internal error: coudn't get comment by user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
+        }
+    });
+}
 function createComment(req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
@@ -125,6 +152,7 @@ function deleteComment(req, res) {
 const commentRoute = Router();
 commentRoute.get('/:commentId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getCommentById(req, res); next(); }));
 commentRoute.get('/issue/:issueId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getCommentsByIssueId(req, res); next(); }));
+commentRoute.get('/post/:postId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getCommentsByIssueId(req, res); next(); }));
 commentRoute.post('/create', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield createComment(req, res); next(); }));
 commentRoute.put('/update', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield updateComment(req, res); next(); }));
 commentRoute.delete('/:commentId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield deleteComment(req, res); next(); }));
