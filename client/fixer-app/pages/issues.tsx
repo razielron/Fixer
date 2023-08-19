@@ -11,8 +11,11 @@ import { CommentModel } from '@/src/models/commentModel';
 import Navbar from "@/components/Navbar";
 import { PriceOfferModel } from '@/src/models/priceOfferModel';
 import PriceOfferModal from '@/components/PriceOfferModal';
+import Search from '@/components/Search';
+import { Profession } from "@/src/enums/profession";
 
 export default function Issues() {
+  const options = Object.values(Profession);
   const token : string = getCookie('jwt_auth')?.toString() || '';
   const headers = {Authorization: `Bearer ${token}`};
   const s3 = {imageUrl: '', userAvatar: ''};
@@ -21,6 +24,7 @@ export default function Issues() {
   const [priceOfferView, setPriceOfferView] = useState(false);
   const [issueView, setIssueView] = useState(false);
   const [issueData, setIssueData] = useState<CardModel>({});
+  const [titleFilter, setTitleFilter] = useState<string>(''); 
 
   let commentModel = {
     body: 'raz & omer = <3'
@@ -40,22 +44,37 @@ export default function Issues() {
       createdAt: new Date(),
   };
 
+  let handleSearch = (search: string) => {
+    setTitleFilter(search);
+  }
+
+  let performSelect = async (profession: string) => {
+    let data = await getIssueByProfessionAsync(profession);
+    setAllIssues(data);
+  }
+
+  let getIssueByProfessionAsync = async (profession: string) => {
+    let response = await fetch(`/api/issue?profession=${profession.toUpperCase()}`, {headers});
+    let resJson = await response.json() as ApiResponseModel<IssueModel[]>;
+    let data = resJson?.data?.sort((x, y) => {
+      let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
+      let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
+      return secondDate - firstDate;
+    });
+
+    return data ?? [];
+  }
+
   useEffect(() => {
     setIsLoading(true);
-    fetch('/api/issue', {headers})
-      .then(res => res.json())
-      .then((response: ApiResponseModel<IssueModel[]>) => {
-        let data = response?.data?.sort((x, y) => { 
-          let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
-          let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
-          return secondDate - firstDate;
-        });
-        if(!data?.length) {
+    getIssueByProfessionAsync(options[0])
+      .then((data: IssueModel[]) => {
+        if(!data || !data?.length) {
           data = [post, post];
         }
         setIsLoading(false);
         setAllIssues(data);
-      })
+      });
   }, []);
 
   let getComments = async (issueId: string) => {
@@ -143,6 +162,13 @@ export default function Issues() {
   return (
     <>
       <Navbar></Navbar>
+      <Search
+          key="1"
+          defaultSearch={titleFilter}
+          performSearch={handleSearch}
+          options={options}
+          performSelect={performSelect}
+      />
       <IssueModal handleNewIssue={handleNewIssue}></IssueModal>
       {issueView && (<CardModal cardData={issueData} getComments={getComments} createComment={createComment} hideModal={closeCardView}></CardModal>)}
       {priceOfferView && (<PriceOfferModal cardData={issueData} getPriceOffers={getPriceOffers} createpriceOffer={createPriceOffer} hideModal={closeCardView} ></PriceOfferModal>)}
@@ -151,8 +177,10 @@ export default function Issues() {
         <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Issues </div>
         {isLoading
           ? (<Spinner></Spinner>)
-          : allIssues.map((issue : IssueModel) => (
-              <Card cardData={convertIssueToCard(issue)} openCardView={openCardView} openPriceOfferView={openPriceOfferView} isModalOpen={true} ></Card>
+          : allIssues
+            .filter(issue => issue.title?.toLowerCase().includes(titleFilter))
+            .map((issue : IssueModel) => (
+              <Card key={issue.id} cardData={convertIssueToCard(issue)} openCardView={openCardView} openPriceOfferView={openPriceOfferView} isModalOpen={true} ></Card>
             ))
         }
       </div>
