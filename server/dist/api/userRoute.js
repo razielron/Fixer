@@ -20,7 +20,7 @@ function getAllUsers(req, res) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
-            let updatedUsers = Promise.all(users === null || users === void 0 ? void 0 : users.map((user) => __awaiter(this, void 0, void 0, function* () { return yield addPhotosUrlsToUserAsync(user); })));
+            let updatedUsers = yield Promise.all(users === null || users === void 0 ? void 0 : users.map((user) => __awaiter(this, void 0, void 0, function* () { return yield addPhotosUrlsToUserAsync(user); })));
             let apiResponseModel = {
                 data: updatedUsers
             };
@@ -47,7 +47,7 @@ function getUsersByProfession(req, res) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
-            let updatedUsers = Promise.all(users === null || users === void 0 ? void 0 : users.map((user) => __awaiter(this, void 0, void 0, function* () { return yield addPhotosUrlsToUserAsync(user); })));
+            let updatedUsers = yield Promise.all(users === null || users === void 0 ? void 0 : users.map((user) => __awaiter(this, void 0, void 0, function* () { return yield addPhotosUrlsToUserAsync(user); })));
             let apiResponseModel = {
                 data: updatedUsers
             };

@@ -15,7 +15,7 @@ async function getAllUsers(req : Request, res : Response) : Promise<void> {
             return;
         }
 
-        let updatedUsers = Promise.all(users?.map(async (user) => await addPhotosUrlsToUserAsync(user)));
+        let updatedUsers = await Promise.all(users?.map(async (user) => await addPhotosUrlsToUserAsync(user)));
         let apiResponseModel: ApiResponseModel<any> = {
             data: updatedUsers
         };
@@ -45,7 +45,7 @@ async function getUsersByProfession(req : Request, res : Response) : Promise<voi
             return;
         }
 
-        let updatedUsers = Promise.all(users?.map(async (user) => await addPhotosUrlsToUserAsync(user)));
+        let updatedUsers = await Promise.all(users?.map(async (user) => await addPhotosUrlsToUserAsync(user)));
         let apiResponseModel: ApiResponseModel<any> = {
             data: updatedUsers
         };
