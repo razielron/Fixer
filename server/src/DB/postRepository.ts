@@ -19,9 +19,11 @@ class PostRepository {
     }
 
     public async createPost(post: PostModel) : Promise<PostModel> {
-        if(this.isPostCreateInput(post)) {
+        let postInputModel : PrismaTypes.PostCreateInput | null = this.getPostCreateInput(post);
+
+        if(postInputModel) {
             try {
-                let data : PrismaTypes.PostCreateInput = post;
+                let data : PrismaTypes.PostCreateInput = postInputModel;
                 let createdPost : PostModel = await prisma.post.create({ data });
                 return createdPost;
             }
@@ -62,9 +64,19 @@ class PostRepository {
         }
     }
 
-    private isPostCreateInput(post : PostModel) : post is PrismaTypes.PostCreateInput {
-        return (post?.title !== undefined
-            && post?.body !== undefined)
+    private getPostCreateInput(post: PostModel): PrismaTypes.PostCreateInput | null {
+        if(!post?.title || !post?.body || !post?.autherId) {
+            return null;
+        }
+
+        return {
+            title: post.title,
+            body: post.body,
+            photo: post?.photo,
+            auther: {
+                connect: { id: post?.autherId }
+            }
+        };
     }
 }
 

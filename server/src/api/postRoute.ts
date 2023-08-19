@@ -1,8 +1,9 @@
 import { Router, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { PostModel } from '../models/dbModels.js';
+import { PostModel, UserModel } from '../models/dbModels.js';
 import { postRepository } from '../DB/postRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
+import { userRepository } from '../DB/userRepository.js';
 
 async function getAllPosts(req : Request, res : Response) : Promise<void> {
     try {
@@ -42,6 +43,16 @@ async function getPost(req : Request, res : Response) : Promise<void> {
 async function createPost(req : Request, res : Response) : Promise<void> {
     try {
         let post : PostModel = req.body;
+        let email: string = req?.body?.cognitoUser?.email;
+
+        if(!post || !email) {
+            res.status(StatusCodes.BAD_REQUEST);
+            res.json({ error: `Missing post data or valid token` });
+            return;
+        }
+        
+        let user: UserModel = await userRepository.getUserByEmail(email);
+        post.autherId = user?.id;
         await postRepository.createPost(post);
         res.sendStatus(StatusCodes.CREATED);
     }
