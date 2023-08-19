@@ -36,6 +36,19 @@ class CommentRepository {
             }
         });
     }
+    getCommentsByPostId(postId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let where = { postId: postId };
+                let comments = yield prisma.comment.findMany({ where });
+                return comments;
+            }
+            catch (error) {
+                console.log({ error });
+                throw error;
+            }
+        });
+    }
     createComment(comment) {
         return __awaiter(this, void 0, void 0, function* () {
             let commentInputModel = this.getCommentCreateInput(comment);

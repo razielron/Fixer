@@ -12,15 +12,29 @@ import { StatusCodes } from 'http-status-codes';
 import { postRepository } from '../DB/postRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
 import { userRepository } from '../DB/userRepository.js';
+import { s3Service } from '../services/s3Service.js';
 function getAllPosts(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let post = yield postRepository.getAllPosts();
-            if (post === null || post.length === 0) {
+            let posts = yield postRepository.getAllPosts();
+            let users = [];
+            if (posts) {
+                let filteredIssues = posts.map(post => post === null || post === void 0 ? void 0 : post.autherId).filter(item => item);
+                users = yield userRepository.getUsers(filteredIssues);
+            }
+            if (!posts || !users) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
-            res.json(post);
+            let postApiModels = yield Promise.all(posts.map((post) => __awaiter(this, void 0, void 0, function* () {
+                let user = users.find(user => (user === null || user === void 0 ? void 0 : user.id) === (post === null || post === void 0 ? void 0 : post.autherId));
+                let photoUrl = null;
+                if (post === null || post === void 0 ? void 0 : post.photo) {
+                    photoUrl = yield s3Service.generateDownloadPresignedUrl(post === null || post === void 0 ? void 0 : post.photo);
+                }
+                return Object.assign(Object.assign({}, post), { autherName: user === null || user === void 0 ? void 0 : user.name, photoUrl });
+            })));
+            res.json({ data: postApiModels });
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);

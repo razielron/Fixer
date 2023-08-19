@@ -31,6 +31,19 @@ class CommentRepository {
         }
     }
 
+    public async getCommentsByPostId(postId: string): Promise<CommentModel[]> {
+        try {
+            let where = { postId: postId };
+            let comments: CommentModel[] = await prisma.comment.findMany({ where });
+
+            return comments;
+        }
+        catch(error: any) {
+            console.log({error});
+            throw error;
+        }
+    }
+
     public async createComment(comment: CommentModel): Promise<CommentModel> {
         let commentInputModel : PrismaTypes.CommentCreateInput | null = this.getCommentCreateInput(comment);
         

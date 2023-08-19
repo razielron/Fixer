@@ -16,6 +16,18 @@ interface IssueApiModel {
     updatedAt?: Date;
 }
 
+interface PostApiModel {
+    id?: string;
+    title?: string;
+    body?: string;
+    photo?: string | null;
+    photoUrl?: string | null;
+    autherId?: string;
+    autherName?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
 interface CommentApiModel {
     id?: string;
     body?: string;
@@ -40,4 +52,4 @@ interface PriceOfferApiModel {
     updatedAt?: Date;
 }
 
-export type { ApiResponseModel, IssueApiModel, CommentApiModel, PriceOfferApiModel };
+export type { ApiResponseModel, IssueApiModel, PostApiModel, CommentApiModel, PriceOfferApiModel };

@@ -4,17 +4,40 @@ import { PostModel, UserModel } from '../models/dbModels.js';
 import { postRepository } from '../DB/postRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
 import { userRepository } from '../DB/userRepository.js';
+import { s3Service } from '../services/s3Service.js';
+import { PostApiModel } from '../models/apiModels.js';
 
 async function getAllPosts(req : Request, res : Response) : Promise<void> {
     try {
-        let post : PostModel[] = await postRepository.getAllPosts();
+        let posts : PostModel[] = await postRepository.getAllPosts();
+        let users: UserModel[] = [];
+        
+        if(posts) {
+            let filteredIssues: string[] = posts.map(post => post?.autherId).filter(item => item) as string[];
+            users = await userRepository.getUsers(filteredIssues);
+        }
 
-        if(post === null || post.length === 0) {
+        if (!posts || !users) {
             res.sendStatus(StatusCodes.NOT_FOUND);
             return;
         }
 
-        res.json(post);
+        let postApiModels: PostApiModel[] = await Promise.all(posts.map(async (post) => {
+            let user = users.find(user => user?.id === post?.autherId);
+            let photoUrl: string | null = null;
+            
+            if(post?.photo) {
+                photoUrl = await s3Service.generateDownloadPresignedUrl(post?.photo);
+            }
+
+            return {
+                ...post,
+                autherName: user?.name,
+                photoUrl
+            }
+        }));
+
+        res.json({data: postApiModels});
     }
     catch(message : unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
