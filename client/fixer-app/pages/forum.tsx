@@ -9,6 +9,7 @@ import Spinner from '@/components/Spinner';
 import CardModal from '@/components/CardModal';
 import { CommentModel } from '@/src/models/commentModel';
 import Navbar from "@/components/Navbar";
+import Search from '@/components/Search';
 
 export default function Posts() {
   const token : string = getCookie('jwt_auth')?.toString() || '';
@@ -18,6 +19,7 @@ export default function Posts() {
   const [isLoading, setIsLoading] = useState(false);
   const [postView, setPostView] = useState(false);
   const [postData, setPostData] = useState<CardModel>({});
+  const [titleFilter, setTitleFilter] = useState<string>(''); 
 
   let commentModel = {
     body: 'raz & omer = <3'
@@ -32,6 +34,9 @@ export default function Posts() {
       createdAt: new Date(),
   };
 
+  let handleSearch = (search: string) => {
+    setTitleFilter(search);
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -109,6 +114,11 @@ export default function Posts() {
   return (
     <>
       <Navbar></Navbar>
+      <Search
+          key="1"
+          defaultSearch={titleFilter}
+          performSearch={handleSearch}
+      />
       <PostModal handleNewPost={handleNewPost}></PostModal>
       {postView && (<CardModal cardData={postData} getComments={getComments} createComment={createComment} hideModal={closeCardView}></CardModal>)}
       
@@ -116,8 +126,10 @@ export default function Posts() {
         <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Posts</div>
         {isLoading
           ? (<Spinner></Spinner>)
-          : allPosts.map((post : PostModel) => (
-              <Card cardData={convertPostToCard(post)} openCardView={openCardView} isModalOpen={true} isPostView={true}></Card>
+          : allPosts
+            .filter((post: PostModel) => post?.title?.toLowerCase().includes(titleFilter))
+            .map((post : PostModel) => (
+              <Card key={post.id} cardData={convertPostToCard(post)} openCardView={openCardView} isModalOpen={true} isPostView={true}></Card>
             ))
         }
       </div>
