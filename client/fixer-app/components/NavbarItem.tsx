@@ -7,6 +7,7 @@ interface NavbarItemProps {
 }
 
 const NavbarItem: React.FC<NavbarItemProps> =({label, value}) => {
+    
     const router = useRouter();
 
     function onClick() {
@@ -16,7 +17,7 @@ const NavbarItem: React.FC<NavbarItemProps> =({label, value}) => {
     //For Some reason, when using client side routing, the page won't appear properly
     return (
         <>
-            <a href={`/${value}`} className="text-white cursor-pointer hover:text-gray-300 transition no-underline">
+            <a href={`/${value}`} className="text-white cursor-pointer no-underline hover:bg-gray-500">
                 {label}
             </a>
             {/* <div onClick={onClick} className="text-white cursor-pointer hover:text-gray-300 transition">

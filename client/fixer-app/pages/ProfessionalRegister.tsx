@@ -78,6 +78,13 @@ const ProfessionalRegister = () => {
         }
     }
 
+    function toEnumValue(displayName: string): string { 
+        return displayName 
+            .split(' ')  // Split by space 
+            .map(word => word.toUpperCase())  // Convert each word to uppercase 
+            .join('_');  // Join words with an underscore 
+    }
+
     return(
         <div className="reative min-h-screen h-full w-full bg-[url('/images/peakpx.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
         <div className="min-h-screen flex justify-center">
@@ -119,8 +126,8 @@ const ProfessionalRegister = () => {
                         
                     /> 
                     <DropDown  
-                        options={professionOptions} 
-                        onChange={(event:any)=> setProffesion(event[0].label)}
+                        options={professionOptions}
+                        onChange={(event:any)=> setProffesion(toEnumValue(event[0].label))}
                         placeHolder="Profession"   
                     />
                     <Upload updateKey={setS3key}></Upload>

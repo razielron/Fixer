@@ -69,9 +69,6 @@ export default function Issues() {
     setIsLoading(true);
     getIssueByProfessionAsync(options[0])
       .then((data: IssueModel[]) => {
-        if(!data || !data?.length) {
-          data = [post, post];
-        }
         setIsLoading(false);
         setAllIssues(data);
       });
@@ -86,11 +83,9 @@ export default function Issues() {
         return secondDate - firstDate;
     });
 
-    if(!data?.length) {
-        data = [commentModel, commentModel];
-    }
-
-    return data;
+    
+    return data ?? [];
+    
   };
 
   let getPriceOffers = async (issueId: string) => {
@@ -102,11 +97,8 @@ export default function Issues() {
         return secondDate - firstDate;
     });
 
-    if(!data?.length) {
-        data = [priceOfferModel, priceOfferModel];
-    }
 
-    return data;
+    return data ?? [];
   };
 
   let convertIssueToCard = (issue: IssueModel) => {

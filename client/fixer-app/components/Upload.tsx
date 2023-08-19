@@ -4,10 +4,11 @@ import React, { useState, useEffect } from 'react';
 
 interface UploadProps{
     updateKey: (key: string) => void;
+    setIsLoading?: (bool: boolean) => void
 }
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
-const Upload: React.FC<UploadProps> = ({ updateKey }) => {
+const Upload: React.FC<UploadProps> = ({ updateKey, setIsLoading }) => {
     const [file, setFile] = useState<File>();
 
     const handleFileChange = async (e: any) => {
@@ -27,6 +28,8 @@ const Upload: React.FC<UploadProps> = ({ updateKey }) => {
 
     async function uploadFile() {
         try {
+            if(setIsLoading)
+            setIsLoading(true)
             const token : string = getCookie('jwt_auth')?.toString() || '';
             const headers = {Authorization: `Bearer ${token}`};
             const bodyData = {fileType: file?.type};
@@ -48,6 +51,8 @@ const Upload: React.FC<UploadProps> = ({ updateKey }) => {
         } catch (error) {
             console.error({error});
         }
+        if(setIsLoading)
+        setIsLoading(false)
     }
 
     return (

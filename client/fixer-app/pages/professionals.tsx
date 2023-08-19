@@ -34,12 +34,7 @@ export default function ProfilePage() {
         const token: string = getCookie('jwt_auth')?.toString() || '';
         getUsersInformation(token, selectedProfession).then((data: UserModel[]) => {
             if(!data?.length) {
-                data = [
-                    { id: 'demo', name: 'demo', email: 'demo' },
-                    { id: 'demo2', name: 'demo2', email: 'demo2' },
-                    { id: 'demo23', name: 'demo23', email: 'demo23' },
-                    { id: 'demo4', name: 'demo4', email: 'demo4' },
-                ];
+                data = [];
             }
             setUsersInformation(data);
         });

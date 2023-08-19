@@ -15,13 +15,19 @@ const Search: React.FC<SearchProps> = (props) => {
     function toggleDropdown() {
         setDropdownOpen(!dropdownOpen);
     }
+    function toEnumValue(displayName: string): string { 
+        return displayName 
+            .split(' ')  // Split by space 
+            .map(word => word.toUpperCase())  // Convert each word to uppercase 
+            .join('_');  // Join words with an underscore 
+    }
 
     function handleSelect(option: string) {
         setDropdownOpen(false);
         setSelectedOption(option);
         
         if(props.performSelect) {
-            props.performSelect(option);
+            props.performSelect(toEnumValue(option));
         }
     }
 
@@ -46,9 +52,10 @@ const Search: React.FC<SearchProps> = (props) => {
     }
 
     function convertOptionToDisplay(option: string) : string {
-        option = option.toLowerCase();
-        option = option.charAt(0).toUpperCase() + option.slice(1);
-        return option;
+        return option 
+            .split('_') 
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
     }
 
     return (
