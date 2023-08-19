@@ -166,15 +166,21 @@ function addPhotosUrlsToUserAsync(user) {
     return __awaiter(this, void 0, void 0, function* () {
         let photoUrl = null;
         let certificateUrl = null;
-        if (user === null || user === void 0 ? void 0 : user.photo) {
-            photoUrl = yield s3Service.generateDownloadPresignedUrl(user.photo);
+        try {
+            if (user === null || user === void 0 ? void 0 : user.photo) {
+                photoUrl = yield s3Service.generateDownloadPresignedUrl(user.photo);
+            }
+            if (user === null || user === void 0 ? void 0 : user.certificate) {
+                certificateUrl = yield s3Service.generateDownloadPresignedUrl(user.certificate);
+            }
         }
-        if (user === null || user === void 0 ? void 0 : user.certificate) {
-            certificateUrl = yield s3Service.generateDownloadPresignedUrl(user.certificate);
+        catch (message) {
+            console.error({ message });
         }
-        let apiResponseModel = Object.assign(Object.assign({}, user), { photoUrl,
-            certificateUrl });
-        return apiResponseModel;
+        finally {
+            return Object.assign(Object.assign({}, user), { photoUrl,
+                certificateUrl });
+        }
     });
 }
 const userRoute = Router();
