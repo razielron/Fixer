@@ -4,13 +4,20 @@ import { UserModel } from '../models/dbModels.js';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
 import { ApiResponseModel } from '../models/apiModels.js';
+import { s3Service } from '../services/s3Service.js';
 
 async function getAllUsers(req : Request, res : Response) : Promise<void> {
     try {
         let users : UserModel[] = await userRepository.getAllUsers();
 
-        let apiResponseModel: ApiResponseModel<UserModel[]> = {
-            data: users
+        if(!users) {
+            res.sendStatus(StatusCodes.NOT_FOUND);
+            return;
+        }
+
+        let updatedUsers = Promise.all(users?.map(async (user) => await addPhotosUrlsToUserAsync(user)));
+        let apiResponseModel: ApiResponseModel<any> = {
+            data: updatedUsers
         };
 
         res.json(apiResponseModel);
@@ -38,8 +45,9 @@ async function getUsersByProfession(req : Request, res : Response) : Promise<voi
             return;
         }
 
-        let apiResponseModel: ApiResponseModel<UserModel[]> = {
-            data: users
+        let updatedUsers = Promise.all(users?.map(async (user) => await addPhotosUrlsToUserAsync(user)));
+        let apiResponseModel: ApiResponseModel<any> = {
+            data: updatedUsers
         };
 
         console.log({getUsersByProfession: users});
@@ -62,8 +70,9 @@ async function getUser(req : Request, res : Response) : Promise<void> {
             return;
         }
 
-        let apiResponseModel: ApiResponseModel<UserModel> = {
-            data: user
+        let updatedUser = await addPhotosUrlsToUserAsync(user);
+        let apiResponseModel: ApiResponseModel<any> = {
+            data: updatedUser
         };
 
         console.log({getUser: user});
@@ -86,11 +95,12 @@ async function getUserByEmail(req : Request, res : Response) : Promise<void> {
             return;
         }
 
-        let apiResponseModel: ApiResponseModel<UserModel> = {
-            data: user
+        let updatedUser = await addPhotosUrlsToUserAsync(user);
+        let apiResponseModel: ApiResponseModel<any> = {
+            data: updatedUser
         };
 
-        console.log({getUser: user});
+        console.log({getUser: apiResponseModel});
         res.json(apiResponseModel);
     }
     catch(message : unknown) {
@@ -145,6 +155,27 @@ async function deleteUser(req : Request, res : Response) : Promise<void> {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
         res.json({ error: `internal error: couldn't delete user ${req?.params?.userId}` });
     }
+}
+
+async function addPhotosUrlsToUserAsync(user: UserModel) : Promise<any> {
+    let photoUrl: string | null = null;
+    let certificateUrl: string | null = null;
+
+    if(user?.photo) {
+        photoUrl = await s3Service.generateDownloadPresignedUrl(user.photo);
+    }
+
+    if(user?.certificate) {
+        certificateUrl = await s3Service.generateDownloadPresignedUrl(user.certificate);
+    }
+
+    let apiResponseModel = {
+        ...user,
+        photoUrl,
+        certificateUrl,
+    };
+
+    return apiResponseModel;
 }
 
 const userRoute : Router = Router();
