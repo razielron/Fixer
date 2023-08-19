@@ -3,6 +3,7 @@ import GalleryModal from "./GalleryModal";
 import { CardModel } from "@/src/models/CardModel";
 import PriceOfferModal from "./PriceOfferModal";
 import { getCookie } from "cookies-next";
+import router from "next/router";
 
 type Props =   {
     isModalOpen: boolean
@@ -72,6 +73,11 @@ const Card: React.FC<Props> = (props) => {
     setIsShowGalleryModal(false);
   }
 
+  const openProfile = () => {
+    if(!props?.cardData?.autherId) return;
+    router.push(`/profile/${props.cardData?.autherId}`);
+  }
+
   return (
     <div className='flex items-center justify-center mt-4'> 
         <div className="rounded-xl border p-5 shadow-md w-9/12 bg-white">
@@ -79,7 +85,7 @@ const Card: React.FC<Props> = (props) => {
             <div className="flex w-full items-center justify-between border-b pb-3">
                 <div className="flex items-center space-x-3">
                     <img className="h-8 w-8 rounded-full bg-slate-400" src="/images/profile.jpg" alt="" />
-                    <div className="text-lg font-bold text-slate-700">{props.cardData?.autherName}</div>
+                    <div onClick={openProfile} className="text-lg font-bold text-slate-700 cursor-pointer">{props.cardData?.autherName}</div>
                 </div>
                 <div className="flex items-center space-x-8">
                     {props.cardData?.profession &&<button className="rounded-3xl border bg-neutral-100 px-3 py-1 text-xs font-semibold">{props.cardData.profession.toLocaleLowerCase()}</button>}

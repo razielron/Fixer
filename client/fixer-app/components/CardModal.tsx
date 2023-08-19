@@ -29,6 +29,14 @@ const CardModal: React.FC<Props> = (props) => {
         });
   }
 
+  let sortByCreatedAt = (x: Date | undefined, y: Date | undefined, orderAscending: boolean) : number => {
+    let order = orderAscending ? 1 : -1;
+    let firstDate: number = x ? (new Date(x)).getTime() : Date.now();
+    let secondDate: number = y ? (new Date(y)).getTime() : Date.now();
+
+    return (secondDate - firstDate) * order;
+  }
+
   useEffect(() => {
     if(!props.cardData?.id) return;
     props.getComments(props.cardData.id)
@@ -54,7 +62,13 @@ const CardModal: React.FC<Props> = (props) => {
                         </button>
                         <Card cardData={props.cardData} isModalOpen={false} />
                         <div className="overflow-auto pl-5">
-                        {comments && comments.map((comment) => (<Comment comment={comment} />))}
+                        {comments &&
+                            comments
+                                .sort((x, y) => sortByCreatedAt(x.createdAt, y.createdAt, false))
+                                .map((comment) => 
+                                    (<Comment comment={comment} />)
+                                )
+                        }
                         </div>
                         <div className="">
                         <CommentForm onSubmit={handleNewComment} />

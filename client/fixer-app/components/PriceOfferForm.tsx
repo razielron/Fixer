@@ -22,7 +22,6 @@ const PriceOfferForm: React.FC<PriceOfferProps> = (props) => {
         setPrice(0);
     }
 
-
     return(
             
             <div className="px-10 py-10">

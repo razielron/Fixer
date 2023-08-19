@@ -1,21 +1,27 @@
 import { CommentModel } from "@/src/models/commentModel";
+import router from "next/router";
 
 interface Props {
     comment: CommentModel
 }
 
 const Comment: React.FC<Props> = (props) => {
+    const openProfile = () => {
+        if(!props.comment?.autherId) return;
+        router.push(`/profile/${props.comment?.autherId}`);
+    }
+
     return (
         <>
-            <article className="p-6 text-base bg-white rounded-lg dark:bg-gray-900">
+            <article className="p-6 text-base bg-white rounded-lg bg-gray-900">
                 <footer className="flex justify-between items-center mb-2">
                     <div className="flex items-center">
-                        <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                        <p className="inline-flex items-center mr-3 mb-0 text-sm text-gray-900 font-bold cursor-pointer" onClick={openProfile}>
                             <img
-                                className="mr-2 w-6 h-6 rounded-full"
+                                className="mr-2 w-12 h-12 rounded-full"
                                 src={props.comment.avatar || "/images/profile.jpg"}
                                 alt="Michael Gough"/>{props.comment.autherName}</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-400 mb-0">
                             {(new Date(props.comment.createdAt || '')).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'})}
                         </p>
                     </div>
