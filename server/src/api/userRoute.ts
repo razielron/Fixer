@@ -161,21 +161,25 @@ async function addPhotosUrlsToUserAsync(user: UserModel) : Promise<any> {
     let photoUrl: string | null = null;
     let certificateUrl: string | null = null;
 
-    if(user?.photo) {
-        photoUrl = await s3Service.generateDownloadPresignedUrl(user.photo);
+    try {
+        if(user?.photo) {
+            photoUrl = await s3Service.generateDownloadPresignedUrl(user.photo);
+        }
+
+        if(user?.certificate) {
+            certificateUrl = await s3Service.generateDownloadPresignedUrl(user.certificate);
+        }
     }
-
-    if(user?.certificate) {
-        certificateUrl = await s3Service.generateDownloadPresignedUrl(user.certificate);
+    catch (message: unknown) {
+        console.error({message});
     }
-
-    let apiResponseModel = {
-        ...user,
-        photoUrl,
-        certificateUrl,
-    };
-
-    return apiResponseModel;
+    finally {
+        return {
+            ...user,
+            photoUrl,
+            certificateUrl,
+        };
+    }
 }
 
 const userRoute : Router = Router();
