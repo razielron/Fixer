@@ -24,7 +24,6 @@ const PostModal: React.FC<Props> = ({handleNewPost}) => {
       body,
       photo: s3key
     };
-    console.log({createPostModel});
 
     fetch('/api/post', {method: 'POST', headers, body: JSON.stringify(createPostModel)})
       .then(res => res.json())

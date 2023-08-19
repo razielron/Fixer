@@ -10,7 +10,6 @@ async function getAllPostHandler (
     try {
         const token = req.headers.authorization as string;
         let response: ApiResponseModel<PostModel[]> = await postClient.getAllPosts(token);
-        console.log({response});
         res.status(200).json(response);
     }
     catch(error: unknown) {
@@ -25,9 +24,7 @@ async function createPostHandler (
 ) {
     try {
         const token = req.headers.authorization as string;
-        console.log({body:JSON.parse(req.body)})
         let response: ApiResponseModel<PostModel> = await postClient.createPost(JSON.parse(req.body), token);
-        console.log({response});
         res.status(200).json(response);
     }
     catch(error: unknown) {

@@ -77,7 +77,6 @@ class CommentClient {
 
     public async createComment(comment: CommentModel, token: string) : Promise<ApiResponseModel<CommentModel>> {
         try {
-            console.log({comment})
             let createCommentUrl: URL = new URL(createEndpoint, baseUrl);
             headers.Authorization = token;
             const { data } = await axios.post(createCommentUrl.toString(), comment, {headers});

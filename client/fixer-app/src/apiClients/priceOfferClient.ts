@@ -56,7 +56,6 @@ class PriceOfferClient {
 
     public async createPriceOffer(priceOffer: PriceOfferModel, token: string) : Promise<ApiResponseModel<PriceOfferModel>> {
         try {
-            console.log({priceOffer})
             let createPriceOfferUrl: URL = new URL(createEndpoint, baseUrl);
             headers.Authorization = token;
             const { data } = await axios.post(createPriceOfferUrl.toString(), priceOffer, {headers});

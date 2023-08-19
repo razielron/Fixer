@@ -38,12 +38,10 @@ const Card: React.FC<Props> = (props) => {
 
   useEffect(() => {
     shouldShowPriceOffer();
-    console.log({cardData: props.cardData})
     fetchCardImages();
   }, []);
 
   let fetchCardImages = async () => {
-    console.log({image:props.cardData })
     if(!props.cardData?.imageUrls?.length) return;
 
     let asyncImages = props.cardData.imageUrls.map(async (imageUrl) => {

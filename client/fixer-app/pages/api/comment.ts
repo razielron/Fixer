@@ -11,7 +11,6 @@ async function getCommentByIssueHandler (
         const token = req.headers.authorization as string;
         const issueId = req.query.issueId as string;
         let response: ApiResponseModel<CommentModel[]> = await commentClient.getCommentByIssueId(issueId, token);
-        console.log({response});
         res.status(200).json(response);
     }
     catch(error: unknown) {
@@ -27,9 +26,7 @@ async function getCommentByPostHandler (
     try {
         const token = req.headers.authorization as string;
         const postId = req.query.postId as string;
-        console.log({postId})
         let response: ApiResponseModel<CommentModel[]> = await commentClient.getCommentByPostId(postId, token);
-        console.log({response});
         res.status(200).json(response);
     }
     catch(error: unknown) {
@@ -45,7 +42,6 @@ async function createCommentHandler (
     try {
         const token = req.headers.authorization || '';
         let response: ApiResponseModel<CommentModel> = await commentClient.createComment(JSON.parse(req.body), token);
-        console.log({response});
         res.status(200).json(response);
     }
     catch(error: unknown) {

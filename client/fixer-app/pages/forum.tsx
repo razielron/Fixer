@@ -38,18 +38,16 @@ export default function Posts() {
     fetch('/api/post', {headers})
       .then(res => res.json())
       .then((response: ApiResponseModel<PostModel[]>) => {
-        console.log({response})
         let data = response?.data?.sort((x, y) => { 
           let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
           let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
           return secondDate - firstDate;
         });
-        console.log({data});
 
         if(!data?.length) {
           data = [post, post];
         }
-        console.log({data});
+        
         setIsLoading(false);
         setAllPosts(data);
       })
@@ -58,23 +56,22 @@ export default function Posts() {
   let getComments = async (postId: string) => {
     let response = await fetch(`/api/comment?postId=${postId}`, {headers});
     let resJson = await response.json() as ApiResponseModel<CommentModel[]>;
-    console.log({commentDataJson: resJson});
     let data = resJson?.data?.sort((x, y) => { 
         let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
         let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
         return secondDate - firstDate;
     });
-    console.log({commentData: data});
+
     if(!data?.length) {
         data = [commentModel, commentModel];
     }
+
     return data;
   };
 
 
 
   let convertPostToCard = (post: PostModel) => {
-    console.log({post})
     let card: CardModel = {
       ...post,
       imageUrls: post.photoUrl ? [post.photoUrl] : null,
@@ -87,7 +84,6 @@ export default function Posts() {
     comment.autherId = autherId;
     let response = await fetch('/api/comment', {method: 'POST', headers, body: JSON.stringify(comment)});
     let resJson = await response.json() as CommentModel;
-    console.log({resJson});
     return resJson;
   };
 
@@ -104,9 +100,7 @@ export default function Posts() {
   let openCardView = (card: CardModel) => {
     setPostData(card);
     setPostView(true);
-    console.log({card})
   }
-
 
   let closeCardView = () => {
     setPostView(false);

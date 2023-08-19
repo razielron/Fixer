@@ -28,7 +28,6 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
       profession: role,
       photo: s3key
     };
-    console.log({createIssueModel});
 
     fetch('/api/issue', {method: 'POST', headers, body: JSON.stringify(createIssueModel)})
       .then(res => res.json())

@@ -44,7 +44,6 @@ const Upload: React.FC<UploadProps> = ({ updateKey }) => {
             }
 
             await fetch(response.data.presignedUrl, {method: 'PUT', body: file});
-            console.log('image uploaded');
             updateKey(response?.data?.key);
         } catch (error) {
             console.error({error});
