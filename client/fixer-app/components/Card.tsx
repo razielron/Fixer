@@ -7,6 +7,7 @@ import { getCookie } from "cookies-next";
 type Props =   {
     isModalOpen: boolean
     cardData: CardModel
+    isPostView?: boolean
     openCardView?: (cardData: CardModel) => void
     openPriceOfferView?: (cardData: CardModel) => void
 }
@@ -30,6 +31,9 @@ const Card: React.FC<Props> = (props) => {
     if (userInformation?.role === 'PROFESSIONAL' || userInformation?.id === props.cardData.autherId){
         setShowPriceOffer(true)
     }
+    if(props.isPostView){
+        setShowPriceOffer(false)
+    }
   }
 
   useEffect(() => {
@@ -39,6 +43,7 @@ const Card: React.FC<Props> = (props) => {
   }, []);
 
   let fetchCardImages = async () => {
+    console.log({image:props.cardData })
     if(!props.cardData?.imageUrls?.length) return;
 
     let asyncImages = props.cardData.imageUrls.map(async (imageUrl) => {
