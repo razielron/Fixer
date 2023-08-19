@@ -11,51 +11,56 @@ enum Profession {
     REPAIRER = 'REPAIRER', 
     OTHER = 'OTHER',
   }
-
+  function convertOptionToDisplay(option: string) : string {
+    return option 
+        .split('_') 
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+}
   const professionOptions = [
     { 
         value: 1,
-        label: Profession.ELECTRICIAN.toString()
+        label: convertOptionToDisplay(Profession.ELECTRICIAN.toString())
     },
     {
         value: 2,
-        label: Profession.PLUMBER.toString()
+        label: convertOptionToDisplay(Profession.PLUMBER.toString())
     },
     { 
         value: 3,
-        label: Profession.CARPENTER.toString()
+        label: convertOptionToDisplay(Profession.CARPENTER.toString())
     },
     {
         value: 4,
-        label: Profession.MECHANIC.toString()
+        label: convertOptionToDisplay(Profession.MECHANIC.toString())
     },
     { 
         value: 5,
-        label: Profession.PAINTER.toString()
+        label: convertOptionToDisplay(Profession.PAINTER.toString())
     },
     {
         value: 6,
-        label: Profession.CLEANER.toString()
+        label: convertOptionToDisplay(Profession.CLEANER.toString())
     },
     { 
         value: 7,
-        label: Profession.GARDENER.toString()
+        label: convertOptionToDisplay(Profession.GARDENER.toString())
     },
     {
         value: 8,
-        label: Profession.AC_TECHNICIAN.toString()
+        label: convertOptionToDisplay(Profession.AC_TECHNICIAN.toString())
     },
     {
         value: 9,
-        label: Profession.MOVER.toString()
+        label: convertOptionToDisplay(Profession.MOVER.toString())
     },
     {
         value: 10,
-        label: Profession.REPAIRER.toString()
+        label: convertOptionToDisplay(Profession.REPAIRER.toString())
     },
     {
         value: 11,
-        label: Profession.OTHER.toString()
+        label: convertOptionToDisplay(Profession.OTHER.toString())
     },
     
 ]

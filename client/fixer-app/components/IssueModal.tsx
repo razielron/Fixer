@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import DropDown from "./DropDown";
 import Input from "./input";
 import Upload from "./Upload";
+import Spinner from "./Spinner";
 
 interface Props {
   handleNewIssue: (issue: IssueModel) => void;
@@ -20,6 +21,8 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
   const [s3key, setS3key] = useState<string>('');
   const [error, setError] = useState('');
   const [showModal, setShowModal] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   function createIssue(){
     let createIssueModel: IssueModel = {
@@ -28,7 +31,7 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
       profession: role,
       photo: s3key
     };
-
+    
     fetch('/api/issue', {method: 'POST', headers, body: JSON.stringify(createIssueModel)})
       .then(res => res.json())
       .then((response: ApiResponseModel<IssueModel[]>) => {
@@ -110,8 +113,9 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
                 </div>
                 {/*footer*/}
                 <div className="flex justify-center p-4 pt-0">
-                  <Upload updateKey={setS3key}></Upload>
+                  <Upload setIsLoading={setIsLoading} updateKey={setS3key}></Upload>
                 </div>
+                {isLoading && (<Spinner></Spinner>)}
                 <div className="flex items-center justify-end p-4 pt-0 border-t border-solid border-slate-200 rounded-b">
                   <button
                     className=" py-2 rounded-md w-full mt-6 transion"
@@ -120,12 +124,13 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
                   >
                     Close
                   </button>
-                  <button
-                    className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion"
-                    type="button"
-                    onClick={createIssue}
-                  >
-                    Create
+                  <button 
+                      className={`bg-yellow-400 py-2 rounded-md w-full mt-6 transition ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                      type="button" 
+                      disabled={isLoading} 
+                      onClick={createIssue} 
+                  > 
+                      Create 
                   </button>
                 </div>
               </div>

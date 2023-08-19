@@ -21,19 +21,6 @@ export default function Posts() {
   const [postData, setPostData] = useState<CardModel>({});
   const [titleFilter, setTitleFilter] = useState<string>(''); 
 
-  let commentModel = {
-    body: 'raz & omer = <3'
-  };
-
-  const post: PostModel = {
-      id: 'id',
-      autherId: 'razId',
-      autherName: 'raz',
-      title: 'shower renovation',
-      body: 'I want to renovate the shower at home. Does anyone know a professional?',
-      createdAt: new Date(),
-  };
-
   let handleSearch = (search: string) => {
     setTitleFilter(search);
   }
@@ -48,13 +35,11 @@ export default function Posts() {
           let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
           return secondDate - firstDate;
         });
-
-        if(!data?.length) {
-          data = [post, post];
-        }
         
         setIsLoading(false);
-        setAllPosts(data);
+        if(data) {
+          setAllPosts(data);
+        }
       })
   }, []);
 
@@ -67,14 +52,8 @@ export default function Posts() {
         return secondDate - firstDate;
     });
 
-    if(!data?.length) {
-        data = [commentModel, commentModel];
-    }
-
-    return data;
+    return data ?? [];
   };
-
-
 
   let convertPostToCard = (post: PostModel) => {
     let card: CardModel = {
@@ -91,8 +70,6 @@ export default function Posts() {
     let resJson = await response.json() as CommentModel;
     return resJson;
   };
-
-
 
   function handleNewPost(post: PostModel) {
     post.id = Math.floor(Math.random() * 100000).toString();
