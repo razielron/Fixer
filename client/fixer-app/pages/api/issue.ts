@@ -11,7 +11,6 @@ async function getIssueByProfessionHandler (
         const token = req.headers.authorization as string;
         const profession = req?.query?.profession as string || 'ELECTRICIAN';
         let response: ApiResponseModel<IssueModel[]> = await issueClient.getIssueByProfession(profession, token);
-        console.log({response});
         res.status(200).json(response);
     }
     catch(error: unknown) {
@@ -27,7 +26,6 @@ async function createIssueHandler (
     try {
         const token = req.headers.authorization as string;
         let response: ApiResponseModel<IssueModel> = await issueClient.createIssue(JSON.parse(req.body), token);
-        console.log({response});
         res.status(200).json(response);
     }
     catch(error: unknown) {

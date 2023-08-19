@@ -78,8 +78,6 @@ class UserClient {
     public async createUser(user: UserModel) : Promise<ApiResponseModel<UserModel>> {
         try {
             let createUserUrl: URL = new URL(createEndpoint, baseUrl);
-            console.log({createUserUrl});
-            console.log({user});
             const { data } = await axios.post(createUserUrl.toString(), user, {headers});
             
             return data;

@@ -9,7 +9,6 @@ async function createUserHandler(
 ) {
     try {
         let response: ApiResponseModel<UserModel> = await userClient.createUser(JSON.parse(req?.body));
-        console.log({response});
         res.status(201).json(response);
     }
     catch(error: unknown) {

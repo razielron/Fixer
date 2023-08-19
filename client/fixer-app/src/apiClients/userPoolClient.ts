@@ -12,7 +12,6 @@ class UserPoolClient {
             UserPoolId: process.env.COGNITO_USER_POOL_ID || "",
             ClientId: process.env.COGNITO_CLIENT_ID || "",
         };
-        console.log({poolData});
         try {
             this.userPool = new CognitoUserPool(poolData);
             this.signupPromise = util.promisify(this.userPool.signUp);

@@ -6,6 +6,7 @@ import {ApiResponseModel} from '@/src/models/apiModel';
 const baseUrl = `${process.env.SERVER_URL}:${process.env.SERVER_PORT}`;
 const getByIdEndpoint: string = '/comment/';
 const getByIssueIdEndpoint: string = '/comment/issue/';
+const getByPostIdEndpoint: string = '/comment/post/';
 const createEndpoint: string = '/comment/create/';
 const updateEndpoint: string = '/comment/update/';
 const deleteEndpoint: string = '/comment/';
@@ -54,9 +55,28 @@ class CommentClient {
         }
     }
 
+    public async getCommentByPostId(postId: string, token: string) : Promise<ApiResponseModel<CommentModel[]>> {
+        try {
+            let getCommentBaseUrl: URL = new URL(getByPostIdEndpoint, baseUrl);
+            let getCommentUrl : URL = new URL (postId, getCommentBaseUrl);
+            headers.Authorization = token;
+            const { data } = await axios.get(getCommentUrl.toString(), {headers});
+
+            return data;
+        }
+        catch(error: unknown) {
+            let errorMessage = `Internal error when trying to get comment by postId ${postId}`;
+            console.log({error});
+            const response: ApiResponseModel<CommentModel[]> = {
+                error: errorMessage
+            }
+            
+            return response;
+        }
+    }
+
     public async createComment(comment: CommentModel, token: string) : Promise<ApiResponseModel<CommentModel>> {
         try {
-            console.log({comment})
             let createCommentUrl: URL = new URL(createEndpoint, baseUrl);
             headers.Authorization = token;
             const { data } = await axios.post(createCommentUrl.toString(), comment, {headers});

@@ -76,7 +76,6 @@ class IssueClient {
 
     public async createIssue(issue: IssueModel, token: string) : Promise<ApiResponseModel<IssueModel>> {
         try {
-            console.log({issue})
             let createIssueUrl: URL = new URL(createEndpoint, baseUrl);
             headers.Authorization = token;
             const { data } = await axios.post(createIssueUrl.toString(), issue, {headers});

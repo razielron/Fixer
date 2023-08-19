@@ -2,104 +2,96 @@ import axios from 'axios';
 import path from 'path';
 import { StatusCodes } from 'http-status-codes';
 import { PostModel } from '../../src/models/postModel.js';
+import {ApiResponseModel} from '@/src/models/apiModel';
 
-type GetPostsResponse = {
-    data?: PostModel[];
-    message?: string;
-};
+
 
 const baseUrl = `${process.env.SERVER_URL}:${process.env.SERVER_PORT}`;
-const getEndpoint: string = '/post';
+const getByIdEndpoint: string = '/post/';
 const createEndpoint: string = '/post/create';
 const updateEndpoint: string = '/post/update';
 const deleteEndpoint: string = '/post';
 
-let headers: object = { Accept: 'application/json' };
+let headers = { Accept: 'application/json', Authorization: '', 'Content-Type': 'application/json'  };
 
 class PostClient {
 
-    public async getPost(postId: string) : Promise<PostModel[] | string> {
-        let errorMessage = `Internal error when trying to get post ${postId}`;
-        
+    public async getAllPosts( token: string) : Promise<ApiResponseModel<PostModel[]>> {
         try {
-            let getPostUrl: string = path.join(baseUrl, getEndpoint, postId);
-            const { data } = await axios.get<GetPostsResponse>(getPostUrl, {headers});
+            let getPostBaseUrl: URL = new URL(getByIdEndpoint, baseUrl);
+            let getPostUrl : URL = new URL ( getPostBaseUrl);
+            headers.Authorization = token
+            const {data} = await axios.get(getPostUrl.toString(), {headers});
             
-            if(data.message) {
-                return data.message;
-            }
-
-            if(data.data) {
-                return data.data;
-            }
-
-            return errorMessage
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to get posts`;
             console.log({error});
-            return errorMessage;
+            const response: ApiResponseModel<PostModel[]> = {
+                error: errorMessage
+            }
+
+            return response;
         }
     }
 
-    public async createPost(post: PostModel) : Promise<boolean> {
-        let errorMessage = `Internal error when trying to create post`;
+    public async createPost(post: PostModel, token: string) : Promise<ApiResponseModel<PostModel>> {
         
         try {
-            let createPostUrl: string = path.join(baseUrl, createEndpoint);
-            const { status } = await axios.post<GetPostsResponse>(createPostUrl, {data: post}, {headers});
+            let createPostUrl: URL = new URL(createEndpoint, baseUrl);
+            headers.Authorization = token;
+            const { data } = await axios.post(createPostUrl.toString(), post, {headers});
             
-            return status == StatusCodes.CREATED;
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to create post`;
             console.log({error});
-            return false;
+            const response: ApiResponseModel<PostModel> = {
+                error: errorMessage
+            }
+
+            return response;
         }
     }
 
-    public async updatePost(post: PostModel) : Promise<PostModel[] | string> {
-        let errorMessage = `Internal error when trying to update post: ${post.id}`;
-        
+    public async updatePost(post: PostModel, token: string) : Promise<ApiResponseModel<PostModel>> {
         try {
-            if(!post.id) throw "missing post id";
+            if(!post.id) throw "missing Post id";
             let updatePostUrl: string = path.join(baseUrl, updateEndpoint, post.id);
-            const { data } = await axios.put<GetPostsResponse>(updatePostUrl, {data: post}, {headers});
+            headers.Authorization = token;
+            const { data } = await axios.put(updatePostUrl, {data: post}, {headers});
             
-            if(data.message) {
-                return data.message;
-            }
-
-            if(data.data) {
-                return data.data;
-            }
-
-            return errorMessage
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to update post: ${post.id}`;
             console.log({error});
-            return errorMessage;
+            const response: ApiResponseModel<PostModel> = {
+                error: errorMessage
+            }
+
+            return response;
         }
     }
 
-    public async deletePost(postId: string) : Promise<PostModel[] | string> {
-        let errorMessage = `Internal error when trying to delete post: ${postId}`;
-        
+    public async deletePost(postId: string, token: string) : Promise<ApiResponseModel<PostModel>> {
         try {
             let deletePostUrl: string = path.join(baseUrl, deleteEndpoint, postId);
-            const { data } = await axios.delete<GetPostsResponse>(deletePostUrl, {headers});
-            
-            if(data.message) {
-                return data.message;
-            }
+            headers.Authorization = token;
+            const { data } = await axios.delete(deletePostUrl, {headers});
 
-            if(data.data) {
-                return data.data;
-            }
-
-            return errorMessage
+            return data;
         }
         catch(error: unknown) {
+            let errorMessage = `Internal error when trying to delete post: ${postId}`;
             console.log({error});
-            return errorMessage;
+            const response: ApiResponseModel<PostModel> = {
+                error: errorMessage
+            }
+
+            return response;
         }
     }
 }

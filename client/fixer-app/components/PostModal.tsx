@@ -1,38 +1,34 @@
-import { professionOptions } from "@/src/enums/profession";
 import { ApiResponseModel } from "@/src/models/apiModel";
-import { IssueModel } from "@/src/models/issueModel";
+import { PostModel } from "@/src/models/postModel";
 import { getCookie } from "cookies-next";
 import React, { useState } from "react";
-import DropDown from "./DropDown";
 import Input from "./input";
 import Upload from "./Upload";
 
 interface Props {
-  handleNewIssue: (issue: IssueModel) => void;
+  handleNewPost: (post: PostModel) => void;
 }
 
-const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
+const PostModal: React.FC<Props> = ({handleNewPost}) => {
   const token : string = getCookie('jwt_auth')?.toString() || '';
   const headers = {Authorization: `Bearer ${token}`};
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('');
-  const [role, setRole] = useState('');
   const [s3key, setS3key] = useState<string>('');
   const [error, setError] = useState('');
   const [showModal, setShowModal] = React.useState(false);
 
-  function createIssue(){
-    let createIssueModel: IssueModel = {
+  function createPost(){
+    let createPostModel: PostModel = {
       title,
       body,
-      profession: role,
       photo: s3key
     };
 
-    fetch('/api/issue', {method: 'POST', headers, body: JSON.stringify(createIssueModel)})
+    fetch('/api/post', {method: 'POST', headers, body: JSON.stringify(createPostModel)})
       .then(res => res.json())
-      .then((response: ApiResponseModel<IssueModel[]>) => {
-        handleNewIssue(createIssueModel);
+      .then((response: ApiResponseModel<PostModel[]>) => {
+        handleNewPost(createPostModel);
         setShowModal(false);
     });
   };
@@ -57,7 +53,7 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                   <h3 className="text-3xl font-semibold">
-                    Create issue
+                    Create post
                   </h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -96,16 +92,6 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
                       placeHolder = "Body"
                   />
                   </div>
-                  <div>
-                    <p className="p-0 m-0">
-                      <b className="p-0">Profession</b>
-                    </p>
-                  <DropDown 
-                      options={professionOptions} 
-                      onChange={(event:any)=> setRole(event[0].label)}
-                      placeHolder="Role"   
-                  />
-                  </div>
                 </div>
                 </div>
                 {/*footer*/}
@@ -123,7 +109,7 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
                   <button
                     className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion"
                     type="button"
-                    onClick={createIssue}
+                    onClick={createPost}
                   >
                     Create
                   </button>
@@ -138,4 +124,4 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
   );
 }
 
-export default IssueModal
+export default PostModal

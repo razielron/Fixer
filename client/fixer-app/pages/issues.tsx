@@ -53,7 +53,6 @@ export default function Issues() {
         if(!data?.length) {
           data = [post, post];
         }
-        console.log({data});
         setIsLoading(false);
         setAllIssues(data);
       })
@@ -62,32 +61,32 @@ export default function Issues() {
   let getComments = async (issueId: string) => {
     let response = await fetch(`/api/comment?issueId=${issueId}`, {headers});
     let resJson = await response.json() as ApiResponseModel<CommentModel[]>;
-    console.log({commentDataJson: resJson});
     let data = resJson?.data?.sort((x, y) => { 
         let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
         let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
         return secondDate - firstDate;
     });
-    console.log({commentData: data});
+
     if(!data?.length) {
         data = [commentModel, commentModel];
     }
+
     return data;
   };
 
   let getPriceOffers = async (issueId: string) => {
     let response = await fetch(`/api/priceOffer?issueId=${issueId}`, {headers});
     let resJson = await response.json() as ApiResponseModel<PriceOfferModel[]>;
-    console.log({priceOfferDataJson: resJson});
     let data = resJson?.data?.sort((x, y) => { 
         let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
         let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
         return secondDate - firstDate;
     });
-    console.log({priceOfferData: data});
+
     if(!data?.length) {
         data = [priceOfferModel, priceOfferModel];
     }
+
     return data;
   };
 
@@ -104,7 +103,7 @@ export default function Issues() {
     comment.autherId = autherId;
     let response = await fetch('/api/comment', {method: 'POST', headers, body: JSON.stringify(comment)});
     let resJson = await response.json() as CommentModel;
-    console.log({resJson});
+
     return resJson;
   };
 
@@ -113,8 +112,8 @@ export default function Issues() {
     priceOffer.autherId = autherId;
     let response = await fetch('/api/priceOffer', {method: 'POST', headers, body: JSON.stringify(priceOffer)});
     let resJson = await response.json() as PriceOfferModel;
-    console.log({resJson});
     window.location.reload();
+
     return resJson;
   };
 
@@ -129,12 +128,11 @@ export default function Issues() {
   let openCardView = (card: CardModel) => {
     setIssueData(card);
     setIssueView(true);
-    console.log({card})
   }
+  
   let openPriceOfferView = (card: CardModel) => {
     setIssueData(card);
     setPriceOfferView(true);
-    console.log({card})
   }
 
   let closeCardView = () => {

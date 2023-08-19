@@ -11,7 +11,6 @@ async function getPriceOfferByIssueHandler (
         const token = req.headers.authorization as string;
         const issueId = req.query.issueId as string;
         let response: ApiResponseModel<PriceOfferModel[]> = await priceOfferClient.getPriceOfferByIssueId(issueId, token);
-        console.log({response});
         res.status(200).json(response);
     }
     catch(error: unknown) {
@@ -27,7 +26,6 @@ async function createPriceOfferHandler (
     try {
         const token = req.headers.authorization || '';
         let response: ApiResponseModel<PriceOfferModel> = await priceOfferClient.createPriceOffer(JSON.parse(req.body), token);
-        console.log({response});
         res.status(200).json(response);
     }
     catch(error: unknown) {
