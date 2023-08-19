@@ -25,9 +25,10 @@ class PostRepository {
     }
     createPost(post) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.isPostCreateInput(post)) {
+            let postInputModel = this.getPostCreateInput(post);
+            if (postInputModel) {
                 try {
-                    let data = post;
+                    let data = postInputModel;
                     let createdPost = yield prisma.post.create({ data });
                     return createdPost;
                 }
@@ -66,9 +67,18 @@ class PostRepository {
             }
         });
     }
-    isPostCreateInput(post) {
-        return ((post === null || post === void 0 ? void 0 : post.title) !== undefined
-            && (post === null || post === void 0 ? void 0 : post.body) !== undefined);
+    getPostCreateInput(post) {
+        if (!(post === null || post === void 0 ? void 0 : post.title) || !(post === null || post === void 0 ? void 0 : post.body) || !(post === null || post === void 0 ? void 0 : post.autherId)) {
+            return null;
+        }
+        return {
+            title: post.title,
+            body: post.body,
+            photo: post === null || post === void 0 ? void 0 : post.photo,
+            auther: {
+                connect: { id: post === null || post === void 0 ? void 0 : post.autherId }
+            }
+        };
     }
 }
 let postRepository = new PostRepository();

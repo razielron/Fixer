@@ -11,6 +11,7 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { postRepository } from '../DB/postRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
+import { userRepository } from '../DB/userRepository.js';
 function getAllPosts(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -46,9 +47,18 @@ function getPost(req, res) {
     });
 }
 function createPost(req, res) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let post = req.body;
+            let email = (_b = (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.cognitoUser) === null || _b === void 0 ? void 0 : _b.email;
+            if (!post || !email) {
+                res.status(StatusCodes.BAD_REQUEST);
+                res.json({ error: `Missing post data or valid token` });
+                return;
+            }
+            let user = yield userRepository.getUserByEmail(email);
+            post.autherId = user === null || user === void 0 ? void 0 : user.id;
             yield postRepository.createPost(post);
             res.sendStatus(StatusCodes.CREATED);
         }
