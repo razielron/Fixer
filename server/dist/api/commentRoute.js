@@ -69,7 +69,7 @@ function getCommentsByPostId(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let postId = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.postId;
-            let comments = yield commentRepository.getCommentsByIssueId(postId);
+            let comments = yield commentRepository.getCommentsByPostId(postId);
             let users = [];
             if (comments) {
                 let filteredComments = comments.map(comment => comment === null || comment === void 0 ? void 0 : comment.autherId).filter(item => item);

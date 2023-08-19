@@ -71,7 +71,7 @@ async function getCommentsByIssueId(req: Request, res: Response): Promise<void> 
 async function getCommentsByPostId(req: Request, res: Response): Promise<void> {
     try {
         let postId: string = req?.params?.postId;
-        let comments: CommentModel[] = await commentRepository.getCommentsByIssueId(postId);
+        let comments: CommentModel[] = await commentRepository.getCommentsByPostId(postId);
         let users: UserModel[] = [];
         
         if(comments) {
