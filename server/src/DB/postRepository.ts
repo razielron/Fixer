@@ -5,6 +5,12 @@ import { Prisma as PrismaTypes } from '@prisma/client';
 const prisma = new PrismaClient();
 
 class PostRepository {
+    public async getAllPosts() : Promise<PostModel[]> {
+        let post : PostModel[] = await prisma.post.findMany();
+
+        return post;
+    }
+
     public async getPost(postId : string) : Promise<PostModel> {
         let where = { id: postId };
         let post : PostModel = await prisma.post.findFirst({ where });

@@ -4,6 +4,23 @@ import { PostModel } from '../models/dbModels.js';
 import { postRepository } from '../DB/postRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
 
+async function getAllPosts(req : Request, res : Response) : Promise<void> {
+    try {
+        let post : PostModel[] = await postRepository.getAllPosts();
+
+        if(post === null || post.length === 0) {
+            res.sendStatus(StatusCodes.NOT_FOUND);
+            return;
+        }
+
+        res.json(post);
+    }
+    catch(message : unknown) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+        res.json({message});
+    }
+}
+
 async function getPost(req : Request, res : Response) : Promise<void> {
     try {
         let postId : string = req?.params?.postId;
@@ -60,6 +77,7 @@ async function deletePost(req : Request, res : Response) : Promise<void> {
 
 const postRoute : Router = Router();
 
+postRoute.get('/', authenticateUser, async (req : Request, res : Response, next : NextFunction) => { await getAllPosts(req, res); next(); } );
 postRoute.get('/:postId', authenticateUser, async (req : Request, res : Response, next : NextFunction) => { await getPost(req, res); next(); } );
 postRoute.post('/create', authenticateUser, async (req : Request<{}, {}, PostModel>, res : Response, next : NextFunction) => { await createPost(req, res); next(); } );
 postRoute.put('/update', authenticateUser, async (req : Request<{}, {}, PostModel>, res : Response, next : NextFunction) => { await updatePost(req, res); next(); } );

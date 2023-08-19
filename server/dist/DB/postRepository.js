@@ -10,6 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 class PostRepository {
+    getAllPosts() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let post = yield prisma.post.findMany();
+            return post;
+        });
+    }
     getPost(postId) {
         return __awaiter(this, void 0, void 0, function* () {
             let where = { id: postId };

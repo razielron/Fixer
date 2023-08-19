@@ -11,6 +11,22 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { postRepository } from '../DB/postRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
+function getAllPosts(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let post = yield postRepository.getAllPosts();
+            if (post === null || post.length === 0) {
+                res.sendStatus(StatusCodes.NOT_FOUND);
+                return;
+            }
+            res.json(post);
+        }
+        catch (message) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+            res.json({ message });
+        }
+    });
+}
 function getPost(req, res) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -70,6 +86,7 @@ function deletePost(req, res) {
     });
 }
 const postRoute = Router();
+postRoute.get('/', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getAllPosts(req, res); next(); }));
 postRoute.get('/:postId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getPost(req, res); next(); }));
 postRoute.post('/create', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield createPost(req, res); next(); }));
 postRoute.put('/update', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield updatePost(req, res); next(); }));
