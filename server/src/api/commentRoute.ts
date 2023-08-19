@@ -158,7 +158,7 @@ const commentRoute: Router = Router();
 
 commentRoute.get('/:commentId', authenticateUser, async (req: Request, res: Response, next: NextFunction) => { await getCommentById(req, res); next(); });
 commentRoute.get('/issue/:issueId', authenticateUser, async (req: Request, res: Response, next: NextFunction) => { await getCommentsByIssueId(req, res); next(); });
-commentRoute.get('/post/:postId', authenticateUser, async (req: Request, res: Response, next: NextFunction) => { await getCommentsByIssueId(req, res); next(); });
+commentRoute.get('/post/:postId', authenticateUser, async (req: Request, res: Response, next: NextFunction) => { await getCommentsByPostId(req, res); next(); });
 commentRoute.post('/create', authenticateUser, async (req: Request<{}, {}, CommentModel>, res: Response, next: NextFunction) => { await createComment(req, res); next(); });
 commentRoute.put('/update', authenticateUser, async (req: Request<{}, {}, CommentModel>, res: Response, next: NextFunction) => { await updateComment(req, res); next(); });
 commentRoute.delete('/:commentId', authenticateUser, async (req: Request, res: Response, next: NextFunction) => { await deleteComment(req, res); next(); });

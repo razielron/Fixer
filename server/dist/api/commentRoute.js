@@ -152,7 +152,7 @@ function deleteComment(req, res) {
 const commentRoute = Router();
 commentRoute.get('/:commentId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getCommentById(req, res); next(); }));
 commentRoute.get('/issue/:issueId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getCommentsByIssueId(req, res); next(); }));
-commentRoute.get('/post/:postId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getCommentsByIssueId(req, res); next(); }));
+commentRoute.get('/post/:postId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield getCommentsByPostId(req, res); next(); }));
 commentRoute.post('/create', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield createComment(req, res); next(); }));
 commentRoute.put('/update', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield updateComment(req, res); next(); }));
 commentRoute.delete('/:commentId', authenticateUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { yield deleteComment(req, res); next(); }));
