@@ -11,12 +11,18 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
+import { s3Service } from '../services/s3Service.js';
 function getAllUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let users = yield userRepository.getAllUsers();
+            if (!users) {
+                res.sendStatus(StatusCodes.NOT_FOUND);
+                return;
+            }
+            let updatedUsers = Promise.all(users === null || users === void 0 ? void 0 : users.map((user) => __awaiter(this, void 0, void 0, function* () { return yield addPhotosUrlsToUserAsync(user); })));
             let apiResponseModel = {
-                data: users
+                data: updatedUsers
             };
             res.json(apiResponseModel);
         }
@@ -41,8 +47,9 @@ function getUsersByProfession(req, res) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
+            let updatedUsers = Promise.all(users === null || users === void 0 ? void 0 : users.map((user) => __awaiter(this, void 0, void 0, function* () { return yield addPhotosUrlsToUserAsync(user); })));
             let apiResponseModel = {
-                data: users
+                data: updatedUsers
             };
             console.log({ getUsersByProfession: users });
             res.json(apiResponseModel);
@@ -64,8 +71,9 @@ function getUser(req, res) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
+            let updatedUser = yield addPhotosUrlsToUserAsync(user);
             let apiResponseModel = {
-                data: user
+                data: updatedUser
             };
             console.log({ getUser: user });
             res.json(apiResponseModel);
@@ -87,10 +95,11 @@ function getUserByEmail(req, res) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
+            let updatedUser = yield addPhotosUrlsToUserAsync(user);
             let apiResponseModel = {
-                data: user
+                data: updatedUser
             };
-            console.log({ getUser: user });
+            console.log({ getUser: apiResponseModel });
             res.json(apiResponseModel);
         }
         catch (message) {
@@ -151,6 +160,21 @@ function deleteUser(req, res) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
             res.json({ error: `internal error: couldn't delete user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
         }
+    });
+}
+function addPhotosUrlsToUserAsync(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let photoUrl = null;
+        let certificateUrl = null;
+        if (user === null || user === void 0 ? void 0 : user.photo) {
+            photoUrl = yield s3Service.generateDownloadPresignedUrl(user.photo);
+        }
+        if (user === null || user === void 0 ? void 0 : user.certificate) {
+            certificateUrl = yield s3Service.generateDownloadPresignedUrl(user.certificate);
+        }
+        let apiResponseModel = Object.assign(Object.assign({}, user), { photoUrl,
+            certificateUrl });
+        return apiResponseModel;
     });
 }
 const userRoute = Router();
