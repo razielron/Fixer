@@ -4,6 +4,7 @@ import AccountMenu from "./AccountMenu";
 import { BsChevronDown} from 'react-icons/bs';
 import { getCookie } from "cookies-next";
 import { UserModel } from "@/src/models/userModel";
+import { RouterPath, RouterTitle } from "@/src/enums/router";
 
 const Navbar = () => {
     const [showAccountMenu, setShowAccountMenu] = useState(false)
@@ -22,7 +23,6 @@ const Navbar = () => {
         <nav className="w-full z-40">
             <div className="px-4
              md:px-16
-              py-6
               flex
               flex-row
               items-center
@@ -37,12 +37,12 @@ const Navbar = () => {
                 className="
                  flex-row
                  ml-8
-                 gap-7
+                 gap-2
                  hidden
                  lg:flex">
-                    <NavbarItem label='Home' value="issues" />
-                    <NavbarItem label='Forum' value='forum' />
-                    <NavbarItem label='Professionals' value='professionals' />
+                    <NavbarItem label={RouterTitle.HOME} value={RouterPath.HOME} />
+                    <NavbarItem label={RouterTitle.FORUM} value={RouterPath.FORUM} />
+                    <NavbarItem label={RouterTitle.PROFESSIONAL} value={RouterPath.PROFESSIONAL} />
                     {/* <NavbarItem label='Store' value='store' /> */}
               </div>
               <div className="flex flex-row ml-auto gap-7 items-center">
