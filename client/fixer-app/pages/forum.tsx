@@ -95,12 +95,12 @@ export default function Posts() {
           key="1"
           defaultSearch={titleFilter}
           performSearch={handleSearch}
+          inputPlaceHolder='Post title...'
       />
       <PostModal handleNewPost={handleNewPost}></PostModal>
       {postView && (<CardModal cardData={postData} getComments={getComments} createComment={createComment} hideModal={closeCardView}></CardModal>)}
       
       <div>
-        <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Posts</div>
         {isLoading
           ? (<Spinner></Spinner>)
           : allPosts

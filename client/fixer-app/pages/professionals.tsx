@@ -61,6 +61,7 @@ export default function ProfilePage() {
                 performSearch={handleSearch}
                 options={options}
                 performSelect={option => setSelectedProfession(option)}
+                inputPlaceHolder="Professional name..."
             />
             {isLoading
                 ? (<Spinner></Spinner>)

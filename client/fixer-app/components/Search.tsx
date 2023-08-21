@@ -5,6 +5,7 @@ interface SearchProps {
     performSearch: (search: string) => void;
     options?: string[];
     performSelect?: (option: string) => void;
+    inputPlaceHolder: string;
 }
 
 const Search: React.FC<SearchProps> = (props) => {
@@ -80,10 +81,10 @@ const Search: React.FC<SearchProps> = (props) => {
                 </div>
             }
             <div className="flex bg-gray-100 h-12 w-80 space-x-4 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <input type='text' value={search} onChange={handleSearchChange} onKeyDown={handleKeyDown} className="bg-gray-100 outline-none" placeholder="Professional name..." />
+                <input type='text' value={search} onChange={handleSearchChange} onKeyDown={handleKeyDown} className="bg-gray-100 outline-none" placeholder={`${props.inputPlaceHolder}`} />
             </div>
             <button type='submit' onClick={handleSearchClicked} className="bg-yellow-400 py-3 px-5 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
                 <span>Search</span>

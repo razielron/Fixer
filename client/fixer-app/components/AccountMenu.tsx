@@ -17,7 +17,7 @@ const AccountMenu: React.FC<UserModel> = (props) => {
             <div className="flex flex-col gap-3">
                 <div className="px-3 group/item flex flex-row gap-3 items-center w-full" onClick={() => router.push(`/profile/${props.id}`)}>
                     <img className="w-8 rounded-md" src="/images/profile.jpg" alt="" />
-                        <p className="text-white text-sm group-hover/item:underline">
+                        <p className="text-xl text-white text-sm group-hover/item:underline">
                             {props.name}
                         </p>
                 </div>
