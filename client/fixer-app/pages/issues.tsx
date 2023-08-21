@@ -160,13 +160,13 @@ export default function Issues() {
           performSearch={handleSearch}
           options={options}
           performSelect={performSelect}
+          inputPlaceHolder='Issue title...'
       />
       <IssueModal handleNewIssue={handleNewIssue}></IssueModal>
       {issueView && (<CardModal cardData={issueData} getComments={getComments} createComment={createComment} hideModal={closeCardView}></CardModal>)}
       {priceOfferView && (<PriceOfferModal cardData={issueData} getPriceOffers={getPriceOffers} createpriceOffer={createPriceOffer} hideModal={closeCardView} ></PriceOfferModal>)}
       
       <div>
-        <div className="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-yellow-500 md:text-5xl lg:text-6xl dark:text-white">Issues </div>
         {isLoading
           ? (<Spinner></Spinner>)
           : allIssues
