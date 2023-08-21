@@ -104,7 +104,7 @@ export default function Posts() {
         {isLoading
           ? (<Spinner></Spinner>)
           : allPosts
-            .filter((post: PostModel) => post?.title?.toLowerCase().includes(titleFilter))
+            .filter((post: PostModel) => post?.title?.toLowerCase().includes(titleFilter.toLowerCase()))
             .map((post : PostModel) => (
               <Card key={post.id} cardData={convertPostToCard(post)} openCardView={openCardView} isModalOpen={true} isPostView={true}></Card>
             ))

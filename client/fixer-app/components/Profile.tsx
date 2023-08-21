@@ -14,7 +14,7 @@ const Profile: React.FC<UserModel & {key?: string}> = (props) => {
                             }
                         </div>
 
-                        <span className="text-gray-600">This information is secret so be careful</span>
+                        <span className="text-gray-600">Information of Fixer account</span>
                         <div className="w-full p-8 mx-2 flex justify-center">
                             <img onClick={() => {}} className="max-w-xs w-32 items-center border cursor-pointer" src="/images/profile.jpg" alt=""/>
                         </div>
@@ -31,7 +31,7 @@ const Profile: React.FC<UserModel & {key?: string}> = (props) => {
                         <div className="pb-4">
                         <label htmlFor="about" className="font-semibold text-gray-700 block pb-1">Email</label>
                         <input disabled id="email" className="border-1  rounded-r px-4 py-2 w-full" type="email" value={props.email} />
-                        <span className="text-gray-600 pt-4 block opacity-70">Personal login information of your account</span>
+                        {/* <span className="text-gray-600 pt-4 block opacity-70">Personal login information of your account</span> */}
                         </div>
                     </div>
                     </div>

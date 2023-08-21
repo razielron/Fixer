@@ -170,7 +170,7 @@ export default function Issues() {
         {isLoading
           ? (<Spinner></Spinner>)
           : allIssues
-            .filter(issue => issue.title?.toLowerCase().includes(titleFilter))
+            .filter(issue => issue.title?.toLowerCase().includes(titleFilter.toLowerCase()))
             .map((issue : IssueModel) => (
               <Card key={issue.id} cardData={convertIssueToCard(issue)} openCardView={openCardView} openPriceOfferView={openPriceOfferView} isModalOpen={true} ></Card>
             ))

@@ -43,7 +43,7 @@ export default function ProfilePage() {
     useEffect(() => {
         let filteredUsers = usersInformation
             .filter((user: UserModel) => {
-                return !nameFilter || user?.name?.includes(nameFilter);
+                return !nameFilter || user?.name?.toLowerCase().includes(nameFilter.toLowerCase());
             }).sort((first: UserModel, second: UserModel) => {
                 let name1 = first?.name ?? 'a';
                 let name2 = second?.name ?? 'b';
