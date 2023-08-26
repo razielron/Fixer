@@ -9,7 +9,7 @@ interface CommentModel {
     updatedAt?: Date,
     imageUrls?: string[] | null,
     images?: string[] | null,
-    avatarUrl?: string | null,
+    autherPhotoUrl?: string | null,
     avatar?: string | null,
 };
 

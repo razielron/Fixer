@@ -19,7 +19,7 @@ const PriceOffer: React.FC<Props> = (props) => {
                         <p className="inline-flex items-center mr-3 mb-0 text-sm text-gray-900 cursor-pointer" onClick={openProfile}>
                             <img
                                 className="mr-2 w-12 h-12 rounded-full"
-                                src={"/images/profile.jpg"}// to fix - add avatar props on PriceOfferModel
+                                src={props.priceOffer.autherPhotoUrl || "/images/profile.jpg"}// to fix - add avatar props on PriceOfferModel
                                 alt="Michael Gough"/>{props.priceOffer.autherName}</p>
                         <p className="text-sm text-gray-600 mb-0">
                             {(new Date(props.priceOffer.createdAt || '')).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'})}

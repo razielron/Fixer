@@ -71,7 +71,7 @@ export default function ProfilePage() {
                         profilesToDisplay.length > 0
                         ?
                             profilesToDisplay.map((userInfo: UserModel) => (
-                                <Profile key={userInfo.id} {...userInfo}/>
+                                <Profile isEditable={false} key={userInfo.id} {...userInfo}/>
                             ))
                         :
                             <p className="flex items-center justify-center p-14">- NO RESULTS -</p>

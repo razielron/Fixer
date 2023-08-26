@@ -17,6 +17,21 @@ async function createUserHandler(
     }
 }
 
+async function updateUserHandler(
+    req: NextApiRequest,
+    res: NextApiResponse<ApiResponseModel<UserModel>>
+  ) {
+      try {
+          const token = req.headers.authorization as string;
+          let response: ApiResponseModel<UserModel> = await userClient.updateUser(JSON.parse(req?.body),token);
+          res.status(200).json(response);
+      }
+      catch(error: unknown) {
+          console.log({error});
+          res.status(500).json({error: `internal error: couldn't create user`});
+      }
+  }
+
 async function getUserByEmail (
     req: NextApiRequest,
     res: NextApiResponse<ApiResponseModel<UserModel>>
@@ -99,11 +114,14 @@ export default async function handler(
     res: NextApiResponse
   ) {
   
-      if (req.method === 'GET'){
-          await getUserNavigator(req, res);
-      }
-      else if (req.method === 'POST'){
-          await createUserHandler(req, res);
-      }
+        if (req.method === 'GET'){
+            await getUserNavigator(req, res);
+        }
+        else if (req.method === 'POST'){
+            await createUserHandler(req, res);
+        }
+        else if (req.method === 'PUT'){
+            await updateUserHandler(req, res);
+        }
   
   }

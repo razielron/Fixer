@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import Input from "@/components/input";
-import DropDown from "@/components/DropDown";
 import Link from "next/link";
 import UserPool from "@/pages/api/userPool";
 import { UserModel } from "@/src/models/userModel";
 import { Role } from "@/src/enums/role";
-import Select from "react-dropdown-select";
+import DropDown from "@/components/DropDown";
+import { District, districtOptions } from "@/src/enums/district";
 
 const Register = () => {
     const options = [
@@ -19,19 +19,19 @@ const Register = () => {
             label: "PROFESSIONAL"
         }
     ];
-    const defaultOption = options[0];
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [check, setCheck] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [district, setDistrict] = useState('');
     const [error, setError] = useState('');
     
     const signupRedirectVladition = async () => {
     
         let newError = '';
-        if(name === '' || email === ''||password === '' || confirmPassword === ''){
+        if(firstName === '' || lastName === '' || email === ''||password === '' || confirmPassword === ''){
             newError = (`Please fill all fields`);
         }
 
@@ -42,6 +42,13 @@ const Register = () => {
         }
 
     };
+
+    function toEnumValue(displayName: string): string { 
+        return displayName 
+            .split(' ')  // Split by space 
+            .map(word => word.toUpperCase())  // Convert each word to uppercase 
+            .join('_');  // Join words with an underscore 
+    }
     
     const userPoolErrorTranslation = (error:string) => {
         let err = ''
@@ -65,7 +72,10 @@ const Register = () => {
             }
             const user : UserModel = {
                 email: email,
-                name: name,
+                name: `${firstName} ${lastName}`,
+                firstName: firstName,
+                lastName: lastName,
+                address:district,
                 role: Role.BASIC   
             };
 
@@ -97,11 +107,23 @@ const Register = () => {
                 </h2>
                 <div className="flex flex-col gap-4">
                     <Input
-                        onChange = {(event:any)=> setName(event.target.value)}
-                        id = "name"
-                        type = "name"
-                        value = {name}
-                        placeHolder = "Name"
+                        onChange = {(event:any)=> setFirstName(event.target.value)}
+                        id = "firstName"
+                        type = "text"
+                        value = {firstName}
+                        placeHolder = "First name"
+                    />
+                    <Input
+                        onChange = {(event:any)=> setLastName(event.target.value)}
+                        id = "last name"
+                        type = "text"
+                        value = {lastName}
+                        placeHolder = "Last name"
+                    />
+                    <DropDown  
+                        options={districtOptions}
+                        onChange={(event:any)=> setDistrict(toEnumValue(event[0].label))}
+                        placeHolder="District"   
                     />
                     <Input
                         onChange = {(event:any)=> setEmail(event.target.value)}

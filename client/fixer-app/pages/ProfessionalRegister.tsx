@@ -8,20 +8,25 @@ import { UserModel } from "@/src/models/userModel";
 import { Role } from "@/src/enums/role";
 import { Profession, professionOptions } from "@/src/enums/profession";
 import Upload from "@/components/Upload";
+import { districtOptions } from "@/src/enums/district";
+import { BsPcHorizontal, BsPhone } from "react-icons/bs";
 
 const ProfessionalRegister = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [district, setDistrict] = useState('');
     const [profession, setProffesion] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [error, setError] = useState('');
     const [s3key, setS3key] = useState<string>('');
     
     const signupRedirectVladition = async () => {
         let newError = '';
-        if(name === '' || email === ''||password === '' || confirmPassword === ''|| profession === ''){
+        if(firstName === ''|| lastName === ''|| district === ''|| phoneNumber === '' || email === ''||password === '' || confirmPassword === ''|| profession === ''){
             newError = (`Please fill all fields`);
         }
 
@@ -56,7 +61,11 @@ const ProfessionalRegister = () => {
 
             const user : UserModel = {
                 email: email,
-                name: name,
+                name: `${firstName} ${lastName}`,
+                firstName: firstName,
+                lastName: lastName,
+                address: district,
+                phoneNumber: phoneNumber,
                 role: Role.PROFESSIONAL,
                 certificate: s3key,
                 profession: profession
@@ -97,11 +106,30 @@ const ProfessionalRegister = () => {
                 </h2>
                 <div className="flex flex-col gap-4">
                     <Input
-                        onChange = {(event:any)=> setName(event.target.value)}
-                        id = "name"
-                        type = "name"
-                        value = {name}
-                        placeHolder = "Name"
+                        onChange = {(event:any)=> setFirstName(event.target.value)}
+                        id = "firstName"
+                        type = "text"
+                        value = {firstName}
+                        placeHolder = "First name"
+                    />
+                    <Input
+                        onChange = {(event:any)=> setLastName(event.target.value)}
+                        id = "last name"
+                        type = "text"
+                        value = {lastName}
+                        placeHolder = "Last name"
+                    />
+                    <DropDown  
+                        options={districtOptions}
+                        onChange={(event:any)=> setDistrict(toEnumValue(event[0].label))}
+                        placeHolder="District"   
+                    />
+                    <Input
+                        onChange = {(event:any)=> setPhoneNumber(event.target.value)}
+                        id = "phone number"
+                        type = "text"
+                        value = {phoneNumber}
+                        placeHolder = "Phone number"
                     />
                     <Input
                         onChange = {(event:any)=> setEmail(event.target.value)}
@@ -130,7 +158,6 @@ const ProfessionalRegister = () => {
                         onChange={(event:any)=> setProffesion(toEnumValue(event[0].label))}
                         placeHolder="Profession"   
                     />
-                    <Upload updateKey={setS3key}></Upload>
                 </div>
                 <div>
                     <p className="text-red-600 mt-5">{error}</p>
