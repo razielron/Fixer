@@ -24,16 +24,24 @@ async function getAllPosts(req : Request, res : Response) : Promise<void> {
 
         let postApiModels: PostApiModel[] = await Promise.all(posts.map(async (post) => {
             let user = users.find(user => user?.id === post?.autherId);
-            let photoUrl: string | null = null;
+            let photoUrlTask;
+            let autherPhotoUrlTask;
             
             if(post?.photo) {
-                photoUrl = await s3Service.generateDownloadPresignedUrl(post?.photo);
+                photoUrlTask = s3Service.generateDownloadPresignedUrl(post?.photo);
             }
+
+            if(user?.photo) {
+                autherPhotoUrlTask = s3Service.generateDownloadPresignedUrl(user?.photo);
+            }
+
+            let [photoUrl, autherPhotoUrl] = await Promise.all([photoUrlTask, autherPhotoUrlTask]);
 
             return {
                 ...post,
                 autherName: user?.name,
-                photoUrl
+                photoUrl,
+                autherPhotoUrl,
             }
         }));
 

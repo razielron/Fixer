@@ -28,11 +28,17 @@ function getAllPosts(req, res) {
             }
             let postApiModels = yield Promise.all(posts.map((post) => __awaiter(this, void 0, void 0, function* () {
                 let user = users.find(user => (user === null || user === void 0 ? void 0 : user.id) === (post === null || post === void 0 ? void 0 : post.autherId));
-                let photoUrl = null;
+                let photoUrlTask;
+                let autherPhotoUrlTask;
                 if (post === null || post === void 0 ? void 0 : post.photo) {
-                    photoUrl = yield s3Service.generateDownloadPresignedUrl(post === null || post === void 0 ? void 0 : post.photo);
+                    photoUrlTask = s3Service.generateDownloadPresignedUrl(post === null || post === void 0 ? void 0 : post.photo);
                 }
-                return Object.assign(Object.assign({}, post), { autherName: user === null || user === void 0 ? void 0 : user.name, photoUrl });
+                if (user === null || user === void 0 ? void 0 : user.photo) {
+                    autherPhotoUrlTask = s3Service.generateDownloadPresignedUrl(user === null || user === void 0 ? void 0 : user.photo);
+                }
+                let [photoUrl, autherPhotoUrl] = yield Promise.all([photoUrlTask, autherPhotoUrlTask]);
+                return Object.assign(Object.assign({}, post), { autherName: user === null || user === void 0 ? void 0 : user.name, photoUrl,
+                    autherPhotoUrl });
             })));
             res.json({ data: postApiModels });
         }

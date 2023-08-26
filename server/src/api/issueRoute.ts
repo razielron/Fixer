@@ -87,16 +87,24 @@ async function getIssuesByProfession(req: Request, res: Response): Promise<void>
 
         let issueApiModels: IssueApiModel[] = await Promise.all(issues.map(async (issue) => {
             let user = users.find(user => user?.id === issue?.autherId);
-            let photoUrl: string | null = null;
+            let photoUrlTask;
+            let autherPhotoUrlTask;
             
             if(issue?.photo) {
-                photoUrl = await s3Service.generateDownloadPresignedUrl(issue?.photo);
+                photoUrlTask = s3Service.generateDownloadPresignedUrl(issue?.photo);
             }
+
+            if(user?.photo) {
+                autherPhotoUrlTask = s3Service.generateDownloadPresignedUrl(user?.photo);
+            }
+
+            let [photoUrl, autherPhotoUrl] = await Promise.all([photoUrlTask, autherPhotoUrlTask]);
 
             return {
                 ...issue,
                 autherName: user?.name,
-                photoUrl
+                photoUrl,
+                autherPhotoUrl
             }
         }));
 

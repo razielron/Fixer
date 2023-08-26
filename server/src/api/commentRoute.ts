@@ -5,6 +5,7 @@ import { commentRepository } from '../DB/commentsRepository.js';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
 import { ApiResponseModel, CommentApiModel } from '../models/apiModels.js';
+import { s3Service } from '../services/s3Service.js';
 
 async function getCommentById(req: Request, res: Response): Promise<void> {
     try {
@@ -72,7 +73,7 @@ async function getCommentsByPostId(req: Request, res: Response): Promise<void> {
     try {
         let postId: string = req?.params?.postId;
         let comments: CommentModel[] = await commentRepository.getCommentsByPostId(postId);
-        let users: UserModel[] = [];
+        let users: any[] = [];
         
         if(comments) {
             let filteredComments: string[] = comments.map(comment => comment?.autherId).filter(item => item) as string[];
@@ -84,11 +85,21 @@ async function getCommentsByPostId(req: Request, res: Response): Promise<void> {
             return;
         }
 
+        users = users?.map(async (user) => {
+            if(user?.photo) {
+                user.photoUrl = await s3Service.generateDownloadPresignedUrl(user?.photo);
+            }
+            return user;
+        });
+
+        users = await Promise.all(users);
+
         let commentApiModels: CommentApiModel[] = comments.map(comment => {
             let user = users.find(user => user?.id === comment?.autherId);
             return {
                 ...comment,
-                autherName: user?.name
+                autherName: user?.name,
+                autherPhotoUrl: user?.photoUrl,
             }
         });
 

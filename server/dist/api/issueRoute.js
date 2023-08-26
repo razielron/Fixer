@@ -82,11 +82,17 @@ function getIssuesByProfession(req, res) {
             }
             let issueApiModels = yield Promise.all(issues.map((issue) => __awaiter(this, void 0, void 0, function* () {
                 let user = users.find(user => (user === null || user === void 0 ? void 0 : user.id) === (issue === null || issue === void 0 ? void 0 : issue.autherId));
-                let photoUrl = null;
+                let photoUrlTask;
+                let autherPhotoUrlTask;
                 if (issue === null || issue === void 0 ? void 0 : issue.photo) {
-                    photoUrl = yield s3Service.generateDownloadPresignedUrl(issue === null || issue === void 0 ? void 0 : issue.photo);
+                    photoUrlTask = s3Service.generateDownloadPresignedUrl(issue === null || issue === void 0 ? void 0 : issue.photo);
                 }
-                return Object.assign(Object.assign({}, issue), { autherName: user === null || user === void 0 ? void 0 : user.name, photoUrl });
+                if (user === null || user === void 0 ? void 0 : user.photo) {
+                    autherPhotoUrlTask = s3Service.generateDownloadPresignedUrl(user === null || user === void 0 ? void 0 : user.photo);
+                }
+                let [photoUrl, autherPhotoUrl] = yield Promise.all([photoUrlTask, autherPhotoUrlTask]);
+                return Object.assign(Object.assign({}, issue), { autherName: user === null || user === void 0 ? void 0 : user.name, photoUrl,
+                    autherPhotoUrl });
             })));
             res.json({ data: issueApiModels });
         }

@@ -12,6 +12,7 @@ import { StatusCodes } from 'http-status-codes';
 import { commentRepository } from '../DB/commentsRepository.js';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
+import { s3Service } from '../services/s3Service.js';
 function getCommentById(req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
@@ -79,9 +80,16 @@ function getCommentsByPostId(req, res) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
+            users = users === null || users === void 0 ? void 0 : users.map((user) => __awaiter(this, void 0, void 0, function* () {
+                if (user === null || user === void 0 ? void 0 : user.photo) {
+                    user.photoUrl = yield s3Service.generateDownloadPresignedUrl(user === null || user === void 0 ? void 0 : user.photo);
+                }
+                return user;
+            }));
+            users = yield Promise.all(users);
             let commentApiModels = comments.map(comment => {
                 let user = users.find(user => (user === null || user === void 0 ? void 0 : user.id) === (comment === null || comment === void 0 ? void 0 : comment.autherId));
-                return Object.assign(Object.assign({}, comment), { autherName: user === null || user === void 0 ? void 0 : user.name });
+                return Object.assign(Object.assign({}, comment), { autherName: user === null || user === void 0 ? void 0 : user.name, autherPhotoUrl: user === null || user === void 0 ? void 0 : user.photoUrl });
             });
             res.json({ data: commentApiModels });
         }
