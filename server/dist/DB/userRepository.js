@@ -84,6 +84,22 @@ class UserRepository {
             throw new Error("Missing argument to create a user");
         });
     }
+    updateUserByEmail(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!(user === null || user === void 0 ? void 0 : user.email)) {
+                throw new Error("Missing email to update user");
+            }
+            try {
+                let where = { email: user.email };
+                let data = user;
+                let updatedUser = yield prisma.user.update({ where, data });
+                return updatedUser;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
     updateUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!(user === null || user === void 0 ? void 0 : user.id)) {

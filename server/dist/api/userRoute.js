@@ -132,7 +132,7 @@ function updateUser(req, res) {
             user = Object.assign(Object.assign({}, user), { email: user.cognitoUser.email });
             delete user.cognitoUser;
             console.log({ updateUser: user });
-            let updatedUser = yield userRepository.updateUser(user);
+            let updatedUser = yield userRepository.updateUserByEmail(user);
             let apiResponseModel = {
                 data: updatedUser
             };

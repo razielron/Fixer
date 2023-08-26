@@ -79,6 +79,24 @@ class UserRepository {
         throw new Error("Missing argument to create a user");
     }
 
+    public async updateUserByEmail(user: UserModel) : Promise<UserModel> {
+        if(!user?.email) {
+            throw new Error("Missing email to update user");
+        }
+
+        try {
+            let where = { email: user.email };
+            let data : PrismaTypes.UserUncheckedUpdateInput = user;
+            let updatedUser: UserModel = await prisma.user.update({where, data});
+            
+            return updatedUser;
+        }
+        catch(error : unknown) {
+            throw error;
+        }
+
+    }
+
     public async updateUser(user: UserModel) : Promise<UserModel> {
         if(!user?.id) {
             throw new Error("Missing id to update user");

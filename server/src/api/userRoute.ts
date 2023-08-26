@@ -130,7 +130,7 @@ async function updateUser(req : Request, res : Response) : Promise<void> {
         user = {...user, email: user.cognitoUser.email};
         delete user.cognitoUser;
         console.log({updateUser: user});
-        let updatedUser = await userRepository.updateUser(user);
+        let updatedUser = await userRepository.updateUserByEmail(user);
         let apiResponseModel: ApiResponseModel<UserModel> = {
             data: updatedUser
         };
