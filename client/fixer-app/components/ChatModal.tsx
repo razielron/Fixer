@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { getCookie, setCookie } from "cookies-next";
 import Message from "@/src/models/openaiModels";
+import { UserModel } from "@/src/models/userModel";
 
 const ChatModal: React.FC = () => {
     const [conversation, setConversation] = useState<Message[]>([]);
@@ -100,6 +101,15 @@ const ChatModal: React.FC = () => {
         }
     }
 
+    function getUserAvatar(): string {
+        const base64String = localStorage.getItem('userAvatar');
+        if (base64String) {
+            return `data:image/jpeg;base64,${base64String}`;
+        }
+
+        return '/images/profile.jpg';
+    }
+
     useEffect(() => {
         setIsLoading(false);
         bottomRef.current?.scrollIntoView({behavior: 'smooth'});
@@ -144,16 +154,20 @@ const ChatModal: React.FC = () => {
                                 <div className="relative flex-grow">
                                     {/*chat*/}
                                     <div className="flex flex-col flex-grow w-full bg-white shadow-xl rounded-lg overflow-hidden">
-                                        <div className="flex flex-col flex-grow h-0 p-4 overflow-auto" style={{ minHeight: '400px', maxHeight: 'calc(100vh - 6rem)' }}>
-                                            { conversation.sort((x, y) => x.id - y.id).map((message) => {
+                                        <div className="flex flex-col flex-grow p-4 overflow-auto" style={{ minHeight: '400px', maxHeight: 'calc(100vh - 20rem)' }}>
+                                            { !conversation.length
+                                            ? <span className="self-center">- Start a new conversation with our AI -</span>
+                                            : conversation.sort((x, y) => x.id - y.id).map((message) => {
                                                 return message.role !== 'user'
                                                 ?
                                                     (
-                                                        <div className="flex w-full mt-2 space-x-3 max-w-xs">
-                                                            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                                                        <div key={message.id} className="flex w-full mt-2 space-x-3 max-w-xs">
+                                                            <div className="flex-shrink-0 h-12 w-12 border rounded-full">
+                                                                <img className="rounded-full h-12 w-12 bg-slate-400" src="/images/ai-logo.png" alt=""/>
+                                                            </div>
                                                             <div>
-                                                                <div className="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
-                                                                    <p className="text-sm">{message.content}</p>
+                                                                <div className="bg-yellow-500 p-3 rounded-r-lg rounded-bl-lg">
+                                                                    <p className="text-sm m-0">{message.content}</p>
                                                                 </div>
                                                                 <span className="text-xs text-gray-500 leading-none">{timeAgo(message.createdAt.toString())}</span>
                                                             </div>
@@ -161,14 +175,16 @@ const ChatModal: React.FC = () => {
                                                     )
                                                 :
                                                     (
-                                                        <div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
+                                                        <div key={message.id} className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
                                                             <div>
                                                                 <div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
-                                                                    <p className="text-sm">{message.content}</p>
+                                                                    <p className="text-sm m-0">{message.content}</p>
                                                                 </div>
                                                                 <span className="text-xs text-gray-500 leading-none">{timeAgo(message.createdAt.toString())}</span>
                                                             </div>
-                                                            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                                                            <div className="flex-shrink-0 h-12 w-12 border rounded-full">
+                                                                <img className="rounded-full h-12 w-12 bg-slate-400" src={getUserAvatar()} alt=""/>
+                                                            </div>
                                                         </div>
                                                     )
                                             })}

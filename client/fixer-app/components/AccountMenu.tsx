@@ -10,6 +10,7 @@ const AccountMenu: React.FC<UserModel> = (props) => {
         deleteCookie('jwt_auth');
         deleteCookie('userInformation');
         deleteCookie('conversation');
+        localStorage.clear();
         router.push('/');
     };
 

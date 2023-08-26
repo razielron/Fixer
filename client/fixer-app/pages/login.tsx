@@ -15,15 +15,31 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const saveUserInformation = (apiToken: string) => {
+    const saveUserInformation = async (apiToken: string) => {
         const headers = {Authorization: `Bearer ${apiToken}`};
         let params = new URLSearchParams({email});
-        fetch(`/api/user?${params}`, {headers})
-          .then(res => res.json())
-          .then((response: ApiResponseModel<UserModel[]>) => {
-            let data = response?.data;
-            setCookie('userInformation', data);
-          })
+        let response = await fetch(`/api/user?${params}`, {headers});
+        let resJson: {data: UserModel} = await response.json();
+        let user: UserModel = resJson?.data;
+
+        await saveAvatarToLocalstorage(user);
+        setCookie('userInformation', user);
+    }
+
+    let saveAvatarToLocalstorage = async (user: UserModel) => {
+        if(!user?.photoUrl) {
+            return;
+        }
+    
+        let response = await fetch(user?.photoUrl);
+        let imageBlob = await response.blob();
+
+        const reader = new FileReader();
+        reader.readAsDataURL(imageBlob);
+        reader.onloadend = function() {
+            const base64String = (reader.result as string).split(',')[1];
+            localStorage.setItem('userAvatar', base64String);
+        };
     }
 
     const loginRedirect = () => {

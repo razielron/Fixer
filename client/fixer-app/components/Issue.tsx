@@ -68,7 +68,7 @@ const Issue: React.FC<Props> =(props) => {
       {/* Post Footer */}
       <div className="post__footer">
         <div className="post__footer-item flex items-center flex-col ">
-          <svg className="h-8 w-8 text-yellow-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21 2H3v16h5v4l4-4h5l4-4V2zM11 11V7M16 11V7" /></svg>
+          <svg className="h-8 w-8 text-yellow-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round">  <path d="M21 2H3v16h5v4l4-4h5l4-4V2zM11 11V7M16 11V7" /></svg>
           <button onClick={() => setShowComment(true)} className="post__reaction">Comment</button>
           {showComment && <CommentTemp comment={{}} ></CommentTemp>}
         </div>
