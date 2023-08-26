@@ -129,7 +129,7 @@ function updateUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let user = req.body;
-            user = Object.assign(Object.assign({}, user), { id: user.cognitoUser.id, email: user.cognitoUser.email });
+            user = Object.assign(Object.assign({}, user), { email: user.cognitoUser.email });
             delete user.cognitoUser;
             console.log({ updateUser: user });
             let updatedUser = yield userRepository.updateUser(user);

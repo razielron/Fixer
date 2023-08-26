@@ -127,7 +127,7 @@ async function createUser(req : Request, res : Response) : Promise<void> {
 async function updateUser(req : Request, res : Response) : Promise<void> {
     try {
         let user : UserModel & {cognitoUser: any} = req.body;
-        user = {...user, id: user.cognitoUser.id, email: user.cognitoUser.email};
+        user = {...user, email: user.cognitoUser.email};
         delete user.cognitoUser;
         console.log({updateUser: user});
         let updatedUser = await userRepository.updateUser(user);
