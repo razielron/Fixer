@@ -133,9 +133,9 @@ const ChatModal: React.FC = () => {
             {showModal && (
                 <>
                     <div
-                        className="mt-24 justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                        className="mt-12 justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
                     >
-                        <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                        <div className="relative w-auto my-2 mx-auto max-w-3xl">
                             {/*content*/}
                             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                                 {/*header*/}
@@ -154,14 +154,14 @@ const ChatModal: React.FC = () => {
                                 <div className="relative flex-grow">
                                     {/*chat*/}
                                     <div className="flex flex-col flex-grow w-full bg-white shadow-xl rounded-lg overflow-hidden">
-                                        <div className="flex flex-col flex-grow p-4 overflow-auto" style={{ minHeight: '400px', maxHeight: 'calc(100vh - 20rem)' }}>
+                                        <div className="flex flex-col flex-grow p-4 overflow-auto" style={{ minHeight: '400px', maxHeight: 'calc(100vh - 18rem)' }}>
                                             { !conversation.length
                                             ? <span className="self-center">- Start a new conversation with our AI -</span>
                                             : conversation.sort((x, y) => x.id - y.id).map((message) => {
                                                 return message.role !== 'user'
                                                 ?
                                                     (
-                                                        <div key={message.id} className="flex w-full mt-2 space-x-3 max-w-xs">
+                                                        <div key={message.id} className="flex w-full mt-2 space-x-3 max-w-sm">
                                                             <div className="flex-shrink-0 h-12 w-12 border rounded-full">
                                                                 <img className="rounded-full h-12 w-12 bg-slate-400" src="/images/ai-logo.png" alt=""/>
                                                             </div>
@@ -175,7 +175,7 @@ const ChatModal: React.FC = () => {
                                                     )
                                                 :
                                                     (
-                                                        <div key={message.id} className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
+                                                        <div key={message.id} className="flex w-full mt-2 space-x-3 max-w-sm ml-auto justify-end">
                                                             <div>
                                                                 <div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
                                                                     <p className="text-sm m-0">{message.content}</p>
