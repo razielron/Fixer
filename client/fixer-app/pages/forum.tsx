@@ -25,22 +25,26 @@ export default function Posts() {
     setTitleFilter(search);
   }
 
+  let getPosts = async (): Promise<PostModel[]> => {
+    let response = await fetch('/api/post', {headers});
+    let resJson = await response.json() as ApiResponseModel<PostModel[]>;
+    let data = resJson?.data?.sort((x, y) => {
+      let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
+      let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
+      return secondDate - firstDate;
+    });
+
+    return data ?? [];
+  }
+
   useEffect(() => {
     setIsLoading(true);
-    fetch('/api/post', {headers})
-      .then(res => res.json())
-      .then((response: ApiResponseModel<PostModel[]>) => {
-        let data = response?.data?.sort((x, y) => { 
-          let firstDate: number = x?.createdAt ? (new Date(x.createdAt)).getTime() : Date.now();
-          let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
-          return secondDate - firstDate;
-        });
-        
+    getPosts().then((data: PostModel[]) => {
         setIsLoading(false);
-        if(data) {
+        if(data.length) {
           setAllPosts(data);
         }
-      })
+      });
   }, []);
 
   let getComments = async (postId: string) => {
@@ -71,12 +75,11 @@ export default function Posts() {
     return resJson;
   };
 
-  function handleNewPost(post: PostModel) {
-    post.id = Math.floor(Math.random() * 100000).toString();
-    post.createdAt = new Date();
-    setAllPosts([post, ...allPosts]);
-    //TODO: fix this hack
-    window.location.reload();
+  let handleNewPost = async (post: PostModel) => {
+    let data = await getPosts();
+    if(data.length) {
+      setAllPosts(data);
+    }
   }
 
   let openCardView = (card: CardModel) => {
