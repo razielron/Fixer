@@ -25,30 +25,14 @@ export default function Issues() {
   const [issueView, setIssueView] = useState(false);
   const [issueData, setIssueData] = useState<CardModel>({});
   const [titleFilter, setTitleFilter] = useState<string>(''); 
-
-  let commentModel = {
-    body: 'raz & omer = <3'
-  };
-
-  let priceOfferModel = {
-    price: 75,
-    body: 'ani aci zol sheyes basok'
-  };
-
-  const post: IssueModel = {
-      id: 'id',
-      autherId: 'razId',
-      autherName: 'raz',
-      title: 'A washing machine gets the clothes dirty',
-      body: 'After running the machine, the clothes come out with black stains',
-      createdAt: new Date(),
-  };
+  const [selectedProfession, setSelectedProfession] = useState<string>(options[0]);
 
   let handleSearch = (search: string) => {
     setTitleFilter(search);
   }
 
   let performSelect = async (profession: string) => {
+    setSelectedProfession(profession);
     let data = await getIssueByProfessionAsync(profession);
     setAllIssues(data);
   }
@@ -83,9 +67,7 @@ export default function Issues() {
         return secondDate - firstDate;
     });
 
-    
     return data ?? [];
-    
   };
 
   let getPriceOffers = async (issueId: string) => {
@@ -96,7 +78,6 @@ export default function Issues() {
         let secondDate: number = y?.createdAt ? (new Date(y.createdAt)).getTime() : Date.now();
         return secondDate - firstDate;
     });
-
 
     return data ?? [];
   };
@@ -123,17 +104,13 @@ export default function Issues() {
     priceOffer.autherId = autherId;
     let response = await fetch('/api/priceOffer', {method: 'POST', headers, body: JSON.stringify(priceOffer)});
     let resJson = await response.json() as PriceOfferModel;
-    window.location.reload();
 
     return resJson;
   };
 
-  function handleNewIssue(issue: IssueModel) {
-    issue.id = Math.floor(Math.random() * 100000).toString();
-    issue.createdAt = new Date();
-    setAllIssues([issue, ...allIssues]);
-    //TODO: fix this hack
-    window.location.reload();
+  async function handleNewIssue(issue: IssueModel) {
+    let data = await getIssueByProfessionAsync(selectedProfession);
+    setAllIssues(data);
   }
 
   let openCardView = (card: CardModel) => {

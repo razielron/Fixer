@@ -5,7 +5,6 @@ import CommentForm from './CommentForm';
 import { CommentModel } from "@/src/models/commentModel";
 import { CardModel } from "@/src/models/CardModel";
 import { getCookie } from "cookies-next";
-import { ApiResponseModel } from "@/src/models/apiModel";
 
 type Props =   {
     commentArray?: CommentModel[]
@@ -15,18 +14,16 @@ type Props =   {
     hideModal: () => void
 }
 
-
 const CardModal: React.FC<Props> = (props) => {
   const [comments, setComments] = useState<CommentModel[]>([]);
   const token : string = getCookie('jwt_auth')?.toString() || '';
   const headers = {Authorization: `Bearer ${token}`};
 
-  let handleNewComment = (comment: CommentModel) => {
+  let handleNewComment = async (comment: CommentModel) => {
     if(!props.cardData?.autherId || !props.cardData?.id) return;
-    props.createComment(comment, props.cardData.autherId, props.cardData.id)
-        .then((createdComment) => {
-            setComments([...comments, createdComment]);
-        });
+    await props.createComment(comment, props.cardData.autherId, props.cardData.id);
+    let updatedComments = await props.getComments(props.cardData.id);
+    setComments(updatedComments);
   }
 
   let sortByCreatedAt = (x: Date | undefined, y: Date | undefined, orderAscending: boolean) : number => {
@@ -68,9 +65,7 @@ const CardModal: React.FC<Props> = (props) => {
                             {comments &&
                             comments
                                 .sort((x, y) => sortByCreatedAt(x.createdAt, y.createdAt, false))
-                                .map((comment) => 
-                                (<Comment comment={comment} />)
-                                )
+                                .map((comment) => (<Comment comment={comment} />))
                             }
                         </div>
                         <div className="">
