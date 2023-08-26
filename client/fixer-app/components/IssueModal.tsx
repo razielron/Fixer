@@ -49,7 +49,7 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
       >
         Create
       </button>
-      {showModal ? (
+      {showModal && (
         <>
           <div
             className="mt-24 justify-center items-center  overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
@@ -138,7 +138,7 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
-      ) : null}
+      )}
     </>
   );
 }

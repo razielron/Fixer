@@ -8,7 +8,8 @@ const AccountMenu: React.FC<UserModel> = (props) => {
 
     const signOut = async () => {
         deleteCookie('jwt_auth');
-        deleteCookie('userInformation')
+        deleteCookie('userInformation');
+        deleteCookie('conversation');
         router.push('/');
     };
 
