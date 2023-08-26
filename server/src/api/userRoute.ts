@@ -126,7 +126,9 @@ async function createUser(req : Request, res : Response) : Promise<void> {
 
 async function updateUser(req : Request, res : Response) : Promise<void> {
     try {
-        let user : UserModel = req.body;
+        let user : UserModel & {cognitoUser: any} = req.body;
+        user = {...user, id: user.cognitoUser.id, email: user.cognitoUser.email};
+        delete user.cognitoUser;
         console.log({updateUser: user});
         let updatedUser = await userRepository.updateUser(user);
         let apiResponseModel: ApiResponseModel<UserModel> = {
@@ -148,7 +150,8 @@ async function deleteUser(req : Request, res : Response) : Promise<void> {
         let user : UserModel = await userRepository.deleteUser(userId);
         let apiResponseModel: ApiResponseModel<UserModel> = {
             data: user
-        };res.json(apiResponseModel);
+        };
+        res.json(apiResponseModel);
     }
     catch(message : unknown) {
         console.error({message});
