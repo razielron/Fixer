@@ -37,7 +37,7 @@ const Profile: React.FC<Props> = (props) => {
                         </div>
 
                         <span className="text-gray-600">Information of Fixer account</span>
-                        <div className="">
+                        <div className="mt-10">
                         {props.isEditable ? <img onClick={() => setShowModal(true)} className="max-w-xs w-32 items-center border cursor-pointer mb-3" src={props.photoUrl || "/images/profile.jpg"} alt=""/>
                         : <img className="max-w-xs w-32 items-center border cursor-pointer mb-3" src={props.photoUrl || "/images/profile.jpg"} alt=""/>}
                         {showModal && <UploadImageModal setShowModal={setShowModal} handleProfileChange={props.handleProfileChange}></UploadImageModal>}
