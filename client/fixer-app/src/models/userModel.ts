@@ -14,7 +14,6 @@ interface UserModel {
     certificate?: string,
     profession?: string
     password?: string,
-    photoUrl?: string,
     createdAt?: Date,
     updatedAt?: Date,
 };

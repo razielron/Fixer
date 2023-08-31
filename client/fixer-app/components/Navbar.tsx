@@ -10,13 +10,18 @@ const Navbar = () => {
     const [showAccountMenu, setShowAccountMenu] = useState(false)
     const [userInformation, setUserInformation] = useState<UserModel>({});
 
-    useEffect(() => {
+    const updateUserInformationFromCookies = () => {
         let cookie = getCookie('userInformation') as string;
         if(!cookie) return;
         let userInfo = JSON.parse(cookie);
         if(!userInfo) return;
         setUserInformation(userInfo);
+    }
+
+    useEffect(() => {
+        setTimeout(updateUserInformationFromCookies, 2000);
     }, []);
+
     const toggleAccountMenu = useCallback(() => {
         let cookie = getCookie('userInformation') as string;
         if(!cookie) return;
@@ -55,7 +60,7 @@ const Navbar = () => {
               <div className="flex flex-row ml-auto gap-7 items-center">
                     <div onClick={toggleAccountMenu} className="flex flex-row items-center gap-2 cursor-pointer relative">
                         <div className="w-6 h-6 lg:w-10 lg:h-10 rounded-md overflow-hidden">
-                            <img src="/images/settings-icon.jpg" alt=""/>
+                            <img src={userInformation.photoUrl || "/images/profile.jpg"} alt=""/>
                         </div>
                         <BsChevronDown className="text-white transition" />
                         {showAccountMenu && <AccountMenu id={userInformation.id} name={userInformation.name} email={userInformation.email} photoUrl={userInformation.photoUrl} />}
