@@ -13,6 +13,7 @@ import { PriceOfferModel } from '@/src/models/priceOfferModel';
 import PriceOfferModal from '@/components/PriceOfferModal';
 import Search from '@/components/Search';
 import { Profession } from "@/src/enums/profession";
+import ChatModal from '@/components/ChatModal';
 
 export default function Issues() {
   const options = Object.values(Profession);
@@ -139,6 +140,7 @@ export default function Issues() {
           performSelect={performSelect}
           inputPlaceHolder='Issue title...'
       />
+      <ChatModal/>
       <IssueModal handleNewIssue={handleNewIssue}></IssueModal>
       {issueView && (<CardModal cardData={issueData} getComments={getComments} createComment={createComment} hideModal={closeCardView}></CardModal>)}
       {priceOfferView && (<PriceOfferModal cardData={issueData} getPriceOffers={getPriceOffers} createpriceOffer={createPriceOffer} hideModal={closeCardView} ></PriceOfferModal>)}

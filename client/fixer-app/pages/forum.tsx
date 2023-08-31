@@ -10,6 +10,7 @@ import CardModal from '@/components/CardModal';
 import { CommentModel } from '@/src/models/commentModel';
 import Navbar from "@/components/Navbar";
 import Search from '@/components/Search';
+import ChatModal from '@/components/ChatModal';
 
 export default function Posts() {
   const token : string = getCookie('jwt_auth')?.toString() || '';
@@ -100,6 +101,7 @@ export default function Posts() {
           performSearch={handleSearch}
           inputPlaceHolder='Post title...'
       />
+      <ChatModal/>
       <PostModal handleNewPost={handleNewPost}></PostModal>
       {postView && (<CardModal cardData={postData} getComments={getComments} createComment={createComment} hideModal={closeCardView}></CardModal>)}
       
