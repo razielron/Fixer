@@ -34,7 +34,7 @@ function getCommentById(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't get comment ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.commentId}` });
+            res.json({ error: `internal error: couldn't get comment ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.commentId}` });
         }
     });
 }
@@ -53,15 +53,22 @@ function getCommentsByIssueId(req, res) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
+            users = users === null || users === void 0 ? void 0 : users.map((user) => __awaiter(this, void 0, void 0, function* () {
+                if (user === null || user === void 0 ? void 0 : user.photo) {
+                    user.photoUrl = yield s3Service.generateDownloadPresignedUrl(user === null || user === void 0 ? void 0 : user.photo);
+                }
+                return user;
+            }));
+            users = yield Promise.all(users);
             let commentApiModels = comments.map(comment => {
                 let user = users.find(user => (user === null || user === void 0 ? void 0 : user.id) === (comment === null || comment === void 0 ? void 0 : comment.autherId));
-                return Object.assign(Object.assign({}, comment), { autherName: user === null || user === void 0 ? void 0 : user.name });
+                return Object.assign(Object.assign({}, comment), { autherName: user === null || user === void 0 ? void 0 : user.name, autherPhotoUrl: user === null || user === void 0 ? void 0 : user.photoUrl });
             });
             res.json({ data: commentApiModels });
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't get comment by user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
+            res.json({ error: `internal error: couldn't get comment by user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
         }
     });
 }
@@ -95,7 +102,7 @@ function getCommentsByPostId(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't get comment by user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
+            res.json({ error: `internal error: couldn't get comment by user ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.userId}` });
         }
     });
 }
@@ -117,7 +124,7 @@ function createComment(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't create comment` });
+            res.json({ error: `internal error: couldn't create comment` });
         }
     });
 }
@@ -135,7 +142,7 @@ function updateComment(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't update comment ${(_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.id}` });
+            res.json({ error: `internal error: couldn't update comment ${(_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.id}` });
         }
     });
 }
@@ -153,7 +160,7 @@ function deleteComment(req, res) {
         }
         catch (message) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-            res.json({ error: `internal error: coudn't delete comment ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.commentId}` });
+            res.json({ error: `internal error: couldn't delete comment ${(_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.commentId}` });
         }
     });
 }

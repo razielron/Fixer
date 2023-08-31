@@ -33,7 +33,7 @@ async function getCommentById(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't get comment ${req?.params?.commentId}` });
+        res.json({ error: `internal error: couldn't get comment ${req?.params?.commentId}` });
     }
 }
 
@@ -41,7 +41,7 @@ async function getCommentsByIssueId(req: Request, res: Response): Promise<void> 
     try {
         let issueId: string = req?.params?.issueId;
         let comments: CommentModel[] = await commentRepository.getCommentsByIssueId(issueId);
-        let users: UserModel[] = [];
+        let users: any[] = [];
         
         if(comments) {
             let filteredComments: string[] = comments.map(comment => comment?.autherId).filter(item => item) as string[];
@@ -53,11 +53,21 @@ async function getCommentsByIssueId(req: Request, res: Response): Promise<void> 
             return;
         }
 
+        users = users?.map(async (user) => {
+            if(user?.photo) {
+                user.photoUrl = await s3Service.generateDownloadPresignedUrl(user?.photo);
+            }
+            return user;
+        });
+
+        users = await Promise.all(users);
+
         let commentApiModels: CommentApiModel[] = comments.map(comment => {
             let user = users.find(user => user?.id === comment?.autherId);
             return {
                 ...comment,
-                autherName: user?.name
+                autherName: user?.name,
+                autherPhotoUrl: user?.photoUrl,
             }
         });
 
@@ -65,7 +75,7 @@ async function getCommentsByIssueId(req: Request, res: Response): Promise<void> 
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't get comment by user ${req?.params?.userId}` });
+        res.json({ error: `internal error: couldn't get comment by user ${req?.params?.userId}` });
     }
 }
 
@@ -107,7 +117,7 @@ async function getCommentsByPostId(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't get comment by user ${req?.params?.userId}` });
+        res.json({ error: `internal error: couldn't get comment by user ${req?.params?.userId}` });
     }
 }
 
@@ -129,7 +139,7 @@ async function createComment(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't create comment` });
+        res.json({ error: `internal error: couldn't create comment` });
     }
 }
 
@@ -145,7 +155,7 @@ async function updateComment(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't update comment ${req?.body?.id}` });
+        res.json({ error: `internal error: couldn't update comment ${req?.body?.id}` });
     }
 }
 
@@ -161,7 +171,7 @@ async function deleteComment(req: Request, res: Response): Promise<void> {
     }
     catch (message: unknown) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        res.json({ error: `internal error: coudn't delete comment ${req?.params?.commentId}` });
+        res.json({ error: `internal error: couldn't delete comment ${req?.params?.commentId}` });
     }
 }
 
