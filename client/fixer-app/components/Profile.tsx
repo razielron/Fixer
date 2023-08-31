@@ -1,7 +1,29 @@
+import { Role } from "@/src/enums/role";
 import { UserModel } from "@/src/models/userModel";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Upload from "./Upload";
+import { getCookie } from "cookies-next";
+import { ApiResponseModel } from "@/src/models/apiModel";
+import Spinner from "./Spinner";
+import UploadImageModal from "./UploadImageModal";
 
-const Profile: React.FC<UserModel & {key?: string}> = (props) => {
+interface Props extends UserModel {
+    key?: string,
+    isEditable?: boolean
+    handleProfileChange?: () => void
+}
+
+const Profile: React.FC<Props> = (props) => {
+  const [showModal, setShowModal] = useState(false);
+  const token : string = getCookie('jwt_auth')?.toString() || '';
+
+    function convertOptionToDisplay(option: string | undefined) : string | undefined{
+        if (!option) return 
+        return option 
+            .split('_') 
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+    }
     return (
         <>
             <div className="h-full p-20 pt-5 pb-5 pb-0">
@@ -15,19 +37,41 @@ const Profile: React.FC<UserModel & {key?: string}> = (props) => {
                         </div>
 
                         <span className="text-gray-600">Information of Fixer account</span>
-                        <div className="w-full p-8 mx-2 flex justify-center">
-                            <img onClick={() => {}} className="max-w-xs w-32 items-center border cursor-pointer" src="/images/profile.jpg" alt=""/>
+                        <div className="mt-10">
+                        {props.isEditable ? <img onClick={() => setShowModal(true)} className="max-w-xs w-32 items-center border cursor-pointer mb-3" src={props.photoUrl || "/images/profile.jpg"} alt=""/>
+                        : <img className="max-w-xs w-32 items-center border cursor-pointer mb-3" src={props.photoUrl || "/images/profile.jpg"} alt=""/>}
+                        {showModal && <UploadImageModal setShowModal={setShowModal} handleProfileChange={props.handleProfileChange}></UploadImageModal>}
                         </div>
                     </div>
                     
                     <div className="w-full md:w-3/5 p-8 bg-white lg:ml-4 shadow-md">
                     <div className="rounded  shadow p-6 pb-0">
                         <div className="pb-6">
-                        <label htmlFor="name" className="font-semibold text-gray-700 block pb-1">Name</label>
+                        <label htmlFor="first name" className="font-semibold text-gray-700 block pb-1">First Name</label>
                         <div className="flex">
-                            <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value={props.name} />
+                            <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value={props.firstName} />
                         </div>
                         </div>
+                        <div className="pb-6">
+                        <label htmlFor="last name" className="font-semibold text-gray-700 block pb-1">Last name</label>
+                        <div className="flex">
+                            <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value={props.lastName} />
+                        </div>
+                        </div>
+                        {props.role=== Role.PROFESSIONAL && <div className="pb-6">
+                        <label htmlFor="phone number" className="font-semibold text-gray-700 block pb-1">Phone number</label>
+                        <div className="flex">
+                            <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value={props.phoneNumber} />
+                        </div>
+                        </div>}
+
+                        <div className="pb-6">
+                        <label htmlFor="district" className="font-semibold text-gray-700 block pb-1">District</label>
+                        <div className="flex">
+                            <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value={convertOptionToDisplay(props.address)} />
+                        </div>
+                        </div>
+
                         <div className="pb-4">
                         <label htmlFor="about" className="font-semibold text-gray-700 block pb-1">Email</label>
                         <input disabled id="email" className="border-1  rounded-r px-4 py-2 w-full" type="email" value={props.email} />

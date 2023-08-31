@@ -95,16 +95,14 @@ class UserClient {
 
     public async updateUser(user: UserModel, token: string) : Promise<ApiResponseModel<UserModel>> {
         try {
-            if(!user.id) throw "missing user id";
-            let updateUserBaseUrl: URL = new URL(createEndpoint, baseUrl);
-            let updateUserUrl: URL = new URL(user.id, updateUserBaseUrl);
+            let updateUserBaseUrl: URL = new URL(updateEndpoint, baseUrl);
             headers.Authorization = token;
-            const { data } = await axios.put(updateUserUrl.toString(), {data: user}, {headers});
+            const { data } = await axios.put(updateUserBaseUrl.toString(), user, {headers});
 
             return data;
         }
         catch(error: unknown) {
-            let errorMessage = `Internal error when trying to update user: ${user.id}`;
+            let errorMessage = `Internal error when trying to update user`;
             console.log({error});
             const response: ApiResponseModel<UserModel> = {
                 error: errorMessage

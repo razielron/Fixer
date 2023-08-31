@@ -84,7 +84,7 @@ const Card: React.FC<Props> = (props) => {
 
             <div className="flex w-full items-center justify-between border-b pb-3">
                 <div className="flex items-center space-x-3">
-                    <img className="h-8 w-8 rounded-full bg-slate-400" src="/images/profile.jpg" alt="" />
+                    <img className="h-8 w-8 rounded-full bg-slate-400" src={props.cardData.autherPhotoUrl || "/images/profile.jpg"} alt="" />
                     <div onClick={openProfile} className="text-lg font-bold text-slate-700 cursor-pointer">{props.cardData?.autherName}</div>
                 </div>
                 <div className="flex items-center space-x-8">

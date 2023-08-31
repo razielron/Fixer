@@ -9,6 +9,7 @@ interface PriceOfferModel {
     updatedAt?: Date,
     imageUrls?: string[] | null,
     images?: string[] | null,
+    autherPhotoUrl?: string
 };
 
 export type {PriceOfferModel};

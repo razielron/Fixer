@@ -19,7 +19,7 @@ const Comment: React.FC<Props> = (props) => {
                         <p className="inline-flex items-center mr-3 mb-0 text-sm text-gray-900 font-bold cursor-pointer" onClick={openProfile}>
                             <img
                                 className="mr-2 w-12 h-12 rounded-full"
-                                src={props.comment.avatar || "/images/profile.jpg"}
+                                src={props.comment.autherPhotoUrl || "/images/profile.jpg"}
                                 alt="Michael Gough"/>{props.comment.autherName}</p>
                         <p className="text-sm text-gray-400 mb-0">
                             {(new Date(props.comment.createdAt || '')).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'})}

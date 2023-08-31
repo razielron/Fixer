@@ -11,6 +11,7 @@ interface CardModel {
     avatar?: string,
     createdAt?: Date,
     updatedAt?: Date,
+    autherPhotoUrl?:string,
 };
 
 export type {CardModel};
