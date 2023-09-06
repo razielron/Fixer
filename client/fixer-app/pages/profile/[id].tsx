@@ -11,6 +11,15 @@ export default function ProfilePage() {
     const userId = router.query.id;
     const [userInformation, setUserInformation] = useState<UserModel>({}); 
     const [isLoading, setIsLoading] = useState(false);
+    const [isEditable, setIsEditable] = useState(false);
+
+    function updateIsEditable() {
+        let cookie = getCookie('userInformation') as string;
+        if(!cookie) return;
+        let loggedInUserInfo = JSON.parse(cookie);
+        if(!loggedInUserInfo) return;
+        setIsEditable(loggedInUserInfo.id === userInformation.id);
+    }
 
     async function getUserInformation(token: string, id: string) {
         setIsLoading(true);
@@ -27,7 +36,6 @@ export default function ProfilePage() {
         let data = await getUserInformation(token, userId as string);
 
         if(data) {
-            setCookie('userInformation', data); 
             setUserInformation(data);
         }
     }
@@ -36,13 +44,17 @@ export default function ProfilePage() {
         if(!userId) return;
         getAndSetUserInformation();
     }, [userId]);
+
+    useEffect(() => {
+        updateIsEditable();
+    }, [userInformation]);
     
     return (
         <>
             <Navbar></Navbar>
             {isLoading
                 ? (<Spinner></Spinner>)
-                : (<Profile isEditable={true} handleProfileChange={getAndSetUserInformation} {...userInformation}/>)
+                : (<Profile isEditable={isEditable} handleProfileChange={getAndSetUserInformation} {...userInformation}/>)
             }
         </>
     )

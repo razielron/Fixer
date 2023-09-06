@@ -1,10 +1,6 @@
 import { Role } from "@/src/enums/role";
 import { UserModel } from "@/src/models/userModel";
-import React, { useEffect, useState } from "react";
-import Upload from "./Upload";
-import { getCookie } from "cookies-next";
-import { ApiResponseModel } from "@/src/models/apiModel";
-import Spinner from "./Spinner";
+import React, { useState } from "react";
 import UploadImageModal from "./UploadImageModal";
 
 interface Props extends UserModel {
@@ -13,9 +9,13 @@ interface Props extends UserModel {
     handleProfileChange?: () => void
 }
 
-const Profile: React.FC<Props> = (props) => {
-  const [showModal, setShowModal] = useState(false);
-  const token : string = getCookie('jwt_auth')?.toString() || '';
+const Profile: React.FC<Props> = (props) => {   
+    const [showModal, setShowModal] = useState(false);
+
+    function handleImageClick(){
+        if(!props.isEditable) return;
+        setShowModal(true);
+    }
 
     function convertOptionToDisplay(option: string | undefined) : string | undefined{
         if (!option) return 
@@ -24,6 +24,7 @@ const Profile: React.FC<Props> = (props) => {
             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join(' ');
     }
+
     return (
         <>
             <div className="h-full p-20 pt-5 pb-5 pb-0">
@@ -38,8 +39,12 @@ const Profile: React.FC<Props> = (props) => {
 
                         <span className="text-gray-600">Information of Fixer account</span>
                         <div className="mt-10">
-                        {props.isEditable ? <img onClick={() => setShowModal(true)} className="max-w-xs w-32 items-center border cursor-pointer mb-3" src={props.photoUrl || "/images/profile.jpg"} alt=""/>
-                        : <img className="max-w-xs w-32 items-center border cursor-pointer mb-3" src={props.photoUrl || "/images/profile.jpg"} alt=""/>}
+                        <img 
+                            onClick={handleImageClick} 
+                            className="max-w-xs w-32 items-center border cursor-pointer mb-3" 
+                            src={props.photoUrl || "/images/profile.jpg"}
+                            style={{cursor: props.isEditable ? 'pointer' : 'default'}}
+                        />
                         {showModal && <UploadImageModal setShowModal={setShowModal} handleProfileChange={props.handleProfileChange}></UploadImageModal>}
                         </div>
                     </div>
