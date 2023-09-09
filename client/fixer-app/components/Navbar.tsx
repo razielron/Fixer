@@ -55,7 +55,7 @@ const Navbar = () => {
                     <NavbarItem label={RouterTitle.HOME} value={RouterPath.HOME} />
                     <NavbarItem label={RouterTitle.FORUM} value={RouterPath.FORUM} />
                     <NavbarItem label={RouterTitle.PROFESSIONAL} value={RouterPath.PROFESSIONAL} />
-                    {/* <NavbarItem label='Store' value='store' /> */}
+                    <NavbarItem label={RouterTitle.STORE} value={RouterPath.STORE} />
               </div>
               <div className="flex flex-row ml-auto gap-7 items-center">
                     <div onClick={toggleAccountMenu} className="flex flex-row items-center gap-2 cursor-pointer relative">
