@@ -23,6 +23,12 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
   const [showModal, setShowModal] = React.useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  function toEnumValue(displayName: string): string { 
+    return displayName 
+        .split(' ')  // Split by space 
+        .map(word => word.toUpperCase())  // Convert each word to uppercase 
+        .join('_');  // Join words with an underscore 
+}
 
   function createIssue(){
     let createIssueModel: IssueModel = {
@@ -105,7 +111,7 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
                     </p>
                   <DropDown 
                       options={professionOptions} 
-                      onChange={(event:any)=> setRole(event[0].label)}
+                      onChange={(event:any)=> setRole(toEnumValue(event[0].label))}
                       placeHolder="Role"   
                   />
                   </div>
@@ -126,7 +132,7 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
                   </button>
                   <button 
                       className={`bg-yellow-400 py-2 rounded-md w-full mt-6 transition ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`} 
-                      type="button" 
+                      type="submit" 
                       disabled={isLoading} 
                       onClick={createIssue} 
                   > 

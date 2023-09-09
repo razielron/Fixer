@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
+import { cookies } from 'next/headers';
 import Input from "@/components/input";
 import Link from "next/link";
 import UserPool from "@/pages/api/userPool";
@@ -59,7 +60,8 @@ const Login = () => {
                 const authToken = data.getIdToken().getJwtToken();
                 setCookie('jwt_auth', authToken);
                 saveUserInformation(authToken);
-                router.push('/issues'); },
+                router.push('/issues');
+            },
 
             onFailure: err => setError(err.toString()),
             newPasswordRequired: data => console.log("newPasswordRequired", {data})
@@ -95,7 +97,7 @@ const Login = () => {
                 <div>
                     <p className="text-red-600 mt-5">{error}</p>
                 </div>
-                <button onClick={loginRedirect} className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion">
+                <button onClick={loginRedirect} type="submit" className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion">
                     Login
                 </button>
                 <p className="text-neutral-400 mt-5">

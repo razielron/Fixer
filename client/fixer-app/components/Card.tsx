@@ -4,6 +4,7 @@ import { CardModel } from "@/src/models/CardModel";
 import PriceOfferModal from "./PriceOfferModal";
 import { getCookie } from "cookies-next";
 import router from "next/router";
+import { UserModel } from "@/src/models/userModel";
 
 type Props =   {
     isModalOpen: boolean
@@ -17,20 +18,31 @@ const Card: React.FC<Props> = (props) => {
   const [imageArray, setImageArray] = useState<string[]>([]);
   const [isShowGalleryModal, setIsShowGalleryModal] = useState(false);
   const [showPriceOffer, setShowPriceOffer] = useState<boolean>(false);
+  const [userInformation, setUserInformation] = useState<UserModel>({});
+
+  const updateUserInformation = () => { 
+    const poll = setInterval(() => { 
+        const cookieValue = getUserInformation(); 
+         
+        if (cookieValue) { 
+            clearInterval(poll); 
+            setUserInformation(cookieValue);
+        } 
+    }, 50); 
+  }
 
   const getUserInformation = () => { 
       let cookie = getCookie('userInformation') as string; 
       if(!cookie) return; 
       let userInfo = JSON.parse(cookie); 
       if(!userInfo) return; 
-      return userInfo; 
+      return userInfo;
   }
   
   const shouldShowPriceOffer = () => {
-    let userInformation = getUserInformation();
-
     if (userInformation?.role === 'PROFESSIONAL' || userInformation?.id === props.cardData.autherId){
         setShowPriceOffer(true)
+    
     }
     if(props.isPostView){
         setShowPriceOffer(false)
@@ -38,9 +50,13 @@ const Card: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    shouldShowPriceOffer();
     fetchCardImages();
+    updateUserInformation();
   }, []);
+
+  useEffect(() => {
+    shouldShowPriceOffer();
+  }, [userInformation]);
 
   let fetchCardImages = async () => {
     if(!props.cardData?.imageUrls?.length) return;
