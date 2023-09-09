@@ -17,11 +17,12 @@ After that you can use the aws cli for your purpose
 4. lock the files: sudo chmod 500 fixer_frontend_key_file
 5. ssh to an instance using WSL:
     * cd ~/.ssh
-    * ssh -i fixer_server_dev_key_file ubuntu@44.205.110.82
-    * ssh -i fixer_frontend_key_file ubuntu@44.207.48.75
+    * ssh -i fixer_server_dev_key_file_omer ubuntu@50.16.119.241
+    * ssh -i fixer_frontend_key_file_omer ubuntu@18.235.57.109
 
 # EC2
 1. to add Nodejs:
+    * sudo su
     * sudo apt update
     * curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
     * . ~/.nvm/nvm.sh

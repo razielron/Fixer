@@ -244,13 +244,13 @@ resource "tls_private_key" "fixer_server_dev_private_key" {
 }
 
 resource "aws_key_pair" "fixer_server_dev_key" {
-    key_name = "fixer_server_dev_key"
+    key_name = "fixer_server_dev_key_omer"
     public_key = tls_private_key.fixer_server_dev_private_key.public_key_openssh
 }
 
 resource "local_file" "fixer_server_dev_key_file" {
     content = tls_private_key.fixer_server_dev_private_key.private_key_pem
-    filename = "fixer_server_dev_key_file"
+    filename = "fixer_server_dev_key_file_omer"
 }
 
 # EC2 frontend key pairs
@@ -260,13 +260,13 @@ resource "tls_private_key" "fixer_frontend_private_key" {
 }
 
 resource "aws_key_pair" "fixer_frontend_key" {
-    key_name = "fixer_frontend_key"
+    key_name = "fixer_frontend_key_omer"
     public_key = tls_private_key.fixer_frontend_private_key.public_key_openssh
 }
 
 resource "local_file" "fixer_frontend_key_file" {
     content = tls_private_key.fixer_frontend_private_key.private_key_pem
-    filename = "fixer_frontend_key_file"
+    filename = "fixer_frontend_key_file_omer"
 }
 ########################################################################
 
@@ -368,10 +368,10 @@ resource "aws_cognito_user_pool_client" "fixer_cognito_client" {
 
 # S3 blocks
 resource "aws_s3_bucket" "fixer_bucket_main" {
-    bucket = "fixer-bucket"
+    bucket = "fixer-bucket-omer"
 
     tags = {
-        Name = "fixer-bucket"
+        Name = "fixer-bucket-omer"
     }
 }
 
