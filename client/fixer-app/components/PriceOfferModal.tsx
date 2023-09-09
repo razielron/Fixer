@@ -71,14 +71,15 @@ const PriceOfferModal: React.FC<Props> = (props) => {
                         </div> 
                         {/*body*/} 
                         <div className="relative flex-grow overflow-y-auto" style={{ maxHeight: 'calc(100vh - 6rem)' }}> {/* Adjust the maxHeight as needed */} 
-                            <Card cardData={props.cardData} isModalOpen={false} /> 
+                            <Card cardData={props.cardData} isModalOpen={false} />
+                            {!showPriceOfferForm && <div className="mb-4"></div>}
                             <div className="overflow-auto pl-5"> 
                             {priceOffers && priceOffers.map((priceOffer) => (<PriceOffer priceOffer={priceOffer} />))} 
                             </div> 
-                            <hr className="my-12 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" /> 
-                            <div className=""> 
+                           {showPriceOfferForm && <hr className="my-12 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50" />}
+                            {showPriceOfferForm && <div className=""> 
                             <PriceOfferForm onSubmit={handleNewpriceOffer} /> 
-                            </div> 
+                            </div> }
                         </div> 
                     </div> 
                 </div> 
