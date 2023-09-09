@@ -69,6 +69,12 @@ const Profile: React.FC<Props> = (props) => {
                             <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value={props.phoneNumber} />
                         </div>
                         </div>}
+                        {props.role=== Role.PROFESSIONAL && <div className="pb-6">
+                        <label htmlFor="proffesion" className="font-semibold text-gray-700 block pb-1">Proffesion</label>
+                        <div className="flex">
+                            <input disabled id="username" className="border-1  rounded-r px-4 py-2 w-full" type="text" value={convertOptionToDisplay(props.profession)} />
+                        </div>
+                        </div>}
 
                         <div className="pb-6">
                         <label htmlFor="district" className="font-semibold text-gray-700 block pb-1">District</label>

@@ -162,8 +162,8 @@ const ChatModal: React.FC = () => {
                                                 ?
                                                     (
                                                         <div key={message.id} className="flex w-full mt-2 space-x-3 max-w-sm">
-                                                            <div className="flex-shrink-0 h-12 w-12 border rounded-full">
-                                                                <img className="rounded-full h-12 w-12 bg-slate-400" src="/images/ai-logo.png" alt=""/>
+                                                            <div className="flex-shrink-0 h-12 w-12">
+                                                                <img className="h-12 w-12" src="/images/bot-icon.png" alt=""/>
                                                             </div>
                                                             <div>
                                                                 <div className="bg-yellow-500 p-3 rounded-r-lg rounded-bl-lg">

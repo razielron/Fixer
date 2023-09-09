@@ -108,7 +108,7 @@ const PostModal: React.FC<Props> = ({handleNewPost}) => {
                   </button>
                   <button
                     className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion"
-                    type="button"
+                    type="submit"
                     onClick={createPost}
                   >
                     Create

@@ -162,7 +162,7 @@ const ProfessionalRegister = () => {
                 <div>
                     <p className="text-red-600 mt-5">{error}</p>
                 </div>
-                <button onClick={signupRedirectVladition} className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion">
+                <button onClick={signupRedirectVladition} type="submit" className="bg-yellow-400 py-2 rounded-md w-full mt-6 transion">
                     Sign up
                 </button>
                 <p className="text-neutral-400 mt-5">
