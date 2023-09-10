@@ -12,13 +12,13 @@ After that you can use the aws cli for your purpose
 
 # trraform
 1. run: terraform apply
-2. copy the server_dev public key to .ssh: cp fixer_server_dev_key_file ~/.ssh
-3. copy the frontend public key to .ssh: cp fixer_frontend_key_file ~/.ssh
-4. lock the files: sudo chmod 500 fixer_frontend_key_file
+2. copy the server_dev public key to .ssh: cp fixer_server_dev_key_file_omer ~/.ssh
+3. copy the frontend public key to .ssh: cp fixer_frontend_key_file_omer ~/.ssh
+4. lock the files: sudo chmod 500 fixer_frontend_key_file_omer
 5. ssh to an instance using WSL:
     * cd ~/.ssh
-    * ssh -i fixer_server_dev_key_file_omer ubuntu@50.16.119.241
-    * ssh -i fixer_frontend_key_file_omer ubuntu@18.235.57.109
+    * ssh -i fixer_server_dev_key_file_omer ubuntu@34.196.174.185
+    * ssh -i fixer_frontend_key_file_omer ubuntu@3.84.175.146
 
 # EC2
 1. to add Nodejs:
@@ -29,6 +29,7 @@ After that you can use the aws cli for your purpose
     * nvm install --lts
 2. to clone the project: git clone https://github.com/razielron/Fixer.git
 3. to run the server:
+    * sudo su
     * cd Fixer/server
     * add .env.prod file
     * add .env file for Prisma
@@ -39,12 +40,12 @@ After that you can use the aws cli for your purpose
     * npm run build
     * npm run start
 4. to run the frontend:
+    * sudo su
     * cd Fixer
     * cd client/fixer-app
     * add .env.prod file
     * npm i
     * npm run build
-    * sudo su
     * export NODE_ENV=prod
     * npm run build
     * npm run start
