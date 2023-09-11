@@ -65,7 +65,7 @@ const Search: React.FC<SearchProps> = (props) => {
                 <div className={`relative border ${dropdownOpen ? 'border-yellow-300' : 'border-transparent'} rounded-lg`}>
                     <div className="relative flex align-center w-40 py-3 px-3 rounded-lg text-gray-500 font-semibold cursor-pointer" onClick={toggleDropdown}>
                         <span>{convertOptionToDisplay(selectedOption) || "Select..."}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 w-6 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                         </svg>
                         {dropdownOpen && (
@@ -81,7 +81,7 @@ const Search: React.FC<SearchProps> = (props) => {
                 </div>
             }
             <div className="flex bg-gray-100 h-12 w-80 space-x-4 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 w-6 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input type='text' value={search} onChange={handleSearchChange} onKeyDown={handleKeyDown} className="bg-gray-100 outline-none" placeholder={`${props.inputPlaceHolder}`} />

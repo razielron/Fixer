@@ -48,7 +48,7 @@ const CardModal: React.FC<Props> = (props) => {
         <div className="flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative mx-auto w-[60vw]">
                 {/*content*/}
-                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none" style={{ maxHeight: 'calc(100vh - 4rem)' }}>
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                     {/*header*/}
                     <div className="flex items-start justify-between p-2 border-b border-solid border-slate-200 rounded-t">
                         <button onClick={props.hideModal} type="button" className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -59,20 +59,21 @@ const CardModal: React.FC<Props> = (props) => {
                         </button>
                     </div>
                     {/*body*/}
-                    <div className="relative flex-grow overflow-y-auto" style={{ maxHeight: 'calc(100vh - 6rem)' }}> {/* Adjust the maxHeight as needed */}
+                    <div className="relative flex-grow overflow-class flex flex-col justify-between" style={{ height: 'calc(100vh - 12rem)' }}>
                         <Card cardData={props.cardData} isModalOpen={false} />
                         <div className="mb-4"></div>
-                        <div className="overflow-auto pl-5">
+                        <div className="pl-5">
                             {comments &&
                             comments
                                 .sort((x, y) => sortByCreatedAt(x.createdAt, y.createdAt, false))
                                 .map((comment) => (<Comment comment={comment} />))
                             }
                         </div>
-                        <div className="">
+                        
+                    </div>
+                    <div className="">
                             <CommentForm onSubmit={handleNewComment} />
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
