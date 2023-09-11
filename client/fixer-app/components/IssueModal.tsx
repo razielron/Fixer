@@ -57,26 +57,21 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
       </button>
       {showModal && (
         <>
-          <div
-            className="mt-24 justify-center items-center  overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-          >
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
-                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">
-                    Create issue
-                  </h3>
-                  <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
-                  </button>
-                </div>
+            <div 
+                className="flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none" 
+            > 
+                <div className="relative mx-auto w-[60vw]"> 
+                    {/*content*/} 
+                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"> 
+                        {/*header*/} 
+                        <div className="flex items-start justify-start p-2 border-b border-solid border-slate-200 rounded-t"> 
+                            <button onClick={() => setShowModal(false)} type="button" className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"> 
+                                <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"> 
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /> 
+                                </svg> 
+                            </button> 
+                            <div className="p-0 ml-2 text-3xl font-semibold">Create Issue</div>
+                        </div>
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
                 <div className="flex flex-col gap-4">

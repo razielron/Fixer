@@ -59,7 +59,7 @@ const CardModal: React.FC<Props> = (props) => {
                         </button>
                     </div>
                     {/*body*/}
-                    <div className="relative flex-grow overflow-y-auto" style={{ maxHeight: 'calc(100vh - 6rem)' }}> {/* Adjust the maxHeight as needed */}
+                    <div className="relative flex-grow overflow-class" style={{ maxHeight: 'calc(100vh - 6rem)' }}> {/* Adjust the maxHeight as needed */}
                         <Card cardData={props.cardData} isModalOpen={false} />
                         <div className="mb-4"></div>
                         <div className="overflow-auto pl-5">

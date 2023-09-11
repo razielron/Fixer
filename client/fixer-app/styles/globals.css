@@ -68,3 +68,21 @@
   .post__footer-ic { 
     height: 1rem; 
   }
+
+  .overflow-class {
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgb(231, 231, 231);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgb(119, 119, 119);
+        border-radius: 2px;
+    }
+  }
