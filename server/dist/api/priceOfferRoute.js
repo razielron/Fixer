@@ -12,6 +12,7 @@ import { StatusCodes } from 'http-status-codes';
 import { priceOfferRepository } from '../DB/priceOfferRepository.js';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
+import { s3Service } from '../services/s3Service.js';
 function getPriceOfferById(req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
@@ -52,9 +53,16 @@ function getPriceOffersByIssueId(req, res) {
                 res.sendStatus(StatusCodes.NOT_FOUND);
                 return;
             }
+            users = users === null || users === void 0 ? void 0 : users.map((user) => __awaiter(this, void 0, void 0, function* () {
+                if (user === null || user === void 0 ? void 0 : user.photo) {
+                    user.photoUrl = yield s3Service.generateDownloadPresignedUrl(user === null || user === void 0 ? void 0 : user.photo);
+                }
+                return user;
+            }));
+            users = yield Promise.all(users);
             let priceOfferApiModels = priceOffers.map(priceOffer => {
                 let user = users.find(user => (user === null || user === void 0 ? void 0 : user.id) === (priceOffer === null || priceOffer === void 0 ? void 0 : priceOffer.autherId));
-                return Object.assign(Object.assign({}, priceOffer), { autherName: user === null || user === void 0 ? void 0 : user.name });
+                return Object.assign(Object.assign({}, priceOffer), { autherName: user === null || user === void 0 ? void 0 : user.name, autherPhotoUrl: user === null || user === void 0 ? void 0 : user.photoUrl });
             });
             res.json({ data: priceOfferApiModels });
         }

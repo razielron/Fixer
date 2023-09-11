@@ -5,6 +5,7 @@ import { priceOfferRepository } from '../DB/priceOfferRepository.js';
 import { userRepository } from '../DB/userRepository.js';
 import { authenticateUser } from "./apiAuthentication.js";
 import { ApiResponseModel, PriceOfferApiModel } from '../models/apiModels.js';
+import { s3Service } from '../services/s3Service.js';
 
 async function getPriceOfferById(req: Request, res: Response): Promise<void> {
     try {
@@ -40,7 +41,7 @@ async function getPriceOffersByIssueId(req: Request, res: Response): Promise<voi
     try {
         let issueId: string = req?.params?.issueId;
         let priceOffers: PriceOfferModel[] = await priceOfferRepository.getPriceOffersByIssueId(issueId);
-        let users: UserModel[] = [];
+        let users: any[] = [];
         
         if(priceOffers) {
             let filteredPriceOffers: string[] = priceOffers.map(priceOffer => priceOffer?.autherId).filter(item => item) as string[];
@@ -52,11 +53,21 @@ async function getPriceOffersByIssueId(req: Request, res: Response): Promise<voi
             return;
         }
 
+        users = users?.map(async (user) => {
+            if(user?.photo) {
+                user.photoUrl = await s3Service.generateDownloadPresignedUrl(user?.photo);
+            }
+            return user;
+        });
+
+        users = await Promise.all(users);
+
         let priceOfferApiModels: PriceOfferApiModel[] = priceOffers.map(priceOffer => {
             let user = users.find(user => user?.id === priceOffer?.autherId);
             return {
                 ...priceOffer,
-                autherName: user?.name
+                autherName: user?.name,
+                autherPhotoUrl: user?.photoUrl,
             }
         });
 
