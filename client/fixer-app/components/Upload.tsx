@@ -58,18 +58,22 @@ const Upload: React.FC<UploadProps> = ({ updateKey, setIsLoading}) => {
     return (
         <div className="w-full">
             <label
-                className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                className="flex justify-center items-center w-full h-60 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
 
                 <input type="file" name="file_upload" className="hidden" accept="image/jpeg, image/png, image/jpg" onChange={handleFileChange}/>
                 {file ?
-                    <div>
-                        <button onClick={() => setFile(undefined)} type="button" className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                    <div className="relative w-48 h-48 overflow-hidden flex justify-center items-center">
+                        <img className="max-w-full max-h-full" src={URL.createObjectURL(file)} alt="Thumb" />
+                        <button 
+                            onClick={() => setFile(undefined)} 
+                            type="button" 
+                            className="absolute top-0 left-0 bg-transparent rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                        >
                             <span className="sr-only">Close menu</span>
-                            <svg className="h-2 w-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
-                        <img  className="object-scale-down h-28 w-28" src={URL.createObjectURL(file)} alt="Thumb" />
                     </div>
                     : 
                     <span className="flex items-center space-x-2">

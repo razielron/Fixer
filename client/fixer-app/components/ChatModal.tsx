@@ -154,7 +154,7 @@ const ChatModal: React.FC = () => {
                                 <div className="relative flex-grow">
                                     {/*chat*/}
                                     <div className="flex flex-col flex-grow w-full bg-white shadow-xl rounded-lg overflow-hidden">
-                                        <div className="flex flex-col flex-grow p-4 overflow-class" style={{ minHeight: '400px', maxHeight: 'calc(100vh - 18rem)' }}>
+                                        <div className="flex flex-col flex-grow p-4 overflow-class" style={{ height: 'calc(100vh - 18rem)' }}>
                                             { !conversation.length
                                             ? <span className="self-center">- Start a new conversation with our AI -</span>
                                             : conversation.sort((x, y) => x.id - y.id).map((message) => {

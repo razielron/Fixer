@@ -55,9 +55,9 @@ const UploadImageModal: React.FC<Props> = ({setShowModal, handleProfileChange}) 
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
                   >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
+                    <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"> 
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /> 
+                    </svg> 
                   </button>
                 </div>
                 {/*body*/}
@@ -71,7 +71,7 @@ const UploadImageModal: React.FC<Props> = ({setShowModal, handleProfileChange}) 
                 {isLoading && (<Spinner></Spinner>)}
                 <div className="flex items-center justify-end p-4 pt-0 border-t border-solid border-slate-200 rounded-b">
                   <button
-                    className=" py-2 rounded-md w-full mt-6 transion"
+                    className="py-2 rounded-md w-full mt-6 transion"
                     type="button"
                     onClick={() => setShowModal(false)}
                   >

@@ -60,7 +60,7 @@ const IssueModal: React.FC<Props> = ({handleNewIssue}) => {
             <div 
                 className="flex justify-center items-center fixed inset-0 z-50 outline-none focus:outline-none" 
             > 
-                <div className="relative mx-auto w-[60vw]"> 
+                <div className="relative mx-auto w-[50vw]"> 
                     {/*content*/} 
                     <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"> 
                         {/*header*/} 
